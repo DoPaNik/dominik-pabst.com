@@ -1,0 +1,27 @@
+{
+  "name": "dominik-pabst.com",
+  "version": "1.0.0",
+  "description": "Short web portfolio",
+  "main": "index.js",
+  "repository": "https://github.com/DoPaNik/dominik-pabst.com.git",
+  "author": "DoPaNik <hi@dopanik.de>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+  },
+  "dependencies": {
+    "gatsby": "^2.24.26",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "prettier": "2.0.5"
+  }
+}
