@@ -1,8 +1,13 @@
 image: gitpod/workspace-full
 
+ports:
+  - port: 8000
+    onOpen: open-preview
+
 tasks:
-  - init: yarn build
-    command: yarn dev
+  - init: npm install
+  - init: yarn --network-timeout 100000 && yarn build
+    command: yarn dev --host 0.0.0.0
 
 vscode:
   extensions:
