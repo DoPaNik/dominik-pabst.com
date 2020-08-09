@@ -5,6 +5,7 @@ ports:
     onOpen: open-preview
 
 tasks:
+  - before: git config --global user.email "963151+DoPaNik@users.noreply.github.com"
   - init: npm install
   - init: yarn --network-timeout 100000 && yarn build
     command: yarn dev --host 0.0.0.0
