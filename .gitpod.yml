@@ -3,3 +3,7 @@ image: gitpod/workspace-full
 tasks:
   - init: yarn build
     command: yarn dev
+
+vscode:
+  extensions:
+    - jpoissonnier.vscode-styled-components@0.0.29:7hF8G3VtB+HNearI5Zw+NA==
