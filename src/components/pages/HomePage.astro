@@ -1,0 +1,201 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../astro/Button.astro';
+import Illustration from '../astro/Illustration.astro';
+import RoleRotator from '../astro/RoleRotator.astro';
+import { getDictionary } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+import { buildPersonSchema } from '../../lib/schema';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const h = t.home;
+
+const talksHref = getRelativeLocaleUrl(lang, 'talks');
+const contactHref = getRelativeLocaleUrl(lang, 'contact');
+---
+
+<BaseLayout
+  lang={lang}
+  current="home"
+  path=""
+  title={`${t.about.title} — Dominik Pabst`}
+  description={h.intro}
+  schema={buildPersonSchema(lang)}
+>
+  <header class="dpn-hero">
+    <div class="dpn-hero__grid-bg" aria-hidden="true"></div>
+    <div class="dpn-hero__inner">
+      <div class="dpn-hero__copy">
+        <p class="dpn-hero__prompt">
+          <span class="dpn-hero__prompt-brand">dominik@dopanik</span>:~$ whoami
+        </p>
+        <h1 class="dpn-hero__heading">
+          {h.headingLine1}<br />{h.headingLine2}
+        </h1>
+        <p class="dpn-hero__role">
+          <span class="dpn-hero__role-prefix">{h.rolePrefix}</span>
+          <span class="dpn-hero__role-value"><RoleRotator roles={[...h.roles]} /></span>
+        </p>
+        <p class="dpn-hero__intro">{h.intro}</p>
+        <div class="dpn-hero__actions">
+          <Button href={talksHref} variant="primary" prompt size="lg">{h.ctaPrimary}</Button>
+          <Button href={contactHref} variant="ghost" size="lg">{h.ctaSecondary}</Button>
+        </div>
+      </div>
+
+      <div class="dpn-hero__art">
+        <div class="dpn-hero__art-frame">
+          <span class="dpn-hero__art-lights" aria-hidden="true">
+            <span style="background: var(--red-500)"></span>
+            <span style="background: var(--amber-500)"></span>
+            <span style="background: var(--green-500)"></span>
+          </span>
+          <Illustration name="dopanik" tone="accent" class="dpn-hero__illo" decorative />
+        </div>
+        <div class="dpn-hero__pill dpn-hero__pill--amber">{h.statusUptime}</div>
+        <div class="dpn-hero__pill dpn-hero__pill--brand">
+          <span class="dpn-hero__pill-dot" aria-hidden="true"></span>{h.statusDeploy}
+        </div>
+      </div>
+    </div>
+  </header>
+</BaseLayout>
+
+<style>
+  .dpn-hero {
+    position: relative;
+    overflow: hidden;
+  }
+  .dpn-hero__grid-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(120% 80% at 70% 0%, #000 30%, transparent 75%);
+  }
+  .dpn-hero__inner {
+    position: relative;
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: 72px var(--gutter) 88px;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .dpn-hero__prompt {
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+    font-size: 13px;
+    margin: 0 0 22px;
+  }
+  .dpn-hero__prompt-brand {
+    color: var(--brand);
+  }
+  .dpn-hero__heading {
+    font-size: var(--text-6xl);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin: 0 0 18px;
+    color: var(--text-strong);
+  }
+  .dpn-hero__role {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xl);
+    color: var(--text-muted);
+    min-height: 38px;
+    margin: 0 0 26px;
+  }
+  .dpn-hero__role-prefix {
+    color: var(--text-faint);
+  }
+  .dpn-hero__role-value {
+    color: var(--brand);
+  }
+  .dpn-hero__intro {
+    font-family: var(--font-body);
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+    line-height: 1.65;
+    max-width: 46ch;
+    margin: 0 0 30px;
+  }
+  .dpn-hero__actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .dpn-hero__art {
+    position: relative;
+  }
+  .dpn-hero__art-frame {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 28px 28px 0;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .dpn-hero__art-lights {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+  .dpn-hero__art-lights span {
+    width: 11px;
+    height: 11px;
+    border-radius: var(--radius-full);
+  }
+  .dpn-hero__illo {
+    display: block;
+    filter: drop-shadow(0 0 24px var(--green-glow));
+  }
+  .dpn-hero__pill {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--surface-overlay);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    box-shadow: var(--shadow-md);
+  }
+  .dpn-hero__pill--amber {
+    top: 18px;
+    right: -10px;
+    color: var(--amber-500);
+  }
+  .dpn-hero__pill--brand {
+    bottom: 26px;
+    left: -14px;
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .dpn-hero__pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+    background: var(--brand);
+  }
+
+  @media (max-width: 880px) {
+    .dpn-hero__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

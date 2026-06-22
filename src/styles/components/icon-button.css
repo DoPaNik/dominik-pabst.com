@@ -1,0 +1,17 @@
+.dpn-iconbtn {
+  display: inline-grid; place-items: center;
+  width: 38px; height: 38px; border-radius: var(--radius-sm);
+  background: transparent; color: var(--text-muted);
+  border: 1px solid var(--border); cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.dpn-iconbtn:hover { background: var(--surface-hover); color: var(--text-strong); border-color: var(--border-strong); }
+.dpn-iconbtn:active { transform: translateY(1px); }
+.dpn-iconbtn:focus-visible { outline: none; box-shadow: var(--ring); }
+.dpn-iconbtn[disabled] { opacity: .4; cursor: not-allowed; }
+.dpn-iconbtn--sm { width: 30px; height: 30px; }
+.dpn-iconbtn--lg { width: 46px; height: 46px; }
+.dpn-iconbtn--solid { background: var(--brand); color: var(--on-brand); border-color: transparent; }
+.dpn-iconbtn--solid:hover { background: var(--brand); filter: brightness(1.08); box-shadow: var(--glow-soft); color: var(--on-brand); }
+.dpn-iconbtn--ghost { border-color: transparent; }

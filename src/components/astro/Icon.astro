@@ -1,0 +1,34 @@
+---
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+interface Props {
+  name: string;
+  size?: number;
+  strokeWidth?: number;
+  class?: string;
+}
+
+const { name, size = 18, strokeWidth = 2, class: className = '' } = Astro.props;
+
+const iconPath = fileURLToPath(new URL(`../../../node_modules/lucide-static/icons/${name}.svg`, import.meta.url));
+const raw = readFileSync(iconPath, 'utf-8');
+const svg = raw
+  .replace(/<!--.*?-->\s*/s, '')
+  .replace(/width="24"/, `width="${size}"`)
+  .replace(/height="24"/, `height="${size}"`)
+  .replace(/stroke-width="2"/, `stroke-width="${strokeWidth}"`);
+---
+
+<span class={['dpn-icon', className].filter(Boolean).join(' ')} set:html={svg} />
+
+<style>
+  .dpn-icon {
+    display: inline-flex;
+    color: currentColor;
+    line-height: 0;
+  }
+  .dpn-icon :global(svg) {
+    display: block;
+  }
+</style>

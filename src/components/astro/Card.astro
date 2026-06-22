@@ -1,0 +1,35 @@
+---
+interface Props {
+  hoverable?: boolean;
+  accent?: boolean;
+  glow?: boolean;
+  class?: string;
+  title?: string;
+}
+
+const { hoverable = false, accent = false, glow = false, class: className = '', title } = Astro.props;
+
+const cls = [
+  'dpn-card',
+  hoverable ? 'dpn-card--hoverable' : '',
+  accent ? 'dpn-card--accent' : '',
+  glow ? 'dpn-card--glow' : '',
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+
+const hasFooter = Astro.slots.has('footer');
+---
+
+<div class={cls}>
+  {title && <h3 class="dpn-card__title">{title}</h3>}
+  <div class="dpn-card__body">
+    <slot />
+  </div>
+  {hasFooter && (
+    <div class="dpn-card__footer">
+      <slot name="footer" />
+    </div>
+  )}
+</div>

@@ -1,0 +1,49 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../astro/Button.astro';
+import { getDictionary } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const c = t.contact;
+const homeHref = getRelativeLocaleUrl(lang, '');
+---
+
+<BaseLayout lang={lang} current="contact" path="contact/success" title={`${c.successTitle} — Dominik Pabst`} description={c.successBody}>
+  <section class="dpn-success">
+    <div class="dpn-success__inner">
+      <h1 class="dpn-success__title">{c.successTitle}</h1>
+      <p class="dpn-success__body">{c.successBody}</p>
+      <Button href={homeHref} variant="ghost">{c.successCta}</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dpn-success {
+    padding: 140px 0;
+  }
+  .dpn-success__inner {
+    max-width: var(--container-sm);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    text-align: center;
+    font-family: var(--font-mono);
+  }
+  .dpn-success__title {
+    color: var(--brand);
+    font-size: var(--text-2xl);
+    margin: 0 0 12px;
+  }
+  .dpn-success__body {
+    color: var(--text-dim);
+    font-size: var(--text-md);
+    margin: 0 0 32px;
+  }
+</style>

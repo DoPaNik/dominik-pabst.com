@@ -1,0 +1,41 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../../i18n/utils';
+
+interface Props {
+  path?: string;
+  currentLocale: Locale;
+  label: string;
+}
+
+const { path = '', currentLocale, label } = Astro.props;
+const targetLocale: Locale = currentLocale === 'de' ? 'en' : 'de';
+const href = getRelativeLocaleUrl(targetLocale, path);
+---
+
+<a href={href} class="dpn-lang-switch" aria-label={label} hreflang={targetLocale}>
+  {targetLocale}
+</a>
+
+<style>
+  .dpn-lang-switch {
+    display: inline-grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .dpn-lang-switch:hover {
+    color: var(--text-strong);
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    text-decoration: none;
+  }
+</style>

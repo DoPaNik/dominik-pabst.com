@@ -1,0 +1,14 @@
+.dpn-card {
+  display: flex; flex-direction: column;
+  background: var(--surface-raised); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px;
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+.dpn-card--hoverable { cursor: pointer; }
+.dpn-card--hoverable:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.dpn-card--accent { border-top: 2px solid var(--brand); }
+.dpn-card--glow:hover { border-color: var(--brand-deep); box-shadow: var(--glow-soft); }
+.dpn-card__title { font-family: var(--font-display); font-weight: 700; color: var(--text-strong); margin: 0 0 6px; font-size: var(--text-lg); }
+.dpn-card__body { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+.dpn-card__footer { margin-top: 16px; display: flex; align-items: center; gap: 10px; }

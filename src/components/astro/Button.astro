@@ -1,0 +1,45 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'link' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  block?: boolean;
+  prompt?: boolean;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  disabled?: boolean;
+  target?: string;
+  rel?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  block = false,
+  prompt = false,
+  href,
+  type = 'button',
+  class: className = '',
+  disabled = false,
+  ...rest
+} = Astro.props;
+
+const cls = [
+  'dpn-btn',
+  `dpn-btn--${variant}`,
+  size !== 'md' ? `dpn-btn--${size}` : '',
+  block ? 'dpn-btn--block' : '',
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class={cls} href={href} type={href ? undefined : type} disabled={href ? undefined : disabled} {...rest}>
+  {prompt && <span class="dpn-btn__prompt">$</span>}
+  <slot name="iconLeft" />
+  <slot />
+  <slot name="iconRight" />
+</Tag>

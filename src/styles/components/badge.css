@@ -1,0 +1,12 @@
+.dpn-badge {
+  --_c: var(--brand);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.04em; line-height: 1; text-transform: uppercase;
+  padding: 4px 8px; border-radius: var(--radius-xs);
+  border: 1px solid transparent; white-space: nowrap;
+}
+.dpn-badge--soft  { background: color-mix(in srgb, var(--_c) 14%, transparent); color: var(--_c); }
+.dpn-badge--solid { background: var(--_c); color: var(--ink-950); }
+.dpn-badge--outline { color: var(--_c); border-color: color-mix(in srgb, var(--_c) 45%, transparent); }
+.dpn-badge__dot { width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
