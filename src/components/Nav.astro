@@ -1,0 +1,184 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Button from './astro/Button.astro';
+import ThemeToggle from './astro/ThemeToggle.astro';
+import LangSwitch from './astro/LangSwitch.astro';
+import type { Locale } from '../i18n/utils';
+import { getDictionary } from '../i18n/utils';
+
+interface Props {
+  lang: Locale;
+  current: 'home' | 'about' | 'talks' | 'writing' | 'contact';
+}
+
+const { lang, current } = Astro.props;
+const t = getDictionary(lang);
+
+const links: Array<{ id: 'about' | 'talks' | 'writing' | 'contact'; label: string; path: string }> = [
+  { id: 'about', label: t.common.nav.about, path: 'about' },
+  { id: 'talks', label: t.common.nav.talks, path: 'talks' },
+  { id: 'writing', label: t.common.nav.writing, path: 'writing' },
+  { id: 'contact', label: t.common.nav.contact, path: 'contact' },
+];
+
+const homeHref = getRelativeLocaleUrl(lang, '');
+const contactHref = getRelativeLocaleUrl(lang, 'contact');
+const currentLangPath = current === 'home' ? '' : current;
+---
+
+<nav id="dpn-nav" class="dpn-nav">
+  <div class="dpn-nav__bar">
+    <a href={homeHref} class="dpn-nav__wordmark">
+      <span class="dpn-nav__wordmark-strong">Do</span><span class="dpn-nav__wordmark-brand">Pa</span><span class="dpn-nav__wordmark-strong">Nik</span>
+    </a>
+
+    <div class="dpn-nav__spacer" />
+
+    <ul id="dpn-nav-links" class="dpn-nav__links">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={getRelativeLocaleUrl(lang, link.path)}
+              aria-current={current === link.id ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="dpn-nav__actions">
+      <LangSwitch currentLocale={lang} path={currentLangPath} label={t.common.langSwitch} />
+      <ThemeToggle label={t.common.themeToggle} />
+      <Button href={contactHref} variant="primary" prompt class="dpn-nav__cta">{t.common.hireMe}</Button>
+      <button id="dpn-nav-burger" class="dpn-iconbtn dpn-nav__burger" type="button" aria-expanded="false" aria-controls="dpn-nav-links">
+        <span class="visually-hidden">menu</span>
+        <span class="dpn-nav__burger-bars" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .dpn-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid transparent;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .dpn-nav.is-scrolled {
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom-color: var(--border-subtle);
+  }
+  .dpn-nav__bar {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .dpn-nav__wordmark {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .dpn-nav__wordmark-strong { color: var(--text-strong); }
+  .dpn-nav__wordmark-brand { color: var(--brand); }
+  .dpn-nav__spacer { flex: 1; }
+  .dpn-nav__links {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .dpn-nav__links a {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+  .dpn-nav__links a:hover {
+    color: var(--text-strong);
+    background: var(--surface-hover);
+  }
+  .dpn-nav__links a[aria-current='page'] {
+    color: var(--brand);
+  }
+  .dpn-nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dpn-nav__burger {
+    display: none;
+  }
+  .dpn-nav__burger-bars,
+  .dpn-nav__burger-bars::before,
+  .dpn-nav__burger-bars::after {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    position: relative;
+    transition: transform var(--dur) var(--ease);
+  }
+  .dpn-nav__burger-bars::before { top: -5px; }
+  .dpn-nav__burger-bars::after { top: 3px; }
+
+  @media (max-width: 880px) {
+    .dpn-nav__cta {
+      display: none;
+    }
+    .dpn-nav__burger {
+      display: inline-grid;
+    }
+    .dpn-nav__links {
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: var(--space-2);
+      display: none;
+    }
+    .dpn-nav__links.is-open {
+      display: flex;
+    }
+    .dpn-nav__links a {
+      padding: 12px;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('dpn-nav');
+  const onScroll = () => nav?.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const burger = document.getElementById('dpn-nav-burger');
+  const navLinks = document.getElementById('dpn-nav-links');
+  burger?.addEventListener('click', () => {
+    const isOpen = navLinks?.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', String(Boolean(isOpen)));
+  });
+</script>

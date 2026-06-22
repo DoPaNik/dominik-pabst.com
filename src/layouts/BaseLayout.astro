@@ -1,0 +1,79 @@
+---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { getDictionary } from '../i18n/utils';
+import type { Locale } from '../i18n/utils';
+import '../styles/global.css';
+
+interface Props {
+  lang: Locale;
+  current: 'home' | 'about' | 'talks' | 'writing' | 'contact';
+  path: string;
+  title: string;
+  description: string;
+  /** Pre-serialized JSON-LD object(s) for this page (Person, SpeakingEvent, ...). */
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { lang, current, path, title, description, schema } = Astro.props;
+const t = getDictionary(lang);
+
+const canonicalUrl = getAbsoluteLocaleUrl(lang, path);
+const alternateDe = getAbsoluteLocaleUrl('de', path);
+const alternateEn = getAbsoluteLocaleUrl('en', path);
+const ogImage = getAbsoluteLocaleUrl(lang, '').replace(/\/$/, '') + '/og/dopanik.png';
+
+const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="de" href={alternateDe} />
+    <link rel="alternate" hreflang="en" href={alternateEn} />
+    <link rel="alternate" hreflang="x-default" href={alternateDe} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang === 'de' ? 'de_DE' : 'en_US'} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {schemaList.map((entry) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(entry)} />
+    ))}
+
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('dpn-theme');
+          if (stored === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">{t.common.skipToContent}</a>
+    <Nav lang={lang} current={current} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

@@ -1,0 +1,25 @@
+/* ===========================================================================
+   DoPaNik — Fonts
+   Sans: Roboto (self-hosted, heritage from dominik-pabst.com)
+   Mono: JetBrains Mono (Google Fonts) — the "terminal/hacker" signature face
+   --------------------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap');
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/roboto-regular.woff2') format('woff2'),
+       url('/fonts/roboto-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/roboto-700.woff2') format('woff2'),
+       url('/fonts/roboto-700.woff') format('woff');
+}

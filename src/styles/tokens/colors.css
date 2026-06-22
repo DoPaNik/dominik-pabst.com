@@ -1,0 +1,152 @@
+/* ===========================================================================
+   DoPaNik — Color System
+   "Terminal hacker" base: near-black IDE surfaces, phosphor-green brand.
+   Default :root is the DARK theme (primary). [data-theme="light"] = paper mode.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* --- Base neutral ramp (cool slate, IDE-grade) --- */
+  --ink-950: #0B0E14;   /* deepest background */
+  --ink-900: #0E121A;
+  --ink-850: #11161F;   /* default surface */
+  --ink-800: #161C26;   /* raised surface / card */
+  --ink-750: #1A212C;
+  --ink-700: #1E2530;   /* overlay / hover */
+  --ink-600: #2A323F;   /* strong border */
+  --ink-500: #3A4452;   /* border */
+  --ink-400: #586575;   /* faint text / disabled */
+  --ink-300: #7C8896;   /* dim text */
+  --ink-200: #A7B2BF;   /* muted text */
+  --ink-100: #CFD6DE;   /* body text */
+  --ink-050: #E8ECF1;   /* high-contrast text */
+  --paper:   #F4F7FA;
+
+  /* --- Brand: phosphor green (the signature) --- */
+  --green-700: #1B8B4C;
+  --green-600: #27B765;
+  --green-500: #37D67A;   /* brand primary */
+  --green-400: #5FE39B;
+  --green-300: #8CEFB9;
+  --green-tint: rgba(55, 214, 122, 0.12);
+  --green-glow: rgba(55, 214, 122, 0.35);
+
+  /* --- Secondary: CRT amber --- */
+  --amber-600: #D99A22;
+  --amber-500: #F2B544;   /* secondary accent */
+  --amber-400: #FFC964;
+  --amber-tint: rgba(242, 181, 68, 0.12);
+
+  /* --- Link / info: blue (heritage echo of #0074D9) --- */
+  --blue-600: #2F81F7;
+  --blue-500: #4A9EFF;
+  --blue-400: #74B6FF;
+  --blue-tint: rgba(74, 158, 255, 0.12);
+
+  /* --- Photography accent: magenta (echo of legacy #6b63ff) --- */
+  --magenta-500: #C792EA;
+  --magenta-400: #DCB1F5;
+  --magenta-tint: rgba(199, 146, 234, 0.12);
+
+  /* --- Cyan (terminal info) --- */
+  --cyan-500: #3DD6D0;
+  --cyan-tint: rgba(61, 214, 208, 0.12);
+
+  /* --- Danger / red --- */
+  --red-600: #E03A41;
+  --red-500: #F2545B;
+  --red-tint: rgba(242, 84, 91, 0.12);
+
+  /* =========================================================
+     SEMANTIC ALIASES (dark) — reference these in components
+     ========================================================= */
+  --bg:            var(--ink-950);
+  --bg-subtle:     var(--ink-900);
+  --surface:       var(--ink-850);
+  --surface-raised:var(--ink-800);
+  --surface-overlay:var(--ink-700);
+  --surface-hover: var(--ink-750);
+
+  --border:        var(--ink-600);
+  --border-subtle: var(--ink-700);
+  --border-strong: var(--ink-500);
+
+  --text-strong:   var(--ink-050);
+  --text:          var(--ink-100);
+  --text-muted:    var(--ink-200);
+  --text-dim:      var(--ink-300);
+  --text-faint:    var(--ink-400);
+  --text-inverse:  var(--ink-950);
+
+  --brand:         var(--green-500);
+  --brand-strong:  var(--green-400);
+  --brand-deep:    var(--green-600);
+  --brand-soft:    var(--green-tint);
+  --on-brand:      var(--ink-950);
+
+  --accent:        var(--amber-500);
+  --accent-soft:   var(--amber-tint);
+  --link:          var(--blue-500);
+  --link-soft:     var(--blue-tint);
+  --photo:         var(--magenta-500);
+  --photo-soft:    var(--magenta-tint);
+
+  --success:       var(--green-500);
+  --success-soft:  var(--green-tint);
+  --warning:       var(--amber-500);
+  --warning-soft:  var(--amber-tint);
+  --danger:        var(--red-500);
+  --danger-soft:   var(--red-tint);
+  --info:          var(--cyan-500);
+  --info-soft:     var(--cyan-tint);
+
+  --prompt:        var(--green-500);     /* terminal $ prompt */
+  --selection-bg:  rgba(55, 214, 122, 0.25);
+  --selection-fg:  var(--ink-050);
+
+  /* illustration ink (cartoon SVGs use currentColor) */
+  --illo-ink:      var(--ink-050);
+  --illo-accent:   var(--green-500);
+}
+
+/* =========================================================
+   LIGHT THEME — "paper" mode (dev.to-ish), opt-in
+   ========================================================= */
+[data-theme="light"] {
+  --bg:            #F6F8FA;
+  --bg-subtle:     #EEF1F5;
+  --surface:       #FFFFFF;
+  --surface-raised:#FFFFFF;
+  --surface-overlay:#FFFFFF;
+  --surface-hover: #F0F3F7;
+
+  --border:        #D6DCE2;
+  --border-subtle: #E6EAEF;
+  --border-strong: #C2CAD3;
+
+  --text-strong:   #0B0E14;
+  --text:          #1F2733;
+  --text-muted:    #3F4A57;
+  --text-dim:      #687585;
+  --text-faint:    #97A1AD;
+  --text-inverse:  #FFFFFF;
+
+  --brand:         #1F9D57;
+  --brand-strong:  #178A4A;
+  --brand-deep:    #137A40;
+  --brand-soft:    rgba(31, 157, 87, 0.10);
+  --on-brand:      #FFFFFF;
+
+  --accent:        #B9791A;
+  --link:          #0A66C2;
+  --photo:         #8B5CD6;
+
+  --success:       #1F9D57;
+  --warning:       #B9791A;
+  --danger:        #D62F36;
+  --info:          #1592A6;
+
+  --prompt:        #1F9D57;
+  --selection-bg:  rgba(31, 157, 87, 0.18);
+  --illo-ink:      #11161F;
+  --illo-accent:   #1F9D57;
+}

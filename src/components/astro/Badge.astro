@@ -1,0 +1,27 @@
+---
+const TONE: Record<string, string> = {
+  brand: 'var(--brand)',
+  amber: 'var(--amber-500)',
+  blue: 'var(--blue-500)',
+  magenta: 'var(--magenta-500)',
+  cyan: 'var(--cyan-500)',
+  danger: 'var(--red-500)',
+  neutral: 'var(--text-muted)',
+};
+
+interface Props {
+  tone?: keyof typeof TONE;
+  variant?: 'soft' | 'solid' | 'outline';
+  dot?: boolean;
+  class?: string;
+}
+
+const { tone = 'brand', variant = 'soft', dot = false, class: className = '' } = Astro.props;
+const cls = ['dpn-badge', `dpn-badge--${variant}`, className].filter(Boolean).join(' ');
+const colorVar = TONE[tone] ?? tone;
+---
+
+<span class={cls} style={`--_c: ${colorVar}`}>
+  {dot && <span class="dpn-badge__dot" />}
+  <slot />
+</span>

@@ -1,0 +1,181 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Input from '../astro/Input.astro';
+import Button from '../astro/Button.astro';
+import { getDictionary } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+import { site } from '../../data/site';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const c = t.contact;
+const successHref = getRelativeLocaleUrl(lang, 'contact/success');
+---
+
+<BaseLayout lang={lang} current="contact" path="contact" title={`${c.title} — Dominik Pabst`} description={c.intro}>
+  <section class="dpn-section">
+    <div class="dpn-section__inner dpn-contact__grid">
+      <div class="dpn-contact__form-frame">
+        <header class="dpn-section__header">
+          <div class="dpn-eyebrow"><span class="dpn-eyebrow__rule"></span>{c.eyebrow}</div>
+          <h1 class="dpn-section__title">{c.title}</h1>
+          <p class="dpn-section__intro">{c.intro}</p>
+        </header>
+
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action={successHref} class="dpn-contact__form">
+          <input type="hidden" name="form-name" value="contact" />
+          <input type="hidden" name="language" value={lang} />
+          <p style="display: none;">
+            <label>
+              Don't fill this out: <input name="bot-field" />
+            </label>
+          </p>
+
+          <div class="dpn-contact__row">
+            <Input label={c.formNameLabel} name="name" placeholder={c.formNamePlaceholder} required />
+            <Input label={c.formEmailLabel} name="email" type="email" placeholder={c.formEmailPlaceholder} required />
+          </div>
+          <Input label={c.formMessageLabel} name="message" textarea placeholder={c.formMessagePlaceholder} required />
+          <Button type="submit" variant="primary" prompt size="lg">{c.submitLabel}</Button>
+        </form>
+      </div>
+
+      <div class="dpn-contact__side">
+        <a href={`mailto:${site.email}`} class="dpn-contact__email">{site.email}</a>
+        <p class="dpn-contact__based">{c.basedIn}</p>
+        <p class="dpn-contact__socials-intro">{c.socialsIntro}</p>
+        <div class="dpn-contact__socials">
+          {
+            site.socials.map((social) => (
+              <a href={social.url} target="_blank" rel="noreferrer" class="dpn-contact__social">
+                {social.name}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dpn-section {
+    padding: 88px 0;
+  }
+  .dpn-section__inner {
+    max-width: var(--container-lg);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  .dpn-contact__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .dpn-section__header {
+    margin-bottom: 28px;
+  }
+  .dpn-eyebrow {
+    font-family: var(--font-mono);
+    color: var(--brand);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .dpn-eyebrow__rule {
+    width: 18px;
+    height: 1px;
+    background: var(--brand);
+  }
+  .dpn-section__title {
+    font-size: var(--text-3xl);
+    margin: 0 0 12px;
+    color: var(--text-strong);
+  }
+  .dpn-section__intro {
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+    line-height: 1.65;
+    margin: 0;
+  }
+  .dpn-contact__form-frame {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+  }
+  .dpn-contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .dpn-contact__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+  .dpn-contact__email {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    color: var(--text-strong);
+    text-decoration: none;
+    margin-bottom: var(--space-4);
+  }
+  .dpn-contact__email:hover {
+    color: var(--brand);
+  }
+  .dpn-contact__based {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 var(--space-6);
+  }
+  .dpn-contact__socials-intro {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    margin: 0 0 var(--space-2);
+  }
+  .dpn-contact__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .dpn-contact__social {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    background: var(--surface-raised);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    text-decoration: none;
+  }
+  .dpn-contact__social:hover {
+    color: var(--brand);
+    border-color: var(--brand-deep);
+    text-decoration: none;
+  }
+
+  @media (max-width: 880px) {
+    .dpn-contact__grid {
+      grid-template-columns: 1fr;
+    }
+    .dpn-contact__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

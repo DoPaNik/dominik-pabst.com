@@ -1,0 +1,29 @@
+---
+import dopanik from '../../assets/illustrations/dopanik.svg?raw';
+import dev from '../../assets/illustrations/dev.svg?raw';
+import skills from '../../assets/illustrations/skills.svg?raw';
+import contact from '../../assets/illustrations/contact.svg?raw';
+import footer from '../../assets/illustrations/footer.svg?raw';
+
+const ILLUSTRATIONS = { dopanik, dev, skills, contact, footer };
+
+interface Props {
+  name: keyof typeof ILLUSTRATIONS;
+  tone?: 'accent' | 'photo' | 'amber' | 'ink';
+  class?: string;
+  decorative?: boolean;
+  label?: string;
+}
+
+const { name, tone = 'ink', class: className = '', decorative = false, label } = Astro.props;
+const svg = ILLUSTRATIONS[name];
+const cls = ['dpn-illo', tone ? `dpn-illo--${tone}` : '', className].filter(Boolean).join(' ');
+---
+
+<span
+  class={cls}
+  set:html={svg}
+  role={decorative ? 'presentation' : 'img'}
+  aria-hidden={decorative ? 'true' : undefined}
+  aria-label={!decorative ? label : undefined}
+/>

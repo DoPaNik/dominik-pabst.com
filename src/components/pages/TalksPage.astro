@@ -1,0 +1,146 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../astro/Card.astro';
+import Badge from '../astro/Badge.astro';
+import Button from '../astro/Button.astro';
+import { getDictionary } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+import { buildSpeakingEventSchema } from '../../lib/schema';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const talksT = t.talks;
+
+const allTalks = await getCollection('talks', ({ data }) => data.lang === lang);
+const talks = allTalks.sort((a, b) => b.data.year - a.data.year);
+
+const schema = talks
+  .filter((talk) => !talk.data.placeholder)
+  .map((talk) => buildSpeakingEventSchema(talk.data, lang));
+---
+
+<BaseLayout lang={lang} current="talks" path="talks" title={`${talksT.title} — Dominik Pabst`} description={talksT.intro} schema={schema}>
+  <section class="dpn-section">
+    <div class="dpn-section__inner">
+      <header class="dpn-section__header">
+        <div class="dpn-eyebrow"><span class="dpn-eyebrow__rule"></span>{talksT.eyebrow}</div>
+        <h1 class="dpn-section__title">{talksT.title}</h1>
+        <p class="dpn-section__intro">{talksT.intro}</p>
+      </header>
+
+      <div class="dpn-talks__list">
+        {
+          talks.map((talk) => (
+            <Card accent>
+              <div class="dpn-talks__meta">
+                <Badge tone="brand" variant="outline">{talk.data.year}</Badge>
+                <Badge tone="neutral" variant="soft">
+                  {talk.data.type === 'workshop' ? talksT.workshopLabel : talksT.talkLabel}
+                </Badge>
+                <span class="dpn-talks__event">{talk.data.event}</span>
+              </div>
+              <h3 class="dpn-talks__title">{talk.data.title}</h3>
+              <p class="dpn-talks__description">{talk.data.description}</p>
+              {talk.data.coInstructor && (
+                <p class="dpn-talks__co">
+                  {lang === 'de' ? 'gemeinsam mit' : 'together with'} {talk.data.coInstructor}
+                </p>
+              )}
+              {talk.data.url && (
+                <div class="dpn-talks__link">
+                  <Button href={talk.data.url} variant="link" target="_blank" rel="noreferrer">
+                    {talk.data.event} →
+                  </Button>
+                </div>
+              )}
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dpn-section {
+    padding: 88px 0;
+  }
+  .dpn-section__inner {
+    max-width: var(--container-lg);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  .dpn-section__header {
+    margin-bottom: 36px;
+  }
+  .dpn-eyebrow {
+    font-family: var(--font-mono);
+    color: var(--brand);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .dpn-eyebrow__rule {
+    width: 18px;
+    height: 1px;
+    background: var(--brand);
+  }
+  .dpn-section__title {
+    font-size: var(--text-3xl);
+    margin: 0 0 12px;
+    color: var(--text-strong);
+  }
+  .dpn-section__intro {
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+    line-height: 1.65;
+    max-width: 60ch;
+    margin: 0;
+  }
+  .dpn-talks__list {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .dpn-talks__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .dpn-talks__event {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .dpn-talks__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--text-strong);
+    margin: 0 0 8px;
+  }
+  .dpn-talks__description {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .dpn-talks__co {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin: var(--space-2) 0 0;
+  }
+  .dpn-talks__link {
+    margin-top: var(--space-3);
+  }
+</style>
