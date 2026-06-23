@@ -24,7 +24,7 @@ const schema = talks
   .map((talk) => buildSpeakingEventSchema(talk.data, lang));
 ---
 
-<BaseLayout lang={lang} current="talks" path="talks" title={`${talksT.title} — Dominik Pabst`} description={talksT.intro} schema={schema}>
+<BaseLayout lang={lang} current="talks" path="talks" title={talksT.seoTitle} description={talksT.seoDescription} schema={schema}>
   <section class="dpn-section">
     <div class="dpn-section__inner">
       <header class="dpn-section__header">

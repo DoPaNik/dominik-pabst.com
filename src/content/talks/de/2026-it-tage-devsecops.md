@@ -5,8 +5,7 @@ type: workshop
 event: IT-Tage Frankfurt
 title: "DevSecOps – Agile Sicherheit in der Software-Entwicklung"
 description: >
-  Ganztägiger Workshop zu DevSecOps-Praktiken: wie Sicherheit von Anfang an
-  in agile Entwicklungs- und CI/CD-Prozesse eingebaut wird, statt sie am
-  Ende nachzurüsten.
-url: "https://www.it-tage.org/"
+  Ganztägiger Workshop auf den IT-Tagen 2026 in Frankfurt am Main (07.–10. Dezember 2026, Kap Europa), gemeinsam mit Andreas Falk. Praxisorientierter Intensiv-Workshop zu DevSecOps: Value Streams, sichere CI/CD-Pipelines, Supply-Chain-Security, Secret Management, Infrastructure as Code, Container-Sicherheit, Schwachstellenmanagement und Incident Management — mit besonderem Fokus auf die neuen Sicherheitsherausforderungen durch KI-gestützte Softwareentwicklung und AI-generierte Code-Risiken.
+coInstructor: "Andreas Falk"
+url: "https://www.ittage.informatik-aktuell.de/index.html"
 ---

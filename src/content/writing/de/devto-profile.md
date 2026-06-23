@@ -1,9 +1,8 @@
 ---
 lang: de
-title: "Technische Artikel zu DevOps, CI/CD und Security"
+title: "Alle technischen Artikel auf dev.to"
 description: >
-  Weitere technische Artikel rund um DevOps, CI/CD-Pipelines und Security
-  gibt es auf meinem dev.to-Profil.
+  Weitere Artikel rund um DevOps, CI/CD, Automatisierung und Security finden sich auf meinem dev.to-Profil.
 source: "dev.to"
 url: "https://dev.to/dopanik"
 ---
