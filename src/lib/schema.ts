@@ -14,7 +14,17 @@ export function buildPersonSchema(lang: Locale) {
       '@type': 'Organization',
       name: site.company,
     },
+    image: site.photo,
     sameAs: site.socials.map((s) => s.url),
+    knowsAbout: [
+      'DevSecOps',
+      'Platform Engineering',
+      'Cloud',
+      'CI/CD',
+      'GitOps',
+      'Infrastructure as Code',
+      'AI in software development',
+    ],
     inLanguage: lang,
   };
 }

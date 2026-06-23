@@ -13,6 +13,8 @@ export interface Dictionary {
     footerTagline: string;
   };
   home: {
+    seoTitle: string;
+    seoDescription: string;
     eyebrow: string;
     headingLine1: string;
     headingLine2: string;
@@ -25,6 +27,8 @@ export interface Dictionary {
     statusDeploy: string;
   };
   about: {
+    seoTitle: string;
+    seoDescription: string;
     eyebrow: string;
     title: string;
     bio: string;
@@ -35,6 +39,8 @@ export interface Dictionary {
     focusAreas: string[];
   };
   talks: {
+    seoTitle: string;
+    seoDescription: string;
     eyebrow: string;
     title: string;
     intro: string;
@@ -42,12 +48,16 @@ export interface Dictionary {
     talkLabel: string;
   };
   writing: {
+    seoTitle: string;
+    seoDescription: string;
     eyebrow: string;
     title: string;
     intro: string;
     readMore: string;
   };
   contact: {
+    seoTitle: string;
+    seoDescription: string;
     eyebrow: string;
     title: string;
     intro: string;

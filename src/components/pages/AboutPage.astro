@@ -1,11 +1,11 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Illustration from '../astro/Illustration.astro';
 import TerminalWindow from '../astro/TerminalWindow.astro';
 import Tag from '../astro/Tag.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
+import { site } from '../../data/site';
 
 interface Props {
   lang: Locale;
@@ -18,7 +18,7 @@ const tones = ['brand', 'cyan', 'blue', 'amber', 'magenta', 'neutral'] as const;
 const talksHref = getRelativeLocaleUrl(lang, 'talks');
 ---
 
-<BaseLayout lang={lang} current="about" path="about" title={`${a.title} — Dominik Pabst`} description={a.bio}>
+<BaseLayout lang={lang} current="about" path="about" title={a.seoTitle} description={a.seoDescription}>
   <section class="dpn-section">
     <div class="dpn-section__inner">
       <header class="dpn-section__header">
@@ -28,7 +28,14 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
 
       <div class="dpn-about__grid">
         <div class="dpn-about__art">
-          <Illustration name="dev" tone="ink" decorative />
+          <img
+            src={site.photo}
+            alt="Dominik Pabst — Executive Consultant DevOps & Platform Engineering"
+            class="dpn-about__photo"
+            width="480"
+            height="480"
+            loading="lazy"
+          />
         </div>
         <div>
           <p class="dpn-about__bio">{a.bio}</p>
@@ -105,14 +112,13 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
     gap: var(--space-12);
     align-items: center;
   }
-  .dpn-about__art {
-    background: var(--surface);
-    border: 1px solid var(--border);
+  .dpn-about__photo {
+    width: 100%;
+    height: auto;
     border-radius: var(--radius-xl);
-    padding: var(--space-8);
-    background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 32px 32px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    display: block;
   }
   .dpn-about__bio {
     font-size: var(--text-lg);

@@ -16,10 +16,14 @@ const t = getDictionary(lang);
 const w = t.writing;
 
 const allWriting = await getCollection('writing', ({ data }) => data.lang === lang);
-const writing = allWriting.sort((a, b) => Number(a.data.placeholder) - Number(b.data.placeholder));
+const writing = allWriting.sort((a, b) => {
+  if (!a.data.date) return 1;
+  if (!b.data.date) return -1;
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
 ---
 
-<BaseLayout lang={lang} current="writing" path="writing" title={`${w.title} — Dominik Pabst`} description={w.intro}>
+<BaseLayout lang={lang} current="writing" path="writing" title={w.seoTitle} description={w.seoDescription}>
   <section class="dpn-section">
     <div class="dpn-section__inner">
       <header class="dpn-section__header">

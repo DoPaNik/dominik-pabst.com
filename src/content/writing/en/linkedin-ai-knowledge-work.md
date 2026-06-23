@@ -1,9 +1,9 @@
 ---
 lang: en
-title: "When AI systems take over large parts of human knowledge work"
+title: "When AI Systems Take Over Large Parts of Human Knowledge Work"
 description: >
-  Thoughts on what it means for development teams when AI systems
-  increasingly take over tasks that used to be pure knowledge work.
+  A thought experiment: what does it mean for us as knowledge workers when AI systems take on increasingly large parts of our work? And what is left for humans?
 source: "LinkedIn Pulse"
-url: "https://www.linkedin.com/in/dominikpabst/"
+date: "2024-01-01"
+url: "https://www.linkedin.com/pulse/wenn-ki-systeme-gro%C3%9Fe-teile-menschlicher-%C3%BCbernehmen-dominik-pabst-wm5ef/"
 ---
