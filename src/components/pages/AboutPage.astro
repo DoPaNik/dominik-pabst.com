@@ -3,9 +3,9 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TerminalWindow from '../astro/TerminalWindow.astro';
 import Tag from '../astro/Tag.astro';
+import MatrixPortrait from '../astro/MatrixPortrait.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
-import { site } from '../../data/site';
 
 interface Props {
   lang: Locale;
@@ -19,28 +19,21 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
 ---
 
 <BaseLayout lang={lang} current="about" path="about" title={a.seoTitle} description={a.seoDescription}>
-  <section class="dpn-section">
-    <div class="dpn-section__inner">
-      <header class="dpn-section__header">
-        <div class="dpn-eyebrow"><span class="dpn-eyebrow__rule"></span>{a.eyebrow}</div>
-        <h1 class="dpn-section__title">{a.title}</h1>
-      </header>
-
-      <div class="dpn-about__grid">
-        <div class="dpn-about__art">
-          <img
-            src={site.photo}
-            alt="Dominik Pabst — Executive Consultant DevOps & Platform Engineering"
-            class="dpn-about__photo"
-            width="480"
-            height="480"
-            loading="lazy"
-          />
-        </div>
-        <div>
-          <p class="dpn-about__bio">{a.bio}</p>
-          <p class="dpn-about__collab">{a.collabLine}</p>
-        </div>
+  <section class="dpn-about-hero">
+    <div class="dpn-about-hero__bg">
+      <MatrixPortrait
+        alt="Dominik Pabst — Executive Consultant DevOps & Platform Engineering"
+        image="/images/dominik-luma.png"
+        align="left"
+        parallax
+      />
+    </div>
+    <div class="dpn-about-hero__inner">
+      <div class="dpn-about-hero__copy">
+        <div class="dpn-about-hero__eyebrow"><span class="dpn-about-hero__eyebrow-rule"></span>{a.eyebrow}</div>
+        <h1 class="dpn-about-hero__title">{a.title}</h1>
+        <p class="dpn-about-hero__bio">{a.bio}</p>
+        <p class="dpn-about-hero__collab">{a.collabLine}</p>
       </div>
     </div>
   </section>
@@ -106,41 +99,86 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
     margin: 0;
     color: var(--text-strong);
   }
-  .dpn-about__grid {
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: var(--space-12);
-    align-items: center;
-  }
-  .dpn-about__photo {
-    width: 100%;
-    height: auto;
-    border-radius: var(--radius-xl);
-    object-fit: cover;
-    border: 1px solid var(--border);
-    display: block;
-  }
-  .dpn-about__bio {
-    font-size: var(--text-lg);
-    color: var(--text-muted);
-    line-height: 1.7;
-    margin: 0 0 18px;
-  }
-  .dpn-about__collab {
-    font-family: var(--font-mono);
-    color: var(--brand);
-    font-size: 14px;
-    margin: 0;
-  }
   .dpn-about__tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
   }
 
+  .dpn-about-hero {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    background: var(--ink-950);
+    overflow: hidden;
+  }
+  .dpn-about-hero__bg {
+    position: absolute;
+    inset: 0;
+  }
+  .dpn-about-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: var(--container-lg);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: flex;
+    justify-content: flex-end;
+  }
+  .dpn-about-hero__copy {
+    max-width: 540px;
+    padding: 56px 8px 56px 72px;
+    background: linear-gradient(90deg, transparent, var(--ink-950) 42%);
+  }
+  .dpn-about-hero__eyebrow {
+    font-family: var(--font-mono);
+    color: var(--green-500);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .dpn-about-hero__eyebrow-rule {
+    width: 18px;
+    height: 1px;
+    background: var(--green-500);
+  }
+  .dpn-about-hero__title {
+    font-size: var(--text-3xl);
+    margin: 0 0 18px;
+    color: var(--ink-050);
+    overflow-wrap: break-word;
+  }
+  .dpn-about-hero__bio {
+    font-size: var(--text-lg);
+    color: var(--ink-100);
+    line-height: 1.7;
+    margin: 0 0 18px;
+  }
+  .dpn-about-hero__collab {
+    font-family: var(--font-mono);
+    color: var(--green-500);
+    font-size: 14px;
+    margin: 0;
+  }
+
   @media (max-width: 880px) {
-    .dpn-about__grid {
-      grid-template-columns: 1fr;
+    .dpn-about-hero {
+      min-height: 520px;
+    }
+    .dpn-about-hero__inner {
+      justify-content: center;
+    }
+    .dpn-about-hero__copy {
+      max-width: 100%;
+      padding: 24px var(--gutter) 40px;
+      background: linear-gradient(180deg, rgba(11, 14, 20, 0.6) 0%, var(--ink-950) 55%);
     }
   }
 </style>
