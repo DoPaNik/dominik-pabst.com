@@ -1,17 +1,18 @@
 ---
 /**
- * Very subtle, slow Matrix rain used as a decorative backdrop on regular
- * (non-About) surfaces. Sparse columns at low opacity so it reads as texture,
- * not as a feature. Purely decorative: skipped entirely under
- * prefers-reduced-motion.
+ * Very subtle, slow Matrix rain used as a decorative backdrop — the single
+ * matrix accent on pages without the portrait. Sparse columns at low opacity
+ * so it reads as texture, not as a feature. Driven by the shared
+ * matrix-engine ticker (FPS cap, offscreen/hidden pause). Purely decorative:
+ * skipped entirely under prefers-reduced-motion.
  */
 interface Props {
-  /** Overall canvas opacity — keep low (0.05–0.15) so content stays readable. */
+  /** Overall canvas opacity — keep low (≤ 0.08) so content stays readable. */
   opacity?: number;
   class?: string;
 }
 
-const { opacity = 0.1, class: className = '' } = Astro.props;
+const { opacity = 0.08, class: className = '' } = Astro.props;
 ---
 
 <div
@@ -43,6 +44,8 @@ const { opacity = 0.1, class: className = '' } = Astro.props;
 </style>
 
 <script>
+  import { addMatrixInstance, clampedDpr } from '../../scripts/matrix-engine';
+
   const GLYPHS = '01ﾊﾏｲﾑｳｵﾗｷｹﾜｺｴﾈｾﾀﾈﾇﾓﾔﾝﾛﾍｦｱｸ'.split('');
   const FONT_FAMILY = "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace";
   const ROW_HEIGHT = 18;
@@ -85,13 +88,10 @@ const { opacity = 0.1, class: className = '' } = Astro.props;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = clampedDpr();
     let width = 0;
     let height = 0;
     let columns: BackdropColumn[] = [];
-    let rafId = 0;
-    let running = false;
-    let lastTime = 0;
 
     function resize() {
       const rect = root.getBoundingClientRect();
@@ -107,9 +107,11 @@ const { opacity = 0.1, class: className = '' } = Astro.props;
       );
     }
 
-    function drawFrame(now: number) {
-      const dtMs = lastTime ? Math.min(now - lastTime, 80) : 16.7;
-      lastTime = now;
+    function draw(_now: number, dtMs: number) {
+      if (width === 0 || height === 0) {
+        resize();
+        if (width === 0 || height === 0) return;
+      }
 
       ctx!.clearRect(0, 0, width, height);
       ctx!.textAlign = 'center';
@@ -139,43 +141,8 @@ const { opacity = 0.1, class: className = '' } = Astro.props;
       ctx!.globalAlpha = 1;
     }
 
-    function loop(now: number) {
-      if (!running) return;
-      drawFrame(now);
-      rafId = requestAnimationFrame(loop);
-    }
-
-    function start() {
-      if (running) return;
-      running = true;
-      lastTime = 0;
-      rafId = requestAnimationFrame(loop);
-    }
-
-    function stop() {
-      running = false;
-      if (rafId) cancelAnimationFrame(rafId);
-    }
-
-    const ready = () => {
-      if (!root.isConnected) return;
-      resize();
-      if (width === 0 || height === 0) {
-        requestAnimationFrame(ready);
-        return;
-      }
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) start();
-            else stop();
-          }
-        },
-        { threshold: 0.02 },
-      );
-      observer.observe(root);
-    };
-    ready();
+    resize();
+    addMatrixInstance({ el: root, draw });
 
     let resizeTimer = 0;
     window.addEventListener('resize', () => {
