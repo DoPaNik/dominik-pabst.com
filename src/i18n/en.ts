@@ -13,6 +13,7 @@ export const en: Dictionary = {
     themeToggle: 'toggle theme',
     langSwitch: 'switch language',
     footerTagline: '// versioned with care',
+    portraitAlt: 'Portrait of Dominik Pabst',
   },
   home: {
     seoTitle: 'Dominik Pabst – DevSecOps & Platform Engineering | CGI Germany',

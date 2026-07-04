@@ -11,6 +11,7 @@ export interface Dictionary {
     themeToggle: string;
     langSwitch: string;
     footerTagline: string;
+    portraitAlt: string;
   };
   home: {
     seoTitle: string;
