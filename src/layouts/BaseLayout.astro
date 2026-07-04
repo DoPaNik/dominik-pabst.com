@@ -58,18 +58,22 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    {schemaList.map((entry) => (
-      <script type="application/ld+json" is:inline set:html={JSON.stringify(entry)} />
-    ))}
+    {
+      schemaList.map((entry) => (
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(entry)} />
+      ))
+    }
 
     <script is:inline>
       (function () {
         function applyStoredTheme() {
           try {
-            var stored = localStorage.getItem('dpn-theme');
+            const stored = localStorage.getItem('dpn-theme');
             if (stored === 'light') document.documentElement.setAttribute('data-theme', 'light');
             else document.documentElement.removeAttribute('data-theme');
-          } catch (e) {}
+          } catch {
+            // localStorage may be unavailable (e.g. private browsing) — keep the default theme.
+          }
         }
         applyStoredTheme();
         // ClientRouter swaps <html> attributes on navigation — re-apply the theme.
