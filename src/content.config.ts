@@ -13,6 +13,10 @@ const talks = defineCollection({
     coInstructor: z.string().optional(),
     url: z.string().url().optional(),
     placeholder: z.boolean().optional().default(false),
+    /** ISO-8601 date/datetime, set when the talk content reveals a real date. */
+    startDate: z.string().optional(),
+    /** ISO-8601 date/datetime, set when the talk content reveals a real date. */
+    endDate: z.string().optional(),
   }),
 });
 

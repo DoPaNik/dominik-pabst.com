@@ -20,7 +20,7 @@ export default tseslint.config(
   ...eslintPluginAstro.configs.recommended,
   eslintConfigPrettier,
   {
-    files: ['scripts/**/*.mjs', 'eslint.config.js'],
+    files: ['scripts/**/*.mjs', 'eslint.config.js', 'astro.config.mjs'],
     languageOptions: {
       globals: globals.node,
     },

@@ -16,15 +16,18 @@ interface Props {
   description: string;
   /** Pre-serialized JSON-LD object(s) for this page (Person, SpeakingEvent, ...). */
   schema?: Record<string, unknown> | Record<string, unknown>[];
+  /** Excludes the page from search indexing (e.g. post-submit thank-you pages). */
+  noindex?: boolean;
 }
 
-const { lang, current, path, title, description, schema } = Astro.props;
+const { lang, current, path, title, description, schema, noindex = false } = Astro.props;
 const t = getDictionary(lang);
 
 const canonicalUrl = getAbsoluteLocaleUrl(lang, path);
 const alternateDe = getAbsoluteLocaleUrl('de', path);
 const alternateEn = getAbsoluteLocaleUrl('en', path);
-const ogImage = site.photo;
+const ogImage = new URL(site.photo, site.url).toString();
+const ogImageAlt = t.common.portraitAlt;
 
 const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 ---
@@ -34,6 +37,23 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Above-the-fold fonts: nav wordmark / H1 headings (mono 800) and body copy (Roboto 400) -->
+    <link
+      rel="preload"
+      href="/fonts/jetbrains-mono-800-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/roboto-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <title>{title}</title>
     <meta name="description" content={description} />
 
@@ -41,6 +61,7 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <link rel="alternate" hreflang="de" href={alternateDe} />
     <link rel="alternate" hreflang="en" href={alternateEn} />
     <link rel="alternate" hreflang="x-default" href={alternateDe} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -50,6 +71,9 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="840" />
+    <meta property="og:image:height" content="1050" />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:locale" content={lang === 'de' ? 'de_DE' : 'en_US'} />
     <meta property="og:site_name" content="Dominik Pabst" />
 
