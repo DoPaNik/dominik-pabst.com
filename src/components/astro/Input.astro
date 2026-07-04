@@ -33,30 +33,56 @@ const fieldId = id ?? name;
 ---
 
 <div class={['dpn-field', className].filter(Boolean).join(' ')}>
-  {label && <label class="dpn-field__label" for={fieldId}>{label}</label>}
-  <div class={['dpn-input-wrap', invalid ? 'dpn-input-wrap--invalid' : '', textarea ? 'dpn-input-wrap--ta' : ''].filter(Boolean).join(' ')}>
+  {
+    label && (
+      <label class="dpn-field__label" for={fieldId}>
+        {label}
+      </label>
+    )
+  }
+  <div
+    class={[
+      'dpn-input-wrap',
+      invalid ? 'dpn-input-wrap--invalid' : '',
+      textarea ? 'dpn-input-wrap--ta' : '',
+    ]
+      .filter(Boolean)
+      .join(' ')}
+  >
     {prompt && <span class="dpn-input-wrap__prompt">$</span>}
-    {textarea ? (
-      <textarea
-        id={fieldId}
-        name={name}
-        class="dpn-input dpn-textarea"
-        aria-invalid={invalid}
-        required={required}
-        placeholder={placeholder}
-        rows={rows}
-      />
-    ) : (
-      <input
-        id={fieldId}
-        name={name}
-        type={type}
-        class="dpn-input"
-        aria-invalid={invalid}
-        required={required}
-        placeholder={placeholder}
-      />
-    )}
+    {
+      textarea ? (
+        <textarea
+          id={fieldId}
+          name={name}
+          class="dpn-input dpn-textarea"
+          aria-invalid={invalid}
+          required={required}
+          placeholder={placeholder}
+          rows={rows}
+        />
+      ) : (
+        <input
+          id={fieldId}
+          name={name}
+          type={type}
+          class="dpn-input"
+          aria-invalid={invalid}
+          required={required}
+          placeholder={placeholder}
+        />
+      )
+    }
   </div>
-  {hint && <span class={['dpn-field__hint', invalid ? 'dpn-field__hint--error' : ''].filter(Boolean).join(' ')}>{hint}</span>}
+  {
+    hint && (
+      <span
+        class={['dpn-field__hint', invalid ? 'dpn-field__hint--error' : '']
+          .filter(Boolean)
+          .join(' ')}
+      >
+        {hint}
+      </span>
+    )
+  }
 </div>

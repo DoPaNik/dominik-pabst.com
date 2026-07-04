@@ -9,6 +9,7 @@ You own search-engine visibility for dopanik.de, an Astro site with DE (default)
 Reference: `CONTENT.md` section "2. Meta Titles & Descriptions" has the exact DE title/description targets per page, plus the OG/Twitter tag block, Schema.org Person block, and canonical/hreflang pattern. Treat those as the spec, not a suggestion — build every page's metadata to match, and derive the EN equivalents in the same voice.
 
 Checklist for any page:
+
 - `<title>` and `<meta name="description">` present and unique per page/locale.
 - Open Graph + Twitter card tags (og:title, og:description, og:url, og:image, twitter:card, etc.).
 - `<link rel="canonical">` pointing at the absolute URL via `site.url` from `src/data/site.ts`.

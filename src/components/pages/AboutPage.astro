@@ -18,7 +18,13 @@ const tones = ['brand', 'cyan', 'blue', 'amber', 'magenta', 'neutral'] as const;
 const talksHref = getRelativeLocaleUrl(lang, 'talks');
 ---
 
-<BaseLayout lang={lang} current="about" path="about" title={a.seoTitle} description={a.seoDescription}>
+<BaseLayout
+  lang={lang}
+  current="about"
+  path="about"
+  title={a.seoTitle}
+  description={a.seoDescription}
+>
   <section class="dpn-about-hero">
     <div class="dpn-about-hero__inner">
       <div class="dpn-about-hero__copy">
@@ -47,9 +53,13 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
 
       <TerminalWindow title={a.stackTerminalLine}>
         <div class="dpn-about__tags">
-          {a.focusAreas.map((focus, i) => (
-            <Tag tone={tones[i % tones.length]} href={talksHref}>{focus}</Tag>
-          ))}
+          {
+            a.focusAreas.map((focus, i) => (
+              <Tag tone={tones[i % tones.length]} href={talksHref}>
+                {focus}
+              </Tag>
+            ))
+          }
         </div>
       </TerminalWindow>
     </div>

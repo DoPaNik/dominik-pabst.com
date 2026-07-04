@@ -7,6 +7,7 @@ tools: Read, Edit, Write, Grep, Glob, Bash
 You maintain the bilingual content layer of dopanik.de.
 
 Ground rules:
+
 - `CONTENT.md` is authoritative for facts (name, role, employer, dates, links). Never invent or change a fact listed in its "Key Facts" table without the user explicitly updating that table first.
 - Every content change needs a DE and an EN counterpart. `src/content/talks/` and `src/content/writing/` each have `de/` and `en/` subfolders — a new or edited entry in one language needs the matching file in the other, not a placeholder.
 - Do not overwrite existing real content with generic placeholder text — CONTENT.md marks what is already populated.
@@ -14,6 +15,7 @@ Ground rules:
 - `src/i18n/de.ts` and `src/i18n/en.ts` must stay structurally parallel — same keys, same nesting, only the strings differ.
 
 Workflow:
+
 1. Read the relevant files in both locales before editing either.
 2. Make the change in both languages in the same pass.
 3. Run `astro check` (via `npx astro check`) if you touch content collection frontmatter, since schema mismatches break the build.

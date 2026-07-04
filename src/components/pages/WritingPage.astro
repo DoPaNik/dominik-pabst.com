@@ -23,7 +23,13 @@ const writing = allWriting.sort((a, b) => {
 });
 ---
 
-<BaseLayout lang={lang} current="writing" path="writing" title={w.seoTitle} description={w.seoDescription}>
+<BaseLayout
+  lang={lang}
+  current="writing"
+  path="writing"
+  title={w.seoTitle}
+  description={w.seoDescription}
+>
   <section class="dpn-section">
     <div class="dpn-section__inner">
       <header class="dpn-section__header">
@@ -37,7 +43,9 @@ const writing = allWriting.sort((a, b) => {
           writing.map((article) => (
             <Card>
               <div class="dpn-writing__meta">
-                <Badge tone="blue" variant="soft">{article.data.source}</Badge>
+                <Badge tone="blue" variant="soft">
+                  {article.data.source}
+                </Badge>
               </div>
               <h3 class="dpn-writing__title">{article.data.title}</h3>
               <p class="dpn-writing__description">{article.data.description}</p>

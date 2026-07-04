@@ -13,16 +13,18 @@ const hasRight = Astro.slots.has('right');
 <div class={cls}>
   <div class="dpn-term__bar">
     <span class="dpn-term__lights">
-      <span class="dpn-term__light" style="background: var(--red-500)" />
-      <span class="dpn-term__light" style="background: var(--amber-500)" />
-      <span class="dpn-term__light" style="background: var(--green-500)" />
+      <span class="dpn-term__light" style="background: var(--red-500)"></span>
+      <span class="dpn-term__light" style="background: var(--amber-500)"></span>
+      <span class="dpn-term__light" style="background: var(--green-500)"></span>
     </span>
     <span class="dpn-term__title">{title}</span>
-    {hasRight && (
-      <span class="dpn-term__chrome-right">
-        <slot name="right" />
-      </span>
-    )}
+    {
+      hasRight && (
+        <span class="dpn-term__chrome-right">
+          <slot name="right" />
+        </span>
+      )
+    }
   </div>
   <div class="dpn-term__body">
     <slot />

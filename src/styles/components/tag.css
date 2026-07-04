@@ -1,13 +1,30 @@
 .dpn-tag {
   --_c: var(--text-muted);
-  display: inline-flex; align-items: center; gap: 2px;
-  font-family: var(--font-mono); font-size: 13px; font-weight: 500;
-  line-height: 1; padding: 5px 9px; border-radius: var(--radius-sm);
-  background: var(--surface-raised); color: var(--text-muted);
-  border: 1px solid var(--border-subtle); text-decoration: none;
-  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
-              background var(--dur) var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none;
+  transition:
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
   cursor: pointer;
 }
-.dpn-tag:hover { color: var(--_c); border-color: color-mix(in srgb, var(--_c) 50%, transparent); background: color-mix(in srgb, var(--_c) 9%, var(--surface-raised)); }
-.dpn-tag__hash { color: var(--_c); opacity: .8; }
+.dpn-tag:hover {
+  color: var(--_c);
+  border-color: color-mix(in srgb, var(--_c) 50%, transparent);
+  background: color-mix(in srgb, var(--_c) 9%, var(--surface-raised));
+}
+.dpn-tag__hash {
+  color: var(--_c);
+  opacity: 0.8;
+}
