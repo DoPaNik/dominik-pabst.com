@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate:luma": "node scripts/generate-luma.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "sharp": "^0.35.2",
     "typescript": "^6.0.3"
   }
 }
