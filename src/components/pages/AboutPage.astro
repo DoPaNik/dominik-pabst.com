@@ -33,14 +33,15 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
         <p class="dpn-about-hero__bio">{a.bio}</p>
         <p class="dpn-about-hero__collab">{a.collabLine}</p>
       </div>
-      <MatrixPortrait
-        class="dpn-about-hero__portrait"
-        src="/images/dominik-portrait.jpg"
-        alt={lang === 'de' ? 'Porträt von Dominik Pabst' : 'Portrait of Dominik Pabst'}
-        width={840}
-        height={1050}
-        caption="~ cat dominik.pixels | decode"
-      />
+      <div class="dpn-about-hero__portrait">
+        <MatrixPortrait
+          src="/images/dominik-portrait.jpg"
+          alt={t.common.portraitAlt}
+          width={840}
+          height={1050}
+          caption="~ cat dominik.pixels | decode"
+        />
+      </div>
     </div>
   </section>
 
@@ -67,43 +68,6 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
 </BaseLayout>
 
 <style>
-  .dpn-section {
-    padding: 88px 0;
-    border-top: 1px solid var(--border-subtle);
-  }
-  .dpn-section:first-of-type {
-    border-top: none;
-  }
-  .dpn-section__inner {
-    max-width: var(--container-lg);
-    margin: 0 auto;
-    padding: 0 var(--gutter);
-  }
-  .dpn-section__header {
-    margin-bottom: 36px;
-  }
-  .dpn-eyebrow {
-    font-family: var(--font-mono);
-    color: var(--brand);
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-label);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .dpn-eyebrow__rule {
-    width: 18px;
-    height: 1px;
-    background: var(--brand);
-  }
-  .dpn-section__title {
-    font-size: var(--text-3xl);
-    margin: 0;
-    color: var(--text-strong);
-  }
   .dpn-section__title-sm {
     font-size: var(--text-2xl);
     margin: 0;
@@ -144,11 +108,11 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
   }
   .dpn-about-hero__collab {
     font-family: var(--font-mono);
-    color: var(--brand);
+    color: var(--brand-deep);
     font-size: 14px;
     margin: 0;
   }
-  .dpn-about-hero :global(.dpn-about-hero__portrait) {
+  .dpn-about-hero__portrait {
     justify-self: end;
   }
 
@@ -160,7 +124,7 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
       grid-template-columns: 1fr;
       gap: var(--space-8);
     }
-    .dpn-about-hero :global(.dpn-about-hero__portrait) {
+    .dpn-about-hero__portrait {
       justify-self: center;
       max-width: 300px;
       order: -1;

@@ -61,6 +61,25 @@ const { opacity = 0.08, class: className = '' } = Astro.props;
     return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
   }
 
+  function cssVar(name: string, fallback: string): string {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+
+  function themeColors() {
+    const light = document.documentElement.getAttribute('data-theme') === 'light';
+    return light
+      ? {
+          // "Ink instead of phosphor": no neon green on paper.
+          head: cssVar('--green-700', '#1b8b4c'),
+          trail: cssVar('--green-600', '#27b765'),
+        }
+      : {
+          head: cssVar('--green-400', '#5fe39b'),
+          trail: cssVar('--green-500', '#37d67a'),
+        };
+  }
+
   interface BackdropColumn {
     x: number;
     headY: number;
@@ -123,6 +142,7 @@ const { opacity = 0.08, class: className = '' } = Astro.props;
       ctx!.textAlign = 'center';
       ctx!.textBaseline = 'middle';
       ctx!.font = `${(ROW_HEIGHT * 0.8).toFixed(1)}px ${FONT_FAMILY}`;
+      const colors = themeColors();
 
       for (const col of columns) {
         for (let i = 0; i < col.trailSteps; i++) {
@@ -130,7 +150,7 @@ const { opacity = 0.08, class: className = '' } = Astro.props;
           if (y < -ROW_HEIGHT || y > height + ROW_HEIGHT) continue;
           const t = 1 - i / col.trailSteps;
           ctx!.globalAlpha = i === 0 ? 0.9 : t * t * 0.7;
-          ctx!.fillStyle = i === 0 ? '#5FE39B' : '#37D67A';
+          ctx!.fillStyle = i === 0 ? colors.head : colors.trail;
           if (Math.random() < 0.02) col.chars[i] = randomChar();
           ctx!.fillText(col.chars[i], col.x, y);
         }
