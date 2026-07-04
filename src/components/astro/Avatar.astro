@@ -8,7 +8,14 @@ interface Props {
   class?: string;
 }
 
-const { src, name = '', size = 'md', shape = 'square', ring = false, class: className = '' } = Astro.props;
+const {
+  src,
+  name = '',
+  size = 'md',
+  shape = 'square',
+  ring = false,
+  class: className = '',
+} = Astro.props;
 
 function initials(value: string) {
   return value

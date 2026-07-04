@@ -25,18 +25,18 @@
   /* Phosphor glows — the signature accent treatment */
   --glow-green: 0 0 0 1px var(--green-600), 0 0 18px var(--green-glow);
   --glow-amber: 0 0 18px rgba(242, 181, 68, 0.3);
-  --glow-soft:  0 0 24px rgba(55, 214, 122, 0.18);
+  --glow-soft: 0 0 24px rgba(55, 214, 122, 0.18);
 
   /* Focus ring */
   --ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--brand);
   --ring-inset: inset 0 0 0 1px var(--brand);
 
   /* Transitions */
-  --ease: cubic-bezier(0.2, 0, 0, 1);       /* @kind other */
+  --ease: cubic-bezier(0.2, 0, 0, 1); /* @kind other */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
-  --dur-fast: 120ms;                          /* @kind other */
-  --dur: 180ms;                               /* @kind other */
-  --dur-slow: 280ms;                          /* @kind other */
+  --dur-fast: 120ms; /* @kind other */
+  --dur: 180ms; /* @kind other */
+  --dur-slow: 280ms; /* @kind other */
 
   /* Scanline / grid overlay helpers (terminal texture) */
   --grid-line: rgba(255, 255, 255, 0.025);

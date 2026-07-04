@@ -7,7 +7,13 @@ interface Props {
   title?: string;
 }
 
-const { hoverable = false, accent = false, glow = false, class: className = '', title } = Astro.props;
+const {
+  hoverable = false,
+  accent = false,
+  glow = false,
+  class: className = '',
+  title,
+} = Astro.props;
 
 const cls = [
   'dpn-card',
@@ -27,9 +33,11 @@ const hasFooter = Astro.slots.has('footer');
   <div class="dpn-card__body">
     <slot />
   </div>
-  {hasFooter && (
-    <div class="dpn-card__footer">
-      <slot name="footer" />
-    </div>
-  )}
+  {
+    hasFooter && (
+      <div class="dpn-card__footer">
+        <slot name="footer" />
+      </div>
+    )
+  }
 </div>

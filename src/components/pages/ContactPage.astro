@@ -17,7 +17,13 @@ const c = t.contact;
 const successHref = getRelativeLocaleUrl(lang, 'contact/success');
 ---
 
-<BaseLayout lang={lang} current="contact" path="contact" title={c.seoTitle} description={c.seoDescription}>
+<BaseLayout
+  lang={lang}
+  current="contact"
+  path="contact"
+  title={c.seoTitle}
+  description={c.seoDescription}
+>
   <section class="dpn-section">
     <div class="dpn-section__inner dpn-contact__grid">
       <div class="dpn-contact__form-frame">
@@ -27,7 +33,14 @@ const successHref = getRelativeLocaleUrl(lang, 'contact/success');
           <p class="dpn-section__intro">{c.intro}</p>
         </header>
 
-        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action={successHref} class="dpn-contact__form">
+        <form
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          action={successHref}
+          class="dpn-contact__form"
+        >
           <input type="hidden" name="form-name" value="contact" />
           <input type="hidden" name="language" value={lang} />
           <p style="display: none;">
@@ -37,10 +50,27 @@ const successHref = getRelativeLocaleUrl(lang, 'contact/success');
           </p>
 
           <div class="dpn-contact__row">
-            <Input label={c.formNameLabel} name="name" placeholder={c.formNamePlaceholder} required />
-            <Input label={c.formEmailLabel} name="email" type="email" placeholder={c.formEmailPlaceholder} required />
+            <Input
+              label={c.formNameLabel}
+              name="name"
+              placeholder={c.formNamePlaceholder}
+              required
+            />
+            <Input
+              label={c.formEmailLabel}
+              name="email"
+              type="email"
+              placeholder={c.formEmailPlaceholder}
+              required
+            />
           </div>
-          <Input label={c.formMessageLabel} name="message" textarea placeholder={c.formMessagePlaceholder} required />
+          <Input
+            label={c.formMessageLabel}
+            name="message"
+            textarea
+            placeholder={c.formMessagePlaceholder}
+            required
+          />
           <Button type="submit" variant="primary" prompt size="lg">{c.submitLabel}</Button>
         </form>
       </div>

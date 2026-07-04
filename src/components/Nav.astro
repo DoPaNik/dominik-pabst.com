@@ -14,12 +14,13 @@ interface Props {
 const { lang, current } = Astro.props;
 const t = getDictionary(lang);
 
-const links: Array<{ id: 'about' | 'talks' | 'writing' | 'contact'; label: string; path: string }> = [
-  { id: 'about', label: t.common.nav.about, path: 'about' },
-  { id: 'talks', label: t.common.nav.talks, path: 'talks' },
-  { id: 'writing', label: t.common.nav.writing, path: 'writing' },
-  { id: 'contact', label: t.common.nav.contact, path: 'contact' },
-];
+const links: Array<{ id: 'about' | 'talks' | 'writing' | 'contact'; label: string; path: string }> =
+  [
+    { id: 'about', label: t.common.nav.about, path: 'about' },
+    { id: 'talks', label: t.common.nav.talks, path: 'talks' },
+    { id: 'writing', label: t.common.nav.writing, path: 'writing' },
+    { id: 'contact', label: t.common.nav.contact, path: 'contact' },
+  ];
 
 const homeHref = getRelativeLocaleUrl(lang, '');
 const contactHref = getRelativeLocaleUrl(lang, 'contact');
@@ -29,10 +30,11 @@ const currentLangPath = current === 'home' ? '' : current;
 <nav id="dpn-nav" class="dpn-nav">
   <div class="dpn-nav__bar">
     <a href={homeHref} class="dpn-nav__wordmark">
-      <span class="dpn-nav__wordmark-strong">Do</span><span class="dpn-nav__wordmark-brand">Pa</span><span class="dpn-nav__wordmark-strong">Nik</span>
+      <span class="dpn-nav__wordmark-strong">Do</span><span class="dpn-nav__wordmark-brand">Pa</span
+      ><span class="dpn-nav__wordmark-strong">Nik</span>
     </a>
 
-    <div class="dpn-nav__spacer" />
+    <div class="dpn-nav__spacer"></div>
 
     <ul id="dpn-nav-links" class="dpn-nav__links">
       {
@@ -52,8 +54,16 @@ const currentLangPath = current === 'home' ? '' : current;
     <div class="dpn-nav__actions">
       <LangSwitch currentLocale={lang} path={currentLangPath} label={t.common.langSwitch} />
       <ThemeToggle label={t.common.themeToggle} />
-      <Button href={contactHref} variant="primary" prompt class="dpn-nav__cta">{t.common.hireMe}</Button>
-      <button id="dpn-nav-burger" class="dpn-iconbtn dpn-nav__burger" type="button" aria-expanded="false" aria-controls="dpn-nav-links">
+      <Button href={contactHref} variant="primary" prompt class="dpn-nav__cta"
+        >{t.common.hireMe}</Button
+      >
+      <button
+        id="dpn-nav-burger"
+        class="dpn-iconbtn dpn-nav__burger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="dpn-nav-links"
+      >
         <span class="visually-hidden">menu</span>
         <span class="dpn-nav__burger-bars" aria-hidden="true"></span>
       </button>
@@ -67,7 +77,9 @@ const currentLangPath = current === 'home' ? '' : current;
     top: 0;
     z-index: 50;
     border-bottom: 1px solid transparent;
-    transition: background 0.25s, border-color 0.25s;
+    transition:
+      background 0.25s,
+      border-color 0.25s;
   }
   .dpn-nav.is-scrolled {
     background: color-mix(in srgb, var(--bg) 82%, transparent);
@@ -92,9 +104,15 @@ const currentLangPath = current === 'home' ? '' : current;
     letter-spacing: -0.02em;
     text-decoration: none;
   }
-  .dpn-nav__wordmark-strong { color: var(--text-strong); }
-  .dpn-nav__wordmark-brand { color: var(--brand); }
-  .dpn-nav__spacer { flex: 1; }
+  .dpn-nav__wordmark-strong {
+    color: var(--text-strong);
+  }
+  .dpn-nav__wordmark-brand {
+    color: var(--brand);
+  }
+  .dpn-nav__spacer {
+    flex: 1;
+  }
   .dpn-nav__links {
     display: flex;
     gap: 4px;
@@ -110,7 +128,9 @@ const currentLangPath = current === 'home' ? '' : current;
     text-decoration: none;
     padding: 8px 12px;
     border-radius: var(--radius-sm);
-    transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+    transition:
+      color var(--dur) var(--ease),
+      background var(--dur) var(--ease);
   }
   .dpn-nav__links a:hover {
     color: var(--text-strong);
@@ -138,8 +158,12 @@ const currentLangPath = current === 'home' ? '' : current;
     position: relative;
     transition: transform var(--dur) var(--ease);
   }
-  .dpn-nav__burger-bars::before { top: -5px; }
-  .dpn-nav__burger-bars::after { top: 3px; }
+  .dpn-nav__burger-bars::before {
+    top: -5px;
+  }
+  .dpn-nav__burger-bars::after {
+    top: 3px;
+  }
 
   @media (max-width: 880px) {
     .dpn-nav__cta {
@@ -170,14 +194,19 @@ const currentLangPath = current === 'home' ? '' : current;
 </style>
 
 <script>
-  const nav = document.getElementById('dpn-nav');
-  const onScroll = () => nav?.classList.toggle('is-scrolled', window.scrollY > 24);
+  // The nav is re-rendered on every ClientRouter navigation, so nothing here may
+  // hold a reference to a specific element: query fresh on each event instead.
+  const onScroll = () => {
+    document.getElementById('dpn-nav')?.classList.toggle('is-scrolled', window.scrollY > 24);
+  };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('astro:page-load', onScroll);
 
-  const burger = document.getElementById('dpn-nav-burger');
-  const navLinks = document.getElementById('dpn-nav-links');
-  burger?.addEventListener('click', () => {
+  document.addEventListener('click', (event) => {
+    const burger = (event.target as HTMLElement).closest('#dpn-nav-burger');
+    if (!burger) return;
+    const navLinks = document.getElementById('dpn-nav-links');
     const isOpen = navLinks?.classList.toggle('is-open');
     burger.setAttribute('aria-expanded', String(Boolean(isOpen)));
   });

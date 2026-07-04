@@ -3,9 +3,16 @@
    Applies the terminal aesthetic to raw HTML so specimens & docs inherit it.
    --------------------------------------------------------------------------- */
 
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
@@ -18,9 +25,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-::selection { background: var(--selection-bg); color: var(--selection-fg); }
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   color: var(--text-strong);
   font-weight: var(--weight-bold);
@@ -28,19 +43,43 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: var(--tracking-tight);
   margin: 0 0 0.5em;
 }
-h1 { font-size: var(--text-4xl); font-weight: var(--weight-black); }
-h2 { font-size: var(--text-3xl); }
-h3 { font-size: var(--text-2xl); }
-h4 { font-size: var(--text-xl); }
-h5 { font-size: var(--text-lg); }
-h6 { font-size: var(--text-md); }
+h1 {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-black);
+}
+h2 {
+  font-size: var(--text-3xl);
+}
+h3 {
+  font-size: var(--text-2xl);
+}
+h4 {
+  font-size: var(--text-xl);
+}
+h5 {
+  font-size: var(--text-lg);
+}
+h6 {
+  font-size: var(--text-md);
+}
 
-p { margin: 0 0 1em; }
+p {
+  margin: 0 0 1em;
+}
 
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; text-underline-offset: 2px; }
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 
-code, kbd, samp, pre {
+code,
+kbd,
+samp,
+pre {
   font-family: var(--font-code);
   font-size: 0.92em;
 }
@@ -58,24 +97,41 @@ pre {
   padding: var(--space-4);
   overflow: auto;
 }
-pre code { background: none; border: none; padding: 0; color: inherit; }
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
 
-hr { border: none; border-top: 1px solid var(--border); margin: var(--space-6) 0; }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--space-6) 0;
+}
 
 /* Terminal-style scrollbars */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--ink-600) transparent;
 }
-*::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
 *::-webkit-scrollbar-thumb {
   background: var(--ink-600);
   border-radius: var(--radius-full);
   border: 2px solid transparent;
   background-clip: content-box;
 }
-*::-webkit-scrollbar-thumb:hover { background: var(--ink-500); background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-500);
+  background-clip: content-box;
+}
 
 /* ---------------------------------------------------------------------------
    Cartoon illustrations.
@@ -93,11 +149,23 @@ hr { border: none; border-top: 1px solid var(--border); margin: var(--space-6) 0
   width: 100%;
   color: var(--illo-ink);
 }
-.dpn-illo svg { width: 100%; height: auto; display: block; }
-.dpn-illo--accent { color: var(--illo-accent); }
-.dpn-illo--photo  { color: var(--photo); }
-.dpn-illo--amber  { color: var(--amber-500); }
-.dpn-illo--ink    { color: var(--illo-ink); }
+.dpn-illo svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.dpn-illo--accent {
+  color: var(--illo-accent);
+}
+.dpn-illo--photo {
+  color: var(--photo);
+}
+.dpn-illo--amber {
+  color: var(--amber-500);
+}
+.dpn-illo--ink {
+  color: var(--illo-ink);
+}
 
 /* Subtle terminal grid texture, opt-in via class on a container */
 .dpn-grid-bg {

@@ -24,7 +24,14 @@ const schema = talks
   .map((talk) => buildSpeakingEventSchema(talk.data, lang));
 ---
 
-<BaseLayout lang={lang} current="talks" path="talks" title={talksT.seoTitle} description={talksT.seoDescription} schema={schema}>
+<BaseLayout
+  lang={lang}
+  current="talks"
+  path="talks"
+  title={talksT.seoTitle}
+  description={talksT.seoDescription}
+  schema={schema}
+>
   <section class="dpn-section">
     <div class="dpn-section__inner">
       <header class="dpn-section__header">
@@ -38,7 +45,9 @@ const schema = talks
           talks.map((talk) => (
             <Card accent>
               <div class="dpn-talks__meta">
-                <Badge tone="brand" variant="outline">{talk.data.year}</Badge>
+                <Badge tone="brand" variant="outline">
+                  {talk.data.year}
+                </Badge>
                 <Badge tone="neutral" variant="soft">
                   {talk.data.type === 'workshop' ? talksT.workshopLabel : talksT.talkLabel}
                 </Badge>
