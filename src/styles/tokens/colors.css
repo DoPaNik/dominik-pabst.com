@@ -134,7 +134,7 @@
   --brand-strong: #178a4a;
   --brand-deep: #137a40;
   --brand-soft: rgba(31, 157, 87, 0.1);
-  --on-brand: #ffffff;
+  --on-brand: var(--ink-950);
 
   --accent: #b9791a;
   --link: #0a66c2;
