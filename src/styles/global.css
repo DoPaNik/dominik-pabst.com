@@ -58,3 +58,10 @@
     animation: none !important;
   }
 }
+
+/* Visible keyboard focus for links (buttons get --ring via components) */
+a:focus-visible {
+  outline: 2px solid var(--green-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
