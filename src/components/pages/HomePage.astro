@@ -55,6 +55,9 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
 
       <div class="dpn-hero__art">
         <TerminalWindow title={h.pipeline.title} class="dpn-hero__term">
+          <span slot="right" class="dpn-pipeline__live">
+            <span class="dpn-pipeline__live-dot" aria-hidden="true"></span>{h.statusDeploy}
+          </span>
           <p class="dpn-pipeline__cmd">
             <span class="dpn-pipeline__prompt" aria-hidden="true">$</span>{' '}
             {h.pipeline.command}
@@ -79,10 +82,9 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
             <span class="dpn-pipeline__gate-state">{h.pipeline.gateState}</span>
           </p>
         </TerminalWindow>
-        <div class="dpn-hero__pill dpn-hero__pill--amber">{h.statusUptime}</div>
-        <div class="dpn-hero__pill dpn-hero__pill--brand">
-          <span class="dpn-hero__pill-dot" aria-hidden="true"></span>{h.statusDeploy}
-        </div>
+        <p class="dpn-hero__status">
+          <span class="dpn-hero__status-dot" aria-hidden="true"></span>{h.statusUptime}
+        </p>
       </div>
     </div>
   </header>
@@ -139,6 +141,8 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
     color: var(--text-muted);
     min-height: 38px;
     margin: 0 0 26px;
+    white-space: nowrap;
+    overflow: hidden;
   }
   .dpn-hero__role-prefix {
     color: var(--text-faint);
@@ -224,40 +228,46 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
     font-weight: 700;
     color: var(--text-strong);
   }
-  .dpn-hero__pill {
-    position: absolute;
+  .dpn-pipeline__live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 400;
+  }
+  .dpn-pipeline__live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--brand);
+    flex-shrink: 0;
+  }
+  .dpn-hero__status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 0;
     font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 700;
-    background: var(--surface-overlay);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    padding: 6px 10px;
-    box-shadow: var(--shadow-md);
+    color: var(--text-dim);
   }
-  .dpn-hero__pill--amber {
-    top: -14px;
-    right: 20px;
-    color: var(--amber-500);
-  }
-  .dpn-hero__pill--brand {
-    bottom: -14px;
-    left: 20px;
-    color: var(--brand);
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .dpn-hero__pill-dot {
+  .dpn-hero__status-dot {
     width: 7px;
     height: 7px;
     border-radius: var(--radius-full);
-    background: var(--brand);
+    background: var(--amber-500);
+    flex-shrink: 0;
   }
 
   @media (max-width: 880px) {
     .dpn-hero__inner {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dpn-hero__role {
+      font-size: var(--text-lg);
     }
   }
 </style>

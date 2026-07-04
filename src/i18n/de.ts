@@ -22,7 +22,7 @@ export const de: Dictionary = {
     headingLine1: 'Ich bin',
     headingLine2: 'Dominik Pabst.',
     rolePrefix: '$ rolle=',
-    roles: ['DevSecOps', 'Platform Engineering', 'Cloud', 'KI in der Softwareentwicklung'],
+    roles: ['DevSecOps', 'Platform Engineering', 'Cloud', 'AI Engineering'],
     intro:
       'Ich helfe Entwicklungsteams, Sicherheit, Plattformen und KI sinnvoll in ihre Software-Lieferkette einzubauen — als Executive Consultant bei CGI Deutschland, als Speaker und als Trainer.',
     ctaPrimary: 'talks ansehen',
