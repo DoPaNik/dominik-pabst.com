@@ -30,7 +30,7 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
       <MatrixPortrait
         class="dpn-about-hero__portrait"
         src="/images/dominik-portrait.jpg"
-        alt="Porträt von Dominik Pabst"
+        alt={lang === 'de' ? 'Porträt von Dominik Pabst' : 'Portrait of Dominik Pabst'}
         width={840}
         height={1050}
         caption="~ cat dominik.pixels | decode"
