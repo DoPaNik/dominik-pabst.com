@@ -10,7 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate:luma": "node scripts/generate-luma.mjs"
+    "generate:portrait": "node scripts/fetch-portrait.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
