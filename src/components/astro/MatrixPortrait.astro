@@ -61,7 +61,7 @@ const { src, alt, width, height, caption, class: className = '' } = Astro.props;
   .dpn-portrait__caption {
     font-family: var(--font-mono);
     font-size: 12px;
-    color: var(--text-faint);
+    color: var(--text-muted);
     margin-top: 10px;
   }
 </style>
@@ -77,6 +77,10 @@ const { src, alt, width, height, caption, class: className = '' } = Astro.props;
   function cssVar(name: string, fallback: string): string {
     const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     return v || fallback;
+  }
+
+  function monoFont(): string {
+    return cssVar('--font-mono', "'JetBrains Mono', monospace");
   }
 
   function themeColors() {
@@ -185,7 +189,7 @@ const { src, alt, width, height, caption, class: className = '' } = Astro.props;
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx!.fillStyle = colors.bg;
       ctx!.fillRect(0, 0, cssW, cssH);
-      ctx!.font = `${CELL}px 'JetBrains Mono', monospace`;
+      ctx!.font = `${CELL}px ${monoFont()}`;
       ctx!.textBaseline = 'top';
       const now = performance.now();
       for (let x = 0; x < cols; x++) drawGlyphColumn(x, 1, colors, now, -1);
@@ -210,7 +214,7 @@ const { src, alt, width, height, caption, class: className = '' } = Astro.props;
 
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx!.clearRect(0, 0, cssW, cssH);
-      ctx!.font = `${CELL}px 'JetBrains Mono', monospace`;
+      ctx!.font = `${CELL}px ${monoFont()}`;
       ctx!.textBaseline = 'top';
 
       for (let x = 0; x < cols; x++) {

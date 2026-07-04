@@ -94,50 +94,19 @@ const successHref = getRelativeLocaleUrl(lang, 'contact/success');
 </BaseLayout>
 
 <style>
-  .dpn-section {
-    padding: 88px 0;
-  }
-  .dpn-section__inner {
-    max-width: var(--container-lg);
-    margin: 0 auto;
-    padding: 0 var(--gutter);
-  }
   .dpn-contact__grid {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: var(--space-12);
     align-items: start;
   }
+  /* Contact's header sits tighter and its intro isn't measure-constrained,
+     unlike the shared .dpn-section__header/.dpn-section__intro defaults. */
   .dpn-section__header {
     margin-bottom: 28px;
   }
-  .dpn-eyebrow {
-    font-family: var(--font-mono);
-    color: var(--brand);
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-label);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .dpn-eyebrow__rule {
-    width: 18px;
-    height: 1px;
-    background: var(--brand);
-  }
-  .dpn-section__title {
-    font-size: var(--text-3xl);
-    margin: 0 0 12px;
-    color: var(--text-strong);
-  }
   .dpn-section__intro {
-    color: var(--text-muted);
-    font-size: var(--text-lg);
-    line-height: 1.65;
-    margin: 0;
+    max-width: none;
   }
   .dpn-contact__form-frame {
     background: var(--surface);
