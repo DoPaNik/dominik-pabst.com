@@ -19,7 +19,7 @@ export const de: Dictionary = {
     seoDescription:
       'Executive Consultant für DevSecOps, Platform Engineering und Cloud bei CGI Deutschland. Speaker auf den IT-Tagen Frankfurt. Trainer bei der heise Academy.',
     eyebrow: 'dominik@dopanik:~$ whoami',
-    headingLine1: 'Hallo, ich bin',
+    headingLine1: 'Ich bin',
     headingLine2: 'Dominik Pabst.',
     rolePrefix: '$ rolle=',
     roles: ['DevSecOps', 'Platform Engineering', 'Cloud', 'KI in der Softwareentwicklung'],
@@ -29,6 +29,20 @@ export const de: Dictionary = {
     ctaSecondary: 'projekt anfragen',
     statusUptime: 'verfügbar für anfragen',
     statusDeploy: 'aktuell · IT-Tage 2026',
+    pipeline: {
+      title: '~/pipeline — deploy.yml',
+      command: 'gh workflow run deploy.yml --ref main',
+      steps: [
+        { label: 'build', meta: '2.1s' },
+        { label: 'unit-tests', meta: '128 passed' },
+        { label: 'sast · semgrep', meta: '0 findings' },
+        { label: 'sca · trivy', meta: '0 critical' },
+        { label: 'sign · cosign', meta: 'verified' },
+        { label: 'policy · opa gate', meta: 'passed' },
+      ],
+      gateLabel: 'deploy → production',
+      gateState: 'freigegeben',
+    },
   },
   about: {
     seoTitle: 'Über mich – Dominik Pabst | DevSecOps Consultant & Speaker',

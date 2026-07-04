@@ -25,6 +25,13 @@ export interface Dictionary {
     ctaSecondary: string;
     statusUptime: string;
     statusDeploy: string;
+    pipeline: {
+      title: string;
+      command: string;
+      steps: { label: string; meta: string }[];
+      gateLabel: string;
+      gateState: string;
+    };
   };
   about: {
     seoTitle: string;

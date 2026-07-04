@@ -19,7 +19,7 @@ export const en: Dictionary = {
     seoDescription:
       'Executive Consultant for DevSecOps, Platform Engineering, and Cloud at CGI Germany. Speaker at IT-Tage Frankfurt. Trainer at heise Academy.',
     eyebrow: 'dominik@dopanik:~$ whoami',
-    headingLine1: "Hi there. I'm",
+    headingLine1: "I'm",
     headingLine2: 'Dominik Pabst.',
     rolePrefix: '$ role=',
     roles: ['DevSecOps', 'Platform Engineering', 'Cloud', 'AI in software development'],
@@ -29,6 +29,20 @@ export const en: Dictionary = {
     ctaSecondary: 'work with me',
     statusUptime: 'available for inquiries',
     statusDeploy: 'live · IT-Tage 2026',
+    pipeline: {
+      title: '~/pipeline — deploy.yml',
+      command: 'gh workflow run deploy.yml --ref main',
+      steps: [
+        { label: 'build', meta: '2.1s' },
+        { label: 'unit-tests', meta: '128 passed' },
+        { label: 'sast · semgrep', meta: '0 findings' },
+        { label: 'sca · trivy', meta: '0 critical' },
+        { label: 'sign · cosign', meta: 'verified' },
+        { label: 'policy · opa gate', meta: 'passed' },
+      ],
+      gateLabel: 'deploy → production',
+      gateState: 'approved',
+    },
   },
   about: {
     seoTitle: 'About – Dominik Pabst | DevSecOps Consultant & Speaker',

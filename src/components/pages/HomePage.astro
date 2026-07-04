@@ -2,9 +2,9 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../astro/Button.astro';
-import Illustration from '../astro/Illustration.astro';
 import MatrixRainBackdrop from '../astro/MatrixRainBackdrop.astro';
 import RoleRotator from '../astro/RoleRotator.astro';
+import TerminalWindow from '../astro/TerminalWindow.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 import { buildPersonSchema } from '../../lib/schema';
@@ -54,14 +54,31 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
       </div>
 
       <div class="dpn-hero__art">
-        <div class="dpn-hero__art-frame">
-          <span class="dpn-hero__art-lights" aria-hidden="true">
-            <span style="background: var(--red-500)"></span>
-            <span style="background: var(--amber-500)"></span>
-            <span style="background: var(--green-500)"></span>
-          </span>
-          <Illustration name="dopanik" tone="accent" class="dpn-hero__illo" decorative />
-        </div>
+        <TerminalWindow title={h.pipeline.title} class="dpn-hero__term">
+          <p class="dpn-pipeline__cmd">
+            <span class="dpn-pipeline__prompt" aria-hidden="true">$</span>{' '}
+            {h.pipeline.command}
+          </p>
+          <ul class="dpn-pipeline__steps">
+            {
+              h.pipeline.steps.map((step) => (
+                <li class="dpn-pipeline__step">
+                  <span class="dpn-pipeline__check" aria-hidden="true">
+                    ✓
+                  </span>
+                  <span class="dpn-pipeline__label">{step.label}</span>
+                  <span class="dpn-pipeline__meta">{step.meta}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="dpn-pipeline__gate">
+            <span class="dpn-pipeline__gate-dot" aria-hidden="true"></span>
+            <span class="dpn-pipeline__arrow" aria-hidden="true"> → </span>
+            {h.pipeline.gateLabel}
+            <span class="dpn-pipeline__gate-state">{h.pipeline.gateState}</span>
+          </p>
+        </TerminalWindow>
         <div class="dpn-hero__pill dpn-hero__pill--amber">{h.statusUptime}</div>
         <div class="dpn-hero__pill dpn-hero__pill--brand">
           <span class="dpn-hero__pill-dot" aria-hidden="true"></span>{h.statusDeploy}
@@ -145,31 +162,67 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
   .dpn-hero__art {
     position: relative;
   }
-  .dpn-hero__art-frame {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: 28px 28px 0;
+  .dpn-hero__term {
     box-shadow: var(--shadow-lg);
-    overflow: hidden;
-    background-image:
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 32px 32px;
   }
-  .dpn-hero__art-lights {
+  .dpn-pipeline__cmd {
+    margin: 0 0 14px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  .dpn-pipeline__prompt {
+    color: var(--brand);
+  }
+  .dpn-pipeline__steps {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
     display: flex;
-    gap: 7px;
-    margin-bottom: 14px;
+    flex-direction: column;
+    gap: 6px;
   }
-  .dpn-hero__art-lights span {
-    width: 11px;
-    height: 11px;
+  .dpn-pipeline__step {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .dpn-pipeline__check {
+    color: var(--brand);
+    flex-shrink: 0;
+  }
+  .dpn-pipeline__label {
+    color: var(--text);
+  }
+  .dpn-pipeline__meta {
+    margin-left: auto;
+    color: var(--text-dim);
+    padding-left: 12px;
+  }
+  .dpn-pipeline__gate {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 0;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+    color: var(--text);
+  }
+  .dpn-pipeline__gate-dot {
+    width: 7px;
+    height: 7px;
     border-radius: var(--radius-full);
+    background: var(--brand);
+    flex-shrink: 0;
   }
-  .dpn-hero__illo {
-    display: block;
+  .dpn-pipeline__arrow {
+    color: var(--text-dim);
+  }
+  .dpn-pipeline__gate-state {
+    margin-left: auto;
+    font-weight: 700;
+    color: var(--text-strong);
   }
   .dpn-hero__pill {
     position: absolute;
@@ -183,13 +236,13 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
     box-shadow: var(--shadow-md);
   }
   .dpn-hero__pill--amber {
-    top: 18px;
-    right: -10px;
+    top: -14px;
+    right: 20px;
     color: var(--amber-500);
   }
   .dpn-hero__pill--brand {
-    bottom: 26px;
-    left: -14px;
+    bottom: -14px;
+    left: 20px;
     color: var(--brand);
     display: flex;
     align-items: center;
