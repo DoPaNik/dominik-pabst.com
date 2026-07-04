@@ -9,8 +9,11 @@ const { roles, class: className = '' } = Astro.props;
 
 <span
   class={['dpn-role-rotator', className].filter(Boolean).join(' ')}
-  data-roles={JSON.stringify(roles)}>{roles[0]}</span
-><span class="dpn-role-rotator__cursor" aria-hidden="true"></span>
+  data-roles={JSON.stringify(roles)}
+  aria-hidden="true">{roles[0]}</span
+><span class="dpn-role-rotator__cursor" aria-hidden="true"></span><span class="visually-hidden"
+  >{roles.join(', ')}</span
+>
 
 <style>
   .dpn-role-rotator__cursor {
