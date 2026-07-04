@@ -113,13 +113,24 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
     background: var(--ink-950);
     overflow: hidden;
   }
+  .dpn-about-hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 130px;
+    background: linear-gradient(180deg, transparent, var(--bg));
+    pointer-events: none;
+    z-index: 1;
+  }
   .dpn-about-hero__bg {
     position: absolute;
     inset: 0;
   }
   .dpn-about-hero__inner {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     max-width: var(--container-lg);
     margin: 0 auto;
@@ -128,9 +139,20 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
     justify-content: flex-end;
   }
   .dpn-about-hero__copy {
+    position: relative;
     max-width: 540px;
     padding: 56px 8px 56px 72px;
+  }
+  /* Backdrop lives in a pseudo-element so it can dissolve at the hero's bottom
+     edge (in sync with the hero fade) without fading the text itself. */
+  .dpn-about-hero__copy::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: linear-gradient(90deg, transparent, var(--ink-950) 42%);
+    mask-image: linear-gradient(180deg, #000 calc(100% - 120px), transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 120px), transparent 100%);
   }
   .dpn-about-hero__eyebrow {
     font-family: var(--font-mono);
@@ -175,10 +197,17 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
     .dpn-about-hero__inner {
       justify-content: center;
     }
+    .dpn-about-hero::after {
+      height: 72px;
+    }
     .dpn-about-hero__copy {
       max-width: 100%;
       padding: 24px var(--gutter) 40px;
+    }
+    .dpn-about-hero__copy::before {
       background: linear-gradient(180deg, rgba(11, 14, 20, 0.6) 0%, var(--ink-950) 55%);
+      mask-image: linear-gradient(180deg, #000 calc(100% - 64px), transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 64px), transparent 100%);
     }
   }
 </style>

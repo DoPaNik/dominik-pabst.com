@@ -170,14 +170,19 @@ const currentLangPath = current === 'home' ? '' : current;
 </style>
 
 <script>
-  const nav = document.getElementById('dpn-nav');
-  const onScroll = () => nav?.classList.toggle('is-scrolled', window.scrollY > 24);
+  // The nav is re-rendered on every ClientRouter navigation, so nothing here may
+  // hold a reference to a specific element: query fresh on each event instead.
+  const onScroll = () => {
+    document.getElementById('dpn-nav')?.classList.toggle('is-scrolled', window.scrollY > 24);
+  };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('astro:page-load', onScroll);
 
-  const burger = document.getElementById('dpn-nav-burger');
-  const navLinks = document.getElementById('dpn-nav-links');
-  burger?.addEventListener('click', () => {
+  document.addEventListener('click', (event) => {
+    const burger = (event.target as HTMLElement).closest('#dpn-nav-burger');
+    if (!burger) return;
+    const navLinks = document.getElementById('dpn-nav-links');
     const isOpen = navLinks?.classList.toggle('is-open');
     burger.setAttribute('aria-expanded', String(Boolean(isOpen)));
   });

@@ -1,4 +1,5 @@
 ---
+import MatrixRainBackdrop from './astro/MatrixRainBackdrop.astro';
 import { site } from '../data/site';
 import { getDictionary } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
@@ -13,6 +14,9 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="dpn-footer">
+  <div class="dpn-footer__rain" aria-hidden="true">
+    <MatrixRainBackdrop opacity={0.07} />
+  </div>
   <div class="dpn-footer__bar">
     <span class="dpn-footer__wordmark">
       <span class="dpn-footer__wordmark-strong">Do</span><span class="dpn-footer__wordmark-brand">Pa</span><span class="dpn-footer__wordmark-strong">Nik</span>
@@ -38,11 +42,18 @@ const year = new Date().getFullYear();
 
 <style>
   .dpn-footer {
+    position: relative;
+    overflow: hidden;
     border-top: 1px solid var(--border);
     padding: var(--space-10) 0;
     margin-top: var(--space-6);
   }
+  .dpn-footer__rain {
+    position: absolute;
+    inset: 0;
+  }
   .dpn-footer__bar {
+    position: relative;
     max-width: var(--container-xl);
     margin: 0 auto;
     padding: 0 var(--gutter);

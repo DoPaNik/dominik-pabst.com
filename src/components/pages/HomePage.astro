@@ -3,6 +3,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../astro/Button.astro';
 import Illustration from '../astro/Illustration.astro';
+import MatrixRainBackdrop from '../astro/MatrixRainBackdrop.astro';
 import RoleRotator from '../astro/RoleRotator.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
@@ -30,6 +31,9 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
 >
   <header class="dpn-hero">
     <div class="dpn-hero__grid-bg" aria-hidden="true"></div>
+    <div class="dpn-hero__rain" aria-hidden="true">
+      <MatrixRainBackdrop opacity={0.1} />
+    </div>
     <div class="dpn-hero__inner">
       <div class="dpn-hero__copy">
         <p class="dpn-hero__prompt">
@@ -80,6 +84,10 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size: 32px 32px;
     mask-image: radial-gradient(120% 80% at 70% 0%, #000 30%, transparent 75%);
+  }
+  .dpn-hero__rain {
+    position: absolute;
+    inset: 0;
   }
   .dpn-hero__inner {
     position: relative;

@@ -351,6 +351,7 @@ const anchorXPercent = align === 'left' ? 30 : 50;
     }
 
     const ready = () => {
+      if (!root.isConnected) return;
       resize();
       if (width === 0 || height === 0) {
         requestAnimationFrame(ready);
@@ -377,6 +378,7 @@ const anchorXPercent = align === 'left' ? 30 : 50;
 
     let resizeTimer = 0;
     window.addEventListener('resize', () => {
+      if (!root.isConnected) return;
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
         resize();
