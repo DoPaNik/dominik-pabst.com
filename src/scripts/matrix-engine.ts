@@ -37,7 +37,6 @@ export function clampedDpr(): number {
 }
 
 const entries = new Set<Entry>();
-let rafId = 0;
 let running = false;
 
 function anyActive(): boolean {
@@ -62,16 +61,15 @@ function loop(now: number) {
   }
   if (!anyActive()) {
     running = false;
-    rafId = 0;
     return;
   }
-  rafId = requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 
 function wake() {
   if (running || !anyActive()) return;
   running = true;
-  rafId = requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 
 function removeEntry(e: Entry) {
