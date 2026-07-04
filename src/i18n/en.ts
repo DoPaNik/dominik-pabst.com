@@ -24,7 +24,7 @@ export const en: Dictionary = {
     rolePrefix: '$ role=',
     roles: ['DevSecOps', 'Platform Engineering', 'Cloud', 'AI in software development'],
     intro:
-      "I help development teams bake security, platforms and AI into their software supply chain properly — as an Executive Consultant at CGI Germany, as a speaker, and as a trainer.",
+      'I help development teams bake security, platforms and AI into their software supply chain properly — as an Executive Consultant at CGI Germany, as a speaker, and as a trainer.',
     ctaPrimary: 'view talks',
     ctaSecondary: 'work with me',
     statusUptime: 'available for inquiries',
@@ -39,9 +39,17 @@ export const en: Dictionary = {
     bio: "I'm an Executive Consultant for DevOps & Platform Engineering at CGI Germany — formerly Novatec Consulting, acquired by CGI in June 2025. For over a decade, I've helped development teams bake security, automation, and platform thinking into their software supply chain from day one, rather than bolting it on at the end. As a recurring speaker at IT-Tage Frankfurt and trainer at heise Academy, I share that knowledge — most recently in a joint course with Andreas Falk on DevSecOps and AI.",
     collabLine: '# > DevSecOps is a culture shift — not a toolchain decision.',
     stackEyebrow: '// focus',
-    stackTitle: "What I speak, write, and consult about.",
+    stackTitle: 'What I speak, write, and consult about.',
     stackTerminalLine: 'dominik@dopanik:~$ cat ~/.focus',
-    focusAreas: ['DevSecOps', 'Platform Engineering', 'Cloud', 'CI/CD', 'GitOps', 'Infrastructure as Code', 'AI in software development'],
+    focusAreas: [
+      'DevSecOps',
+      'Platform Engineering',
+      'Cloud',
+      'CI/CD',
+      'GitOps',
+      'Infrastructure as Code',
+      'AI in software development',
+    ],
   },
   talks: {
     seoTitle: 'Talks & Workshops – Dominik Pabst | DevSecOps Speaker',
@@ -49,24 +57,29 @@ export const en: Dictionary = {
       'Workshops and talks on DevSecOps, Platform Engineering, and AI security – IT-Tage Frankfurt 2023, 2025 & 2026, heise Academy.',
     eyebrow: '// talks',
     title: 'Talks & workshops.',
-    intro: 'Workshops and talks on DevSecOps, Platform Engineering, and secure AI adoption in software development — at IT-Tage Frankfurt and heise Academy.',
+    intro:
+      'Workshops and talks on DevSecOps, Platform Engineering, and secure AI adoption in software development — at IT-Tage Frankfurt and heise Academy.',
     workshopLabel: 'workshop',
     talkLabel: 'talk',
   },
   writing: {
     seoTitle: 'Articles & Posts – Dominik Pabst | DevSecOps & DevOps',
-    seoDescription: 'Technical articles on DevOps, DevSecOps, CI/CD, and Infrastructure as Code by Dominik Pabst.',
+    seoDescription:
+      'Technical articles on DevOps, DevSecOps, CI/CD, and Infrastructure as Code by Dominik Pabst.',
     eyebrow: '// writing',
     title: 'Articles & posts.',
-    intro: 'Technical articles on DevOps, CI/CD, security, and Infrastructure as Code — plus thoughts on AI in knowledge work.',
+    intro:
+      'Technical articles on DevOps, CI/CD, security, and Infrastructure as Code — plus thoughts on AI in knowledge work.',
     readMore: 'read more →',
   },
   contact: {
     seoTitle: 'Contact – Dominik Pabst | DevSecOps Consulting & Training',
-    seoDescription: 'Get in touch: inquiries for DevSecOps consulting, training, and speaking engagements.',
+    seoDescription:
+      'Get in touch: inquiries for DevSecOps consulting, training, and speaking engagements.',
     eyebrow: '// contact',
     title: "Let's talk.",
-    intro: 'Open to consulting, training, and speaking inquiries around DevSecOps, Platform Engineering, and cloud infrastructure.',
+    intro:
+      'Open to consulting, training, and speaking inquiries around DevSecOps, Platform Engineering, and cloud infrastructure.',
     formNameLabel: 'Name',
     formNamePlaceholder: 'Ada Lovelace',
     formEmailLabel: 'Email',

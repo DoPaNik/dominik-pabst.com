@@ -41,7 +41,15 @@ export const de: Dictionary = {
     stackEyebrow: '// fokus',
     stackTitle: 'Worüber ich spreche, schreibe und berate.',
     stackTerminalLine: 'dominik@dopanik:~$ cat ~/.fokus',
-    focusAreas: ['DevSecOps', 'Platform Engineering', 'Cloud', 'CI/CD', 'GitOps', 'Infrastructure as Code', 'KI in der Softwareentwicklung'],
+    focusAreas: [
+      'DevSecOps',
+      'Platform Engineering',
+      'Cloud',
+      'CI/CD',
+      'GitOps',
+      'Infrastructure as Code',
+      'KI in der Softwareentwicklung',
+    ],
   },
   talks: {
     seoTitle: 'Vorträge & Workshops – Dominik Pabst | DevSecOps Speaker',
@@ -49,24 +57,29 @@ export const de: Dictionary = {
       'Workshops und Vorträge zu DevSecOps, Platform Engineering und KI-Sicherheit – IT-Tage Frankfurt 2023, 2025 & 2026, heise Academy.',
     eyebrow: '// talks',
     title: 'Vorträge & Workshops.',
-    intro: 'Workshops und Vorträge zu DevSecOps, Platform Engineering und dem sicheren Einsatz von KI in der Softwareentwicklung — auf den IT-Tagen Frankfurt und der heise Academy.',
+    intro:
+      'Workshops und Vorträge zu DevSecOps, Platform Engineering und dem sicheren Einsatz von KI in der Softwareentwicklung — auf den IT-Tagen Frankfurt und der heise Academy.',
     workshopLabel: 'workshop',
     talkLabel: 'vortrag',
   },
   writing: {
     seoTitle: 'Artikel & Beiträge – Dominik Pabst | DevSecOps & DevOps',
-    seoDescription: 'Technische Artikel zu DevOps, DevSecOps, CI/CD und Infrastructure as Code von Dominik Pabst.',
+    seoDescription:
+      'Technische Artikel zu DevOps, DevSecOps, CI/CD und Infrastructure as Code von Dominik Pabst.',
     eyebrow: '// schreiben',
     title: 'Artikel & Beiträge.',
-    intro: 'Technische Artikel zu DevOps, CI/CD, Security und Infrastructure as Code — sowie Gedanken zu KI in der Wissensarbeit.',
+    intro:
+      'Technische Artikel zu DevOps, CI/CD, Security und Infrastructure as Code — sowie Gedanken zu KI in der Wissensarbeit.',
     readMore: 'weiterlesen →',
   },
   contact: {
     seoTitle: 'Kontakt – Dominik Pabst | DevSecOps Consulting & Training',
-    seoDescription: 'Jetzt Kontakt aufnehmen: Anfragen für DevSecOps Consulting, Training und Speaking-Auftritte.',
+    seoDescription:
+      'Jetzt Kontakt aufnehmen: Anfragen für DevSecOps Consulting, Training und Speaking-Auftritte.',
     eyebrow: '// kontakt',
     title: 'Lassen Sie uns sprechen.',
-    intro: 'Offen für Consulting-, Trainings- und Speaking-Anfragen rund um DevSecOps, Platform Engineering und Cloud-Infrastruktur.',
+    intro:
+      'Offen für Consulting-, Trainings- und Speaking-Anfragen rund um DevSecOps, Platform Engineering und Cloud-Infrastruktur.',
     formNameLabel: 'Name',
     formNamePlaceholder: 'Ada Lovelace',
     formEmailLabel: 'E-Mail',

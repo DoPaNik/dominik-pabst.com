@@ -15,7 +15,9 @@ const year = new Date().getFullYear();
 <footer class="dpn-footer">
   <div class="dpn-footer__bar">
     <span class="dpn-footer__wordmark">
-      <span class="dpn-footer__wordmark-strong">Do</span><span class="dpn-footer__wordmark-brand">Pa</span><span class="dpn-footer__wordmark-strong">Nik</span>
+      <span class="dpn-footer__wordmark-strong">Do</span><span class="dpn-footer__wordmark-brand"
+        >Pa</span
+      ><span class="dpn-footer__wordmark-strong">Nik</span>
     </span>
     <span class="dpn-footer__meta">© {year} {site.name} · dopanik.de</span>
 
@@ -31,7 +33,7 @@ const year = new Date().getFullYear();
       }
     </ul>
 
-    <span class="dpn-footer__spacer" />
+    <span class="dpn-footer__spacer"></span>
     <span class="dpn-footer__tagline">{t.common.footerTagline}</span>
   </div>
 </footer>
@@ -56,8 +58,12 @@ const year = new Date().getFullYear();
     font-weight: 800;
     font-size: 16px;
   }
-  .dpn-footer__wordmark-strong { color: var(--text-strong); }
-  .dpn-footer__wordmark-brand { color: var(--brand); }
+  .dpn-footer__wordmark-strong {
+    color: var(--text-strong);
+  }
+  .dpn-footer__wordmark-brand {
+    color: var(--brand);
+  }
   .dpn-footer__meta {
     font-family: var(--font-mono);
     font-size: 12px;

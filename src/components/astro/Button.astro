@@ -37,7 +37,13 @@ const cls = [
 const Tag = href ? 'a' : 'button';
 ---
 
-<Tag class={cls} href={href} type={href ? undefined : type} disabled={href ? undefined : disabled} {...rest}>
+<Tag
+  class={cls}
+  href={href}
+  type={href ? undefined : type}
+  disabled={href ? undefined : disabled}
+  {...rest}
+>
   {prompt && <span class="dpn-btn__prompt">$</span>}
   <slot name="iconLeft" />
   <slot />

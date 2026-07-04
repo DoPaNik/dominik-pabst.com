@@ -15,7 +15,13 @@ const c = t.contact;
 const homeHref = getRelativeLocaleUrl(lang, '');
 ---
 
-<BaseLayout lang={lang} current="contact" path="contact/success" title={`${c.successTitle} — Dominik Pabst`} description={c.successBody}>
+<BaseLayout
+  lang={lang}
+  current="contact"
+  path="contact/success"
+  title={`${c.successTitle} — Dominik Pabst`}
+  description={c.successBody}
+>
   <section class="dpn-success">
     <div class="dpn-success__inner">
       <h1 class="dpn-success__title">{c.successTitle}</h1>

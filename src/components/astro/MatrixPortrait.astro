@@ -158,13 +158,23 @@ const { src, alt, width, height, caption, class: className = '' } = Astro.props;
       colProgress = Array.from({ length: cols }, () => -Math.random() * 0.35);
     }
 
-    function drawGlyphColumn(x: number, cover: number, colors: ReturnType<typeof themeColors>, now: number, leadRow: number) {
+    function drawGlyphColumn(
+      x: number,
+      cover: number,
+      colors: ReturnType<typeof themeColors>,
+      now: number,
+      leadRow: number,
+    ) {
       for (let y = 0; y < rows; y++) {
         const L = lum![y * cols + x];
         if (L * colors.density < 0.12) continue; // dark cells stay empty
         ctx!.globalAlpha = cover * (0.35 + L * 0.65);
         ctx!.fillStyle = y === leadRow ? colors.lead : colors.glyph;
-        ctx!.fillText(GLYPHS[(x * 7 + y * 13 + ((now / 90) | 0)) % GLYPHS.length], x * CELL, y * CELL);
+        ctx!.fillText(
+          GLYPHS[(x * 7 + y * 13 + ((now / 90) | 0)) % GLYPHS.length],
+          x * CELL,
+          y * CELL,
+        );
       }
     }
 
@@ -270,7 +280,10 @@ const { src, alt, width, height, caption, class: className = '' } = Astro.props;
       }
       if (mode === 'cover') drawStatic();
     });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
 
     // Resize: resample grid (debounced). After decode the canvas stays clear.
     let resizeTimer = 0;
