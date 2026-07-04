@@ -22,7 +22,7 @@ export const en: Dictionary = {
     headingLine1: "I'm",
     headingLine2: 'Dominik Pabst.',
     rolePrefix: '$ role=',
-    roles: ['DevSecOps', 'Platform Engineering', 'Cloud', 'AI in software development'],
+    roles: ['DevSecOps', 'Platform Engineering', 'Cloud', 'AI Engineering'],
     intro:
       'I help development teams bake security, platforms and AI into their software supply chain properly — as an Executive Consultant at CGI Germany, as a speaker, and as a trainer.',
     ctaPrimary: 'view talks',
