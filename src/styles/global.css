@@ -43,3 +43,18 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* Page transitions: calm 250ms crossfade via the View Transitions API.
+   No JS overlay — the ClientRouter drives this natively. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 250ms;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}

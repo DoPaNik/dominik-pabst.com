@@ -32,9 +32,10 @@ const { label = 'Toggle theme' } = Astro.props;
 
 <script>
   const STORAGE_KEY = 'dpn-theme';
-  const toggle = document.getElementById('dpn-theme-toggle');
 
-  toggle?.addEventListener('click', () => {
+  // Delegated so the handler survives ClientRouter re-rendering the button.
+  document.addEventListener('click', (event) => {
+    if (!(event.target as HTMLElement).closest('#dpn-theme-toggle')) return;
     const root = document.documentElement;
     const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     root.setAttribute('data-theme', next);
