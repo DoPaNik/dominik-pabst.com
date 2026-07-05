@@ -29,3 +29,7 @@
   --gutter: var(--space-6);
   --section-y: var(--space-24);
 }
+
+/* Shared breakpoint — was duplicated as a literal 880px in Nav, Home,
+   About and Contact; postcss-custom-media inlines this at build time. */
+@custom-media --below-tablet (max-width: 880px);
