@@ -22,7 +22,7 @@ const svg = raw
   .replace(/stroke-width="2"/, `stroke-width="${strokeWidth}"`);
 ---
 
-<span class={['dpn-icon', className].filter(Boolean).join(' ')} set:html={svg} />
+<span class={['dpn-icon', className].filter(Boolean).join(' ')} aria-hidden="true" set:html={svg} />
 
 <style>
   .dpn-icon {

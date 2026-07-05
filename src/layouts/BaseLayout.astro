@@ -84,7 +84,11 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 
     {
       schemaList.map((entry) => (
-        <script type="application/ld+json" is:inline set:html={JSON.stringify(entry)} />
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(entry).replace(/</g, '\\u003c')}
+        />
       ))
     }
 
