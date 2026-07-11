@@ -12,6 +12,9 @@ const noindexPaths = ['/contact/success', '/en/contact/success'];
 
 export default defineConfig({
   site: 'https://dopanik.de',
+  devToolbar: {
+    enabled: false,
+  },
   integrations: [
     sitemap({
       filter: (page) =>
