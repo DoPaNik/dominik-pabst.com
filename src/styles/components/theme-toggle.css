@@ -1,0 +1,12 @@
+.dpn-theme-toggle__icon {
+  display: none;
+}
+
+/* dark (default) theme shows the sun (click to go light) */
+:root:not([data-theme='light']) .dpn-theme-toggle__icon[data-icon='sun'] {
+  display: inline-flex;
+}
+
+[data-theme='light'] .dpn-theme-toggle__icon[data-icon='moon'] {
+  display: inline-flex;
+}

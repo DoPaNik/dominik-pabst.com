@@ -1,11 +1,14 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Illustration from '../astro/Illustration.astro';
 import TerminalWindow from '../astro/TerminalWindow.astro';
 import Tag from '../astro/Tag.astro';
 import MatrixPortrait from '../astro/MatrixPortrait.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
+import { site } from '../../data/site';
+import '../../styles/pages/about.css';
 
 interface Props {
   lang: Locale;
@@ -24,6 +27,8 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
   path="about"
   title={a.seoTitle}
   description={a.seoDescription}
+  ogImage={site.photo}
+  ogImageAlt={t.common.portraitAlt}
 >
   <section class="dpn-about-hero">
     <div class="dpn-about-hero__inner">
@@ -52,6 +57,10 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
         <h2 class="dpn-section__title-sm">{a.stackTitle}</h2>
       </header>
 
+      <div class="dpn-about__illustration">
+        <Illustration name="skills" tone="accent" decorative />
+      </div>
+
       <TerminalWindow title={a.stackTerminalLine}>
         <div class="dpn-about__tags">
           {
@@ -66,68 +75,3 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .dpn-section__title-sm {
-    font-size: var(--text-2xl);
-    margin: 0;
-    color: var(--text-strong);
-  }
-  .dpn-about__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .dpn-about-hero {
-    padding: 88px 0;
-  }
-  .dpn-about-hero__inner {
-    max-width: var(--container-lg);
-    margin: 0 auto;
-    padding: 0 var(--gutter);
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: var(--space-12);
-    align-items: center;
-  }
-  .dpn-about-hero__copy {
-    max-width: 560px;
-  }
-  .dpn-about-hero__title {
-    font-size: var(--text-3xl);
-    margin: 0 0 18px;
-    color: var(--text-strong);
-    overflow-wrap: break-word;
-  }
-  .dpn-about-hero__bio {
-    font-size: var(--text-lg);
-    color: var(--text);
-    line-height: 1.7;
-    margin: 0 0 18px;
-  }
-  .dpn-about-hero__collab {
-    font-family: var(--font-mono);
-    color: var(--brand-deep);
-    font-size: 14px;
-    margin: 0;
-  }
-  .dpn-about-hero__portrait {
-    justify-self: end;
-  }
-
-  @media (--below-tablet) {
-    .dpn-about-hero {
-      padding: 40px 0 56px;
-    }
-    .dpn-about-hero__inner {
-      grid-template-columns: 1fr;
-      gap: var(--space-8);
-    }
-    .dpn-about-hero__portrait {
-      justify-self: center;
-      max-width: 300px;
-      order: -1;
-    }
-  }
-</style>

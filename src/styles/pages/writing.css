@@ -1,0 +1,25 @@
+.dpn-writing__list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.dpn-writing__meta {
+  margin-bottom: var(--space-3);
+}
+
+.dpn-writing__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--text-strong);
+  margin: 0 0 8px;
+}
+
+.dpn-writing__description {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.dpn-writing__link {
+  margin-top: var(--space-3);
+}

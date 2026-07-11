@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import '../../styles/components/theme-toggle.css';
 
 interface Props {
   label?: string;
@@ -17,32 +18,4 @@ const { label = 'Toggle theme' } = Astro.props;
   </span>
 </button>
 
-<style>
-  .dpn-theme-toggle__icon {
-    display: none;
-  }
-  /* dark (default) theme shows the sun (click to go light) */
-  :global(:root:not([data-theme='light'])) .dpn-theme-toggle__icon[data-icon='sun'] {
-    display: inline-flex;
-  }
-  :global([data-theme='light']) .dpn-theme-toggle__icon[data-icon='moon'] {
-    display: inline-flex;
-  }
-</style>
-
-<script>
-  const STORAGE_KEY = 'dpn-theme';
-
-  // Delegated so the handler survives ClientRouter re-rendering the button.
-  document.addEventListener('click', (event) => {
-    if (!(event.target as HTMLElement).closest('#dpn-theme-toggle')) return;
-    const root = document.documentElement;
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      /* storage unavailable (private mode) — theme just won't persist */
-    }
-  });
-</script>
+<script is:inline src="/scripts/theme-toggle.js"></script>

@@ -7,6 +7,7 @@ import Button from '../astro/Button.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 import { buildSpeakingEventSchema } from '../../lib/schema';
+import '../../styles/pages/talks.css';
 
 interface Props {
   lang: Locale;
@@ -74,42 +75,3 @@ const schema = talks
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .dpn-talks__list {
-    display: grid;
-    gap: var(--space-4);
-  }
-  .dpn-talks__meta {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin-bottom: var(--space-3);
-    flex-wrap: wrap;
-  }
-  .dpn-talks__event {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-dim);
-  }
-  .dpn-talks__title {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    color: var(--text-strong);
-    margin: 0 0 8px;
-  }
-  .dpn-talks__description {
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin: 0;
-  }
-  .dpn-talks__co {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--text-dim);
-    margin: var(--space-2) 0 0;
-  }
-  .dpn-talks__link {
-    margin-top: var(--space-3);
-  }
-</style>

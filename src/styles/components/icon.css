@@ -1,0 +1,9 @@
+.dpn-icon {
+  display: inline-flex;
+  color: currentColor;
+  line-height: 0;
+}
+
+.dpn-icon svg {
+  display: block;
+}

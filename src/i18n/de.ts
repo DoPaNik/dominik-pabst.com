@@ -14,9 +14,10 @@ export const de: Dictionary = {
     langSwitch: 'sprache wechseln',
     footerTagline: '// versioniert mit sorgfalt',
     portraitAlt: 'Porträt von Dominik Pabst',
+    socialCardAlt: 'Social-Card von Dominik Pabst',
   },
   home: {
-    seoTitle: 'Dominik Pabst – DevSecOps & Platform Engineering | CGI Deutschland',
+    seoTitle: 'Dominik Pabst – DevSecOps & Platform Engineering | CGI',
     seoDescription:
       'Executive Consultant für DevSecOps, Platform Engineering und Cloud bei CGI Deutschland. Speaker auf den IT-Tagen Frankfurt. Trainer bei der heise Academy.',
     eyebrow: 'dominik@dopanik:~$ whoami',
@@ -29,7 +30,7 @@ export const de: Dictionary = {
     ctaPrimary: 'talks ansehen',
     ctaSecondary: 'projekt anfragen',
     statusUptime: 'verfügbar für anfragen',
-    statusDeploy: 'aktuell · IT-Tage 2026',
+    statusDeployPrefix: 'aktuell · ',
     pipeline: {
       title: '~/pipeline — deploy.yml',
       command: 'gh workflow run deploy.yml --ref main',
@@ -80,7 +81,7 @@ export const de: Dictionary = {
   writing: {
     seoTitle: 'Artikel & Beiträge – Dominik Pabst | DevSecOps & DevOps',
     seoDescription:
-      'Technische Artikel zu DevOps, DevSecOps, CI/CD und Infrastructure as Code von Dominik Pabst.',
+      'Technische Artikel zu DevOps, DevSecOps, CI/CD und Infrastructure as Code von Dominik Pabst. Dazu Einordnungen zu KI in der Wissensarbeit und Praxis.',
     eyebrow: '// schreiben',
     title: 'Artikel & Beiträge.',
     intro:
@@ -90,7 +91,7 @@ export const de: Dictionary = {
   contact: {
     seoTitle: 'Kontakt – Dominik Pabst | DevSecOps Consulting & Training',
     seoDescription:
-      'Jetzt Kontakt aufnehmen: Anfragen für DevSecOps Consulting, Training und Speaking-Auftritte.',
+      'Jetzt Kontakt aufnehmen für DevSecOps Consulting, Trainings und Speaking rund um Platform Engineering, Cloud und KI in modernen Softwareprojekten.',
     eyebrow: '// kontakt',
     title: 'Lassen Sie uns sprechen.',
     intro:

@@ -1,0 +1,27 @@
+.dpn-illo {
+  display: block;
+  line-height: 0;
+  color: var(--illo-ink);
+}
+
+.dpn-illo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dpn-illo--accent {
+  color: var(--illo-accent);
+}
+
+.dpn-illo--amber {
+  color: var(--accent);
+}
+
+.dpn-illo--photo {
+  color: var(--photo);
+}
+
+.dpn-illo--ink {
+  color: var(--illo-ink);
+}

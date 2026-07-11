@@ -1,0 +1,21 @@
+.dpn-role-rotator__cursor {
+  display: inline-block;
+  width: 11px;
+  height: 24px;
+  background: var(--brand);
+  vertical-align: -4px;
+  margin-left: 2px;
+  animation: dpnBlink 1.1s steps(1) infinite;
+}
+
+@keyframes dpnBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dpn-role-rotator__cursor {
+    animation: none;
+  }
+}

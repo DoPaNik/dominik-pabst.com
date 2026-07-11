@@ -1,6 +1,7 @@
 ---
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import '../../styles/components/icon.css';
 
 interface Props {
   name: string;
@@ -23,14 +24,3 @@ const svg = raw
 ---
 
 <span class={['dpn-icon', className].filter(Boolean).join(' ')} aria-hidden="true" set:html={svg} />
-
-<style>
-  .dpn-icon {
-    display: inline-flex;
-    color: currentColor;
-    line-height: 0;
-  }
-  .dpn-icon :global(svg) {
-    display: block;
-  }
-</style>

@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../astro/Button.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
+import '../../styles/pages/contact-success.css';
 
 interface Props {
   lang: Locale;
@@ -31,26 +32,3 @@ const homeHref = getRelativeLocaleUrl(lang, '');
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .dpn-success {
-    padding: 140px 0;
-  }
-  .dpn-success__inner {
-    max-width: var(--container-sm);
-    margin: 0 auto;
-    padding: 0 var(--gutter);
-    text-align: center;
-    font-family: var(--font-mono);
-  }
-  .dpn-success__title {
-    color: var(--brand);
-    font-size: var(--text-2xl);
-    margin: 0 0 12px;
-  }
-  .dpn-success__body {
-    color: var(--text-dim);
-    font-size: var(--text-md);
-    margin: 0 0 32px;
-  }
-</style>

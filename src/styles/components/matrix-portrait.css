@@ -1,0 +1,35 @@
+.dpn-portrait {
+  margin: 0;
+  max-width: 420px;
+  width: 100%;
+}
+
+.dpn-portrait__frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.dpn-portrait__frame img,
+.dpn-portrait__frame canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dpn-portrait__frame canvas {
+  pointer-events: none;
+}
+
+.dpn-portrait__caption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 10px;
+}

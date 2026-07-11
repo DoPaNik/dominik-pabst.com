@@ -1,0 +1,105 @@
+.dpn-contact__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-12);
+  align-items: start;
+}
+
+/* Contact's header sits tighter and its intro isn't measure-constrained,
+   unlike the shared .dpn-section__header/.dpn-section__intro defaults. */
+.dpn-section__header {
+  margin-bottom: 28px;
+}
+
+.dpn-section__intro {
+  max-width: none;
+}
+
+.dpn-contact__form-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+}
+
+.dpn-contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.dpn-contact__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.dpn-contact__email {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--text-strong);
+  text-decoration: none;
+  margin-bottom: var(--space-4);
+}
+
+.dpn-contact__illustration {
+  max-width: 320px;
+  margin-bottom: var(--space-5);
+}
+
+.dpn-contact__email:hover {
+  color: var(--brand);
+}
+
+.dpn-contact__based {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0 0 var(--space-6);
+}
+
+.dpn-contact__socials-intro {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0 0 var(--space-2);
+}
+
+.dpn-contact__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.dpn-contact__social {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.dpn-contact__social:hover {
+  color: var(--brand);
+  border-color: var(--brand-deep);
+  text-decoration: none;
+}
+
+@media (--below-tablet) {
+  .dpn-contact__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dpn-contact__row {
+    grid-template-columns: 1fr;
+  }
+
+  .dpn-contact__illustration {
+    max-width: none;
+  }
+}
