@@ -6,7 +6,7 @@
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 11px;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wide);
   line-height: 1;
   text-transform: uppercase;
   padding: 4px 8px;
