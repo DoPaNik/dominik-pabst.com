@@ -136,11 +136,9 @@ hr {
 /* ---------------------------------------------------------------------------
    Cartoon illustrations.
    The unDraw SVGs are monochrome silhouettes whose shapes are forced to
-   `currentColor`. Render them by INLINING the SVG markup (so currentColor
-   inherits): drop a placeholder and let assets/dpn-illo.js fill it in:
-       <span class="dpn-illo dpn-illo--accent" data-illo="dopanik"
-             style="width:320px"></span>
-       <script src="../assets/dpn-illo.js"></script>
+   `currentColor`. Render them by inlining the SVG markup (so currentColor
+   inherits) via the Illustration component or a `.dpn-illo` wrapper:
+       <span class="dpn-illo dpn-illo--accent" data-illo="dopanik"></span>
    `color` (via --illo-ink default, .dpn-illo--accent, or inline) themes it.
    --------------------------------------------------------------------------- */
 .dpn-illo {

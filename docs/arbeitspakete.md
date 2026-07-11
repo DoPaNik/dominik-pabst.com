@@ -15,7 +15,7 @@
 2. **Eine Aufgabe = ein Commit/PR.** Conventional Commits
    (`fix:`, `feat:`, `test:`, `chore:`, `docs:`, `refactor:`).
 3. **Abgrenzungen beachten:** Jede Aufgabe listet unter `Abgrenzung:` explizit,
-   was sie *nicht* ändert. Das verhindert Überschneidungen — nicht "nebenbei
+   was sie _nicht_ ändert. Das verhindert Überschneidungen — nicht "nebenbei
    mitmachen", auch wenn es naheliegt.
 4. **Globale Definition of Done** (gilt zusätzlich zu den Akzeptanzkriterien
    jeder Aufgabe):
@@ -28,16 +28,16 @@
 
 ### Schlüsseldateien (Referenz)
 
-| Datei | Rolle |
-|---|---|
-| `src/layouts/BaseLayout.astro` | `<head>`: Meta, OG/Twitter, canonical/hreflang, JSON-LD, Theme-FOUC-Script |
-| `src/data/site.ts` | Einzige Quelle für Name/Firma/Kontakt/Social-Links/Foto-Pfad |
-| `src/i18n/de.ts`, `src/i18n/en.ts` | Alle User-Facing-Strings, typisiert über `src/i18n/types.ts` |
-| `src/content.config.ts` | Zod-Schemata der Content Collections (`talks`, `writing`) |
-| `src/lib/schema.ts` | JSON-LD-Generatoren (`Person`, `SpeakingEvent`) |
-| `netlify.toml` | Build-Kommando, Security-Header inkl. CSP |
-| `.github/workflows/ci.yml` | CI: Format → Lint → Typecheck → Build → `npm audit` |
-| `CONTENT.md` | Deklarierte "authoritative reference" für Inhalts-Fakten |
+| Datei                              | Rolle                                                                      |
+| ---------------------------------- | -------------------------------------------------------------------------- |
+| `src/layouts/BaseLayout.astro`     | `<head>`: Meta, OG/Twitter, canonical/hreflang, JSON-LD, Theme-FOUC-Script |
+| `src/data/site.ts`                 | Einzige Quelle für Name/Firma/Kontakt/Social-Links/Foto-Pfad               |
+| `src/i18n/de.ts`, `src/i18n/en.ts` | Alle User-Facing-Strings, typisiert über `src/i18n/types.ts`               |
+| `src/content.config.ts`            | Zod-Schemata der Content Collections (`talks`, `writing`)                  |
+| `src/lib/schema.ts`                | JSON-LD-Generatoren (`Person`, `SpeakingEvent`)                            |
+| `netlify.toml`                     | Build-Kommando, Security-Header inkl. CSP                                  |
+| `.github/workflows/ci.yml`         | CI: Format → Lint → Typecheck → Build → `npm audit`                        |
+| `CONTENT.md`                       | Deklarierte "authoritative reference" für Inhalts-Fakten                   |
 
 ---
 
@@ -68,6 +68,7 @@ Umsetzung: `BaseLayout.astro` bekommt eine optionale `ogImage`-Prop mit Default
 bzw. der bestehende Alt-Mechanismus muss zum jeweils gewählten Bild passen.
 
 **Akzeptanzkriterien:**
+
 - [ ] Home, Talks, Writing, Contact (DE+EN) rendern `og:image` + `twitter:image` mit absoluter URL auf `/og/dopanik.png`
 - [ ] About (DE+EN) rendert weiterhin das Porträt als `og:image`
 - [ ] `og:image:alt` (bzw. `twitter:image:alt`) beschreibt das tatsächlich gesetzte Bild in der jeweiligen Sprache
@@ -92,9 +93,10 @@ Minor/Patch-Updates erlaubt, um PR-Rauschen zu begrenzen. Zusätzlich
 aktuell gehalten werden.
 
 **Akzeptanzkriterien:**
+
 - [ ] `.github/dependabot.yml` existiert mit `package-ecosystem: npm`, `schedule.interval: weekly`
 - [ ] GitHub-Actions-Ecosystem ist ebenfalls konfiguriert
-- [ ] Nach dem Merge auf `master` erscheint Dependabot unter *Insights → Dependency graph → Dependabot* als aktiv
+- [ ] Nach dem Merge auf `master` erscheint Dependabot unter _Insights → Dependency graph → Dependabot_ als aktiv
 - [ ] Von Dependabot geöffnete PRs durchlaufen die bestehende CI (Required Check `Lint, typecheck & build`)
 
 **Abgrenzung:** Keine Änderung an `ci.yml` und keine Dependency-Updates in
@@ -122,6 +124,7 @@ zulässigen Ausgängen:
   Doku und Code nicht widersprechen.
 
 **Akzeptanzkriterien:**
+
 - [ ] Entscheidung (A oder B) mit einem Satz Begründung im Commit-/PR-Text dokumentiert
 - [ ] Bei A: Illustration(en) an den gewählten Stellen sichtbar, `decorative`/Alt-Verhalten korrekt, beide Themes geprüft
 - [ ] Bei B: `grep -ri "illustration" src docs` liefert keine toten Referenzen mehr; Styleguide aktualisiert
@@ -145,6 +148,7 @@ Suchergebnissen. Writing- und Contact-Descriptions nutzen mit 85–92 Zeichen nu
 Tonalität gemäß `docs/styleguide/01-brand-voice.md` einhalten.
 
 **Akzeptanzkriterien:**
+
 - [ ] Home-`seoTitle` ≤ 60 Zeichen in DE und EN
 - [ ] Writing- und Contact-`seoDescription` jeweils 140–155 Zeichen in DE und EN
 - [ ] Alle übrigen Seiten unverändert
@@ -178,6 +182,7 @@ Drei Platzhalter-Befunde in sichtbarem Content bzw. strukturierten Daten:
    ausgeben statt mit faktisch falschem Platzhalter.
 
 **Akzeptanzkriterien:**
+
 - [ ] LinkedIn-Eintrag trägt das echte Publikationsdatum (DE und EN identisch) — oder die Nicht-Auffindbarkeit ist im PR dokumentiert und das Datum entfernt
 - [ ] Informatik-Aktuell: dokumentierte Entscheidung umgesetzt (Datum / Konkretisierung / Entfernung)
 - [ ] Kein `SpeakingEvent`-JSON-LD im Build-Output enthält mehr ein Jan-1-Fallback-Datum
@@ -208,6 +213,7 @@ wenn kein zukünftiger Talk existiert (z. B. neutraler Status wie
 `verfügbar für anfragen` aus vorhandenen i18n-Strings — kein Event-Name).
 
 **Akzeptanzkriterien:**
+
 - [ ] Kein Event-Name mehr als Literal in `src/i18n/de.ts` / `en.ts`
 - [ ] Startseite (DE+EN) zeigt den nächsten zukünftigen Talk aus der Collection
 - [ ] Verhalten per Test-Build nachgewiesen: mit ausschließlich vergangenen `startDate`-Werten erscheint der definierte Fallback, nie ein vergangenes Event
@@ -238,6 +244,7 @@ in einen klar markierten Archiv-Abschnitt (`## Archiv (erledigt)`) verschieben.
 Verweis auf `docs/styleguide/` für alles Gestalterische ergänzen.
 
 **Akzeptanzkriterien:**
+
 - [ ] `CONTENT.md` enthält keine offenen "Still Needs to Implement"-Anweisungen mehr, die bereits umgesetzt sind
 - [ ] Keine Aussage in `CONTENT.md` widerspricht dem Code-Stand (Stichproben: Foto-Quelle, OG-Image, Status-Zeile, Datumsangaben)
 - [ ] Key Facts vollständig erhalten (nichts Faktisches geht verloren)
@@ -278,6 +285,7 @@ Konsolenfehler (`console.error`/`pageerror` als Test-Failure). Neuer CI-Job
 `quality`-Job läuft; npm-Script `test` (bzw. `test:e2e`).
 
 **Akzeptanzkriterien:**
+
 - [ ] `npm test` läuft lokal grün gegen den Production-Build
 - [ ] Alle 12 Routen abgedeckt: Status 200, sichtbares `<h1>`, keine Konsolenfehler
 - [ ] CI-Job `tests` läuft bei PR gegen `master` und blockiert den Merge bei Rot (als Required Check ergänzt)
@@ -305,6 +313,7 @@ Stufen `serious`/`critical` schlagen den Test fehl, `moderate` wird als
 Report ausgegeben.
 
 **Akzeptanzkriterien:**
+
 - [ ] axe-Scan für alle 12 Routen × 2 Themes im bestehenden `tests`-CI-Job
 - [ ] `serious`/`critical`-Violations ⇒ Test rot; aktueller Stand läuft grün (ggf. gefundene Verstöße im Rahmen dieser Aufgabe beheben)
 - [ ] Dokumentierte, begründete Ausnahmen (falls nötig) zentral in einer Konfigurationsdatei, nicht verstreut in Tests
@@ -329,6 +338,7 @@ Referenzwerten ableiten (gemessen: Home 99/95, About 97/96) mit Puffer:
 Median zählt.
 
 **Akzeptanzkriterien:**
+
 - [ ] Eigener CI-Job führt Lighthouse mobil gegen `/` und `/about/` des Production-Builds aus
 - [ ] Assertions: Performance ≥ 90 und Accessibility ≥ 95 ⇒ sonst rot
 - [ ] 3 Runs pro Seite, Median als Bewertungsgrundlage (Flaking-Schutz)
@@ -370,6 +380,7 @@ bestehenden Playwright-Infrastruktur:
    erhalten, nicht Homepage); zurück analog; `hreflang`-Alternates konsistent.
 
 **Akzeptanzkriterien:**
+
 - [ ] Alle drei Flows als Playwright-Tests im `tests`-Job, lokal und in CI grün
 - [ ] Formular-Assertions laufen gegen den **Build-Output** (dist), nicht nur den Dev-Server
 - [ ] Theme-Test deckt beide Richtungen (dark→light→dark) inkl. Persistenz ab
@@ -405,6 +416,7 @@ heute `'unsafe-inline'` benötigen:
    unverändert lassen, im PR kurz dokumentieren.
 
 **Akzeptanzkriterien:**
+
 - [ ] `grep -rn 'style="' dist/` nach Build: keine Treffer mehr in den HTML-Ausgaben (oder jede verbliebene Stelle im PR einzeln begründet)
 - [ ] Kein `<script>` ohne `src` im Build-Output außer `application/ld+json`
 - [ ] Theme-FOUC weiterhin verhindert: hartes Reload im Light-Theme zeigt keinen Dark-Flash (manuell + Playwright-Check aus AP3-1 grün)
@@ -429,6 +441,7 @@ Client-Navigation, Matrix-Effekte — Browser-Konsole muss frei von
 CSP-Violation-Reports sein.
 
 **Akzeptanzkriterien:**
+
 - [ ] `netlify.toml`: `script-src 'self'` und `style-src 'self'` (kein `unsafe-inline` mehr)
 - [ ] Deploy-Preview: 0 CSP-Violations in der Konsole über alle 12 Routen, beide Themes, inkl. Theme-Toggle und Navigation
 - [ ] Komplette CI (Smoke, A11y, Lighthouse) auf dem PR grün

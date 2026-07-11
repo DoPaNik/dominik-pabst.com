@@ -15,6 +15,7 @@
 @import './components/card.css';
 @import './components/terminal-window.css';
 @import './components/section.css';
+@import './components/illustration.css';
 
 /* Skip-to-content link (a11y) */
 .skip-link {

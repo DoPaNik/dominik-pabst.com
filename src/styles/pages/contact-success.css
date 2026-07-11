@@ -1,0 +1,23 @@
+.dpn-success {
+  padding: 140px 0;
+}
+
+.dpn-success__inner {
+  max-width: var(--container-sm);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.dpn-success__title {
+  color: var(--brand);
+  font-size: var(--text-2xl);
+  margin: 0 0 12px;
+}
+
+.dpn-success__body {
+  color: var(--text-dim);
+  font-size: var(--text-md);
+  margin: 0 0 32px;
+}

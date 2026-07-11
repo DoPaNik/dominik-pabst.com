@@ -42,19 +42,19 @@ interface TalkLike {
 }
 
 export function buildSpeakingEventSchema(talk: TalkLike, lang: Locale) {
-  // Placeholder fallback (Jan 1 of the talk's year) for the rare talk whose
-  // content doesn't reveal a concrete date — syntactically valid ISO-8601,
-  // but not a real event date.
-  const startDate = talk.startDate ?? `${talk.year}-01-01`;
-  const endDate = talk.endDate ?? talk.startDate ?? `${talk.year}-01-01`;
+  const dates =
+    talk.startDate || talk.endDate
+      ? {
+          startDate: talk.startDate ?? talk.endDate,
+          endDate: talk.endDate ?? talk.startDate,
+        }
+      : {};
 
   return {
     '@context': 'https://schema.org',
     '@type': 'SpeakingEvent',
     name: talk.title,
     description: talk.description,
-    startDate,
-    endDate,
     eventStatus: 'https://schema.org/EventScheduled',
     // All talks so far are in-person events (conference venue / classroom course).
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -68,5 +68,6 @@ export function buildSpeakingEventSchema(talk: TalkLike, lang: Locale) {
     },
     url: talk.url ?? site.url,
     inLanguage: lang,
+    ...dates,
   };
 }

@@ -1,5 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../astro/Button.astro';
 import MatrixRainBackdrop from '../astro/MatrixRainBackdrop.astro';
@@ -8,6 +9,8 @@ import TerminalWindow from '../astro/TerminalWindow.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 import { buildPersonSchema } from '../../lib/schema';
+import { formatTalkStatus, getUpcomingTalk } from '../../lib/talks';
+import '../../styles/pages/home.css';
 
 interface Props {
   lang: Locale;
@@ -19,6 +22,12 @@ const h = t.home;
 
 const talksHref = getRelativeLocaleUrl(lang, 'talks');
 const contactHref = getRelativeLocaleUrl(lang, 'contact');
+
+const allTalks = await getCollection('talks', ({ data }) => data.lang === lang);
+const upcomingTalk = getUpcomingTalk(allTalks.map((talk) => talk.data));
+const statusDeploy = upcomingTalk
+  ? `${h.statusDeployPrefix}${formatTalkStatus(upcomingTalk)}`
+  : h.statusUptime;
 ---
 
 <BaseLayout
@@ -32,7 +41,7 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
   <header class="dpn-hero">
     <div class="dpn-hero__grid-bg" aria-hidden="true"></div>
     <div class="dpn-hero__rain" aria-hidden="true">
-      <MatrixRainBackdrop opacity={0.08} />
+      <MatrixRainBackdrop />
     </div>
     <div class="dpn-hero__inner">
       <div class="dpn-hero__copy">
@@ -54,8 +63,16 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
         <p class="dpn-hero__meta">
           <span class="dpn-hero__meta-dot" aria-hidden="true"></span>
           {h.statusUptime}
-          <span class="dpn-hero__meta-sep" aria-hidden="true">·</span>
-          {h.statusDeploy}
+          {
+            upcomingTalk && (
+              <>
+                <span class="dpn-hero__meta-sep" aria-hidden="true">
+                  ·
+                </span>
+                {statusDeploy}
+              </>
+            )
+          }
         </p>
       </div>
 
@@ -89,176 +106,3 @@ const contactHref = getRelativeLocaleUrl(lang, 'contact');
     </div>
   </header>
 </BaseLayout>
-
-<style>
-  .dpn-hero {
-    position: relative;
-    overflow: hidden;
-  }
-  .dpn-hero__grid-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0.6;
-    background-image:
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(120% 80% at 70% 0%, #000 30%, transparent 75%);
-  }
-  .dpn-hero__rain {
-    position: absolute;
-    inset: 0;
-  }
-  .dpn-hero__inner {
-    position: relative;
-    max-width: var(--container-xl);
-    margin: 0 auto;
-    padding: 72px var(--gutter) 88px;
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: var(--space-12);
-    align-items: center;
-  }
-  .dpn-hero__prompt {
-    font-family: var(--font-mono);
-    color: var(--text-dim);
-    font-size: 13px;
-    margin: 0 0 22px;
-  }
-  .dpn-hero__prompt-brand {
-    color: var(--brand-deep);
-  }
-  .dpn-hero__heading {
-    font-size: var(--text-6xl);
-    line-height: 1.02;
-    letter-spacing: var(--tracking-tighter);
-    margin: 0 0 18px;
-    color: var(--text-strong);
-  }
-  .dpn-hero__role {
-    font-family: var(--font-mono);
-    font-size: var(--text-2xl);
-    color: var(--text-muted);
-    min-height: 38px;
-    margin: 0 0 26px;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  .dpn-hero__role-prefix {
-    color: var(--text-faint);
-  }
-  .dpn-hero__role-value {
-    color: var(--brand);
-  }
-  .dpn-hero__intro {
-    font-family: var(--font-body);
-    color: var(--text-muted);
-    font-size: var(--text-lg);
-    line-height: 1.65;
-    max-width: 46ch;
-    margin: 0 0 30px;
-  }
-  .dpn-hero__actions {
-    display: flex;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-  }
-  .dpn-hero__art {
-    position: relative;
-  }
-  .dpn-hero__term {
-    box-shadow: var(--glow-green);
-  }
-  .dpn-pipeline__cmd {
-    margin: 0 0 14px;
-    color: var(--text-dim);
-    white-space: nowrap;
-    overflow-x: auto;
-  }
-  .dpn-pipeline__prompt {
-    color: var(--brand);
-  }
-  .dpn-pipeline__steps {
-    list-style: none;
-    margin: 0 0 16px;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .dpn-pipeline__step {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
-  .dpn-pipeline__check {
-    color: var(--brand);
-    flex-shrink: 0;
-  }
-  .dpn-pipeline__label {
-    color: var(--text);
-  }
-  .dpn-pipeline__meta {
-    margin-left: auto;
-    color: var(--text-dim);
-    padding-left: 12px;
-  }
-  .dpn-pipeline__gate {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 14px 0 0;
-    padding-top: 14px;
-    border-top: 1px dashed var(--border);
-    color: var(--text);
-  }
-  .dpn-pipeline__gate-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: var(--radius-full);
-    background: var(--brand);
-    flex-shrink: 0;
-  }
-  .dpn-pipeline__arrow {
-    color: var(--text-dim);
-  }
-  .dpn-pipeline__gate-state {
-    margin-left: auto;
-    font-weight: 700;
-    color: var(--text-strong);
-  }
-  .dpn-hero__meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 18px 0 0;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-dim);
-  }
-  .dpn-hero__meta-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: var(--radius-full);
-    background: var(--amber-500);
-    flex-shrink: 0;
-  }
-  .dpn-hero__meta-sep {
-    color: var(--border-strong);
-  }
-
-  @media (--below-tablet) {
-    .dpn-hero__inner {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .dpn-hero__role {
-      font-size: var(--text-lg);
-    }
-  }
-</style>

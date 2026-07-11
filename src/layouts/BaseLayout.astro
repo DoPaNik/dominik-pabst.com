@@ -14,20 +14,32 @@ interface Props {
   path: string;
   title: string;
   description: string;
+  ogImage?: string;
+  ogImageAlt?: string;
   /** Pre-serialized JSON-LD object(s) for this page (Person, SpeakingEvent, ...). */
   schema?: Record<string, unknown> | Record<string, unknown>[];
   /** Excludes the page from search indexing (e.g. post-submit thank-you pages). */
   noindex?: boolean;
 }
 
-const { lang, current, path, title, description, schema, noindex = false } = Astro.props;
+const {
+  lang,
+  current,
+  path,
+  title,
+  description,
+  ogImage = '/og/dopanik.png',
+  ogImageAlt,
+  schema,
+  noindex = false,
+} = Astro.props;
 const t = getDictionary(lang);
 
 const canonicalUrl = getAbsoluteLocaleUrl(lang, path);
 const alternateDe = getAbsoluteLocaleUrl('de', path);
 const alternateEn = getAbsoluteLocaleUrl('en', path);
-const ogImage = new URL(site.photo, site.url).toString();
-const ogImageAlt = t.common.portraitAlt;
+const resolvedOgImage = new URL(ogImage, site.url).toString();
+const resolvedOgImageAlt = ogImageAlt ?? t.common.socialCardAlt;
 
 const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 ---
@@ -70,17 +82,18 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={resolvedOgImage} />
     <meta property="og:image:width" content="840" />
     <meta property="og:image:height" content="1050" />
-    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:image:alt" content={resolvedOgImageAlt} />
     <meta property="og:locale" content={lang === 'de' ? 'de_DE' : 'en_US'} />
     <meta property="og:site_name" content="Dominik Pabst" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+    <meta name="twitter:image:alt" content={resolvedOgImageAlt} />
 
     {
       schemaList.map((entry) => (
@@ -92,22 +105,7 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
       ))
     }
 
-    <script is:inline>
-      (function () {
-        function applyStoredTheme() {
-          try {
-            const stored = localStorage.getItem('dpn-theme');
-            if (stored === 'light') document.documentElement.setAttribute('data-theme', 'light');
-            else document.documentElement.removeAttribute('data-theme');
-          } catch {
-            // localStorage may be unavailable (e.g. private browsing) — keep the default theme.
-          }
-        }
-        applyStoredTheme();
-        // ClientRouter swaps <html> attributes on navigation — re-apply the theme.
-        document.addEventListener('astro:after-swap', applyStoredTheme);
-      })();
-    </script>
+    <script is:inline src="/scripts/theme-bootstrap.js"></script>
 
     <ClientRouter />
   </head>

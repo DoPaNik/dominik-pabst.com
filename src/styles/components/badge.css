@@ -14,17 +14,41 @@
   border: 1px solid transparent;
   white-space: nowrap;
 }
+.dpn-badge--tone-brand {
+  --_c: var(--brand);
+}
+.dpn-badge--tone-amber {
+  --_c: var(--amber-500);
+}
+.dpn-badge--tone-blue {
+  --_c: var(--blue-500);
+}
+.dpn-badge--tone-magenta {
+  --_c: var(--magenta-500);
+}
+.dpn-badge--tone-cyan {
+  --_c: var(--cyan-500);
+}
+.dpn-badge--tone-danger {
+  --_c: var(--red-500);
+}
+.dpn-badge--tone-neutral {
+  --_c: var(--text-muted);
+}
 .dpn-badge--soft {
   background: color-mix(in srgb, var(--_c) 14%, transparent);
   color: var(--_c);
 }
 .dpn-badge--solid {
   background: var(--_c);
-  color: var(--ink-950);
+  color: var(--on-brand);
 }
 .dpn-badge--outline {
   color: var(--_c);
   border-color: color-mix(in srgb, var(--_c) 45%, transparent);
+}
+[data-theme='light'] .dpn-badge--soft {
+  color: var(--text-strong);
 }
 .dpn-badge__dot {
   width: 6px;

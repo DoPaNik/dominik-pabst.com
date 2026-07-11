@@ -1,27 +1,17 @@
 ---
-const TONE: Record<string, string> = {
-  brand: 'var(--brand)',
-  amber: 'var(--amber-500)',
-  blue: 'var(--blue-500)',
-  magenta: 'var(--magenta-500)',
-  cyan: 'var(--cyan-500)',
-  neutral: 'var(--text-muted)',
-};
-
 interface Props {
-  tone?: keyof typeof TONE;
+  tone?: 'brand' | 'amber' | 'blue' | 'magenta' | 'cyan' | 'neutral';
   hash?: boolean;
   href?: string;
   class?: string;
 }
 
 const { tone = 'neutral', hash = true, href, class: className = '' } = Astro.props;
-const cls = ['dpn-tag', className].filter(Boolean).join(' ');
-const colorVar = TONE[tone] ?? tone;
+const cls = ['dpn-tag', `dpn-tag--tone-${tone}`, className].filter(Boolean).join(' ');
 const Tag = href ? 'a' : 'span';
 ---
 
-<Tag class={cls} href={href} style={`--_c: ${colorVar}`}>
+<Tag class={cls} href={href}>
   {hash && <span class="dpn-tag__hash">#</span>}
   <slot />
 </Tag>

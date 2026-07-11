@@ -12,6 +12,7 @@ export interface Dictionary {
     langSwitch: string;
     footerTagline: string;
     portraitAlt: string;
+    socialCardAlt: string;
   };
   home: {
     seoTitle: string;
@@ -25,7 +26,7 @@ export interface Dictionary {
     ctaPrimary: string;
     ctaSecondary: string;
     statusUptime: string;
-    statusDeploy: string;
+    statusDeployPrefix: string;
     pipeline: {
       title: string;
       command: string;

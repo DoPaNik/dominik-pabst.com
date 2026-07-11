@@ -19,6 +19,24 @@
     background var(--dur) var(--ease);
   cursor: pointer;
 }
+.dpn-tag--tone-brand {
+  --_c: var(--brand);
+}
+.dpn-tag--tone-amber {
+  --_c: var(--amber-500);
+}
+.dpn-tag--tone-blue {
+  --_c: var(--blue-500);
+}
+.dpn-tag--tone-magenta {
+  --_c: var(--magenta-500);
+}
+.dpn-tag--tone-cyan {
+  --_c: var(--cyan-500);
+}
+.dpn-tag--tone-neutral {
+  --_c: var(--text-muted);
+}
 .dpn-tag:hover {
   color: var(--_c);
   border-color: color-mix(in srgb, var(--_c) 50%, transparent);

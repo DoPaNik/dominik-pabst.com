@@ -4,3 +4,4 @@ node_modules
 public
 package-lock.json
 matrix-portrait-referenz.js
+test-results
