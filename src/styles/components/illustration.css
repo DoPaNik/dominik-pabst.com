@@ -2,6 +2,9 @@
   display: block;
   line-height: 0;
   color: var(--illo-ink);
+  /* Cut-out surfaces inside the SVGs (screens, speech-bubble fills, eyes)
+     use var(--illo-bg) so they read as punched-out in both themes. */
+  --illo-bg: var(--bg);
 }
 
 .dpn-illo svg {

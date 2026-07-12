@@ -28,9 +28,9 @@ glance, dev.to, hackernoon.
    lowercase mono: `// about`, `$ rolle=`, `whoami`, `hire me`.
 7. **Motion is quick & mechanical.** 120–280ms, `cubic-bezier(.2,0,0,1)`.
    No springs, no parallax. MUST honour `prefers-reduced-motion`.
-8. **Reuse, don't draw.** Illustrations come from the existing monochrome
-   cartoon set; icons are Lucide or mono glyphs (`$ ~ // ✓ ★`). Never generate
-   new SVG artwork.
+8. **Adapt, don't draw.** Illustrations are unDraw motifs, monochromized to
+   the tone system (recipe in `06-components.md`); icons are Lucide or mono
+   glyphs (`$ ~ // ✓ ★`). Never freehand or AI-generate SVG artwork.
 9. **Tokens only.** No hardcoded colors, sizes, radii, durations in components.
 10. **i18n always.** Every user-facing string lives in `src/i18n/{de,en}.ts`.
 
