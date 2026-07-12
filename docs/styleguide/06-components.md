@@ -44,11 +44,16 @@ Terminal window:
 
 Section header: see `03-typography.md` (eyebrow + title + intro ≤60ch).
 
-Illustrations: reuse the monochrome cartoon set
-(`src/assets/illustrations/*.svg`), inlined so `currentColor` recolours them
-(green hero, ink about, amber/magenta accents). **NEVER** hand-draw new SVG
-scenes or generate images. Icons: Lucide (2px stroke, 16–18px, currentColor)
-or mono glyphs.
+Illustrations: adapted from [unDraw](https://undraw.co) (unDraw License) and
+stored monochromized in `src/assets/illustrations/*.svg`, inlined so
+`currentColor` recolours them via the tone system (accent/amber/ink/photo).
+Adaptation recipe when adding a motif: pick one that matches the page's topic,
+set `fill="currentColor"` on the root, map colour surfaces to opacity steps
+(dark ≈ 1/0.9, original accent ≈ 0.55, light greys ≈ 0.3/0.14) and map white
+occlusion surfaces (screens, bubbles, eyes) to `var(--illo-bg, transparent)`
+so they read as punched-out in both themes. Keep the source motif name in an
+SVG comment. **NEVER** hand-draw new SVG scenes or generate images from
+scratch. Icons: Lucide (2px stroke, 16–18px, currentColor) or mono glyphs.
 
 ## Astro / code conventions
 

@@ -146,6 +146,7 @@ hr {
   line-height: 0;
   width: 100%;
   color: var(--illo-ink);
+  --illo-bg: var(--bg);
 }
 .dpn-illo svg {
   width: 100%;
