@@ -15,6 +15,9 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
+  build: {
+    inlineStylesheets: 'never',
+  },
   integrations: [
     sitemap({
       filter: (page) =>
