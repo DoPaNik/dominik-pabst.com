@@ -95,7 +95,7 @@ jobs:
         run: npm run build
 
       - name: Run Lighthouse CI
-        run: npx lhci autorun --config=.lighthouserc.js
+        run: npx lhci autorun --config=.lighthouserc.cjs
 
       - name: Upload Lighthouse artifacts
         if: always()
