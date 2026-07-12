@@ -4,7 +4,7 @@
 > `debt_backlog.csv`, 30/60/90-Roadmap). Dieses Dokument ist die einzige Quelle
 > für die Abarbeitung — es ersetzt die Roadmap-Prosa für operative Zwecke.
 >
-> **Baseline:** Branch `redesign-astro` @ `9a9941d`. Alle Datei-Referenzen und
+> **Baseline:** Branch `redesign-astro` @ `42ccae2`. Alle Datei-Referenzen und
 > Ist-Zustände wurden gegen diesen Stand verifiziert.
 
 ## Hinweise zur Abarbeitung (für Mensch & LLM)
@@ -35,7 +35,7 @@
 | `src/i18n/de.ts`, `src/i18n/en.ts` | Alle User-Facing-Strings, typisiert über `src/i18n/types.ts`               |
 | `src/content.config.ts`            | Zod-Schemata der Content Collections (`talks`, `writing`)                  |
 | `src/lib/schema.ts`                | JSON-LD-Generatoren (`Person`, `SpeakingEvent`)                            |
-| `netlify.toml`                     | Build-Kommando, Security-Header inkl. CSP                                  |
+| `netlify.toml` / `public/_headers` | Build-Kommando bzw. ausgelieferte Security-Header inkl. CSP                |
 | `.github/workflows/ci.yml`         | CI: Format → Lint → Typecheck → Build → `npm audit`                        |
 | `CONTENT.md`                       | Deklarierte "authoritative reference" für Inhalts-Fakten                   |
 
@@ -132,6 +132,9 @@ zulässigen Ausgängen:
 
 **Abgrenzung:** Keine Änderungen an der MatrixPortrait-/Backdrop-Signatur;
 keine neuen Seitenbereiche erfinden.
+
+**Umsetzungsentscheidung:** Option A. Illustrationen werden gezielt auf About
+und Contact eingesetzt; die Matrix-Signatur bleibt der primäre visuelle Akzent.
 
 ---
 
@@ -433,7 +436,8 @@ unverändert (→ AP3-3).
 **Hängt ab von:** AP3-2 (zwingend), AP2-1–AP2-3 (Gates aktiv)
 
 **Beschreibung:**
-Nach der Code-Ablösung aus AP3-2 den Header in `netlify.toml` verschärfen:
+Nach der Code-Ablösung aus AP3-2 die ausgelieferten Header in
+`public/_headers` verschärfen:
 `'unsafe-inline'` aus `script-src` **und** `style-src` entfernen. Verifikation
 auf einem Netlify Deploy-Preview (Header greifen nur dort, nicht im lokalen
 Dev-Server): alle Seiten, beide Themes, beide Locales, Theme-Umschaltung,
@@ -457,3 +461,22 @@ etc. bleiben bewusst außerhalb des 90-Tage-Fensters, siehe Roadmap).
 - **Visuelle Regressionstests** — erst sinnvoll, wenn die Basis aus Paket 2/3 steht.
 - **CSP-Report-Only-Monitoring** mit Reporting-Endpoint — bräuchte einen
   Report-Collector und damit Infrastruktur außerhalb des Backend-losen Setups.
+
+---
+
+## Abschlussstatus — 2026-07-12
+
+Die Implementierung von AP1-1 bis AP3-3 ist auf `redesign-astro` abgeschlossen
+und im Pull Request #1 verifiziert:
+
+- `format:check`, `lint`, `typecheck` und `build` grün
+- Playwright: alle 12 Routen, beide Locales und beide Themes grün
+- axe-core: keine blockierenden A11y-Verstöße
+- Lighthouse CI: 3 Läufe für `/` und `/about/`, Budgets grün
+- Deploy Preview: Build, Forms, Header-Regeln und Preview-Status grün
+- CSP: keine Inline-Styles aus der Anwendung; verbleibende `cdp`-Meldungen
+  stammen ausschließlich vom Netlify-Review-Drawer
+
+Nach dem Merge bleibt nur die externe Verifikation, dass Dependabot unter
+`master` aktiviert ist und die Required Checks korrekt greifen. Das ist kein
+offener Implementierungspunkt im Repository.
