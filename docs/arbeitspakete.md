@@ -4,7 +4,7 @@
 > `debt_backlog.csv`, 30/60/90-Roadmap). Dieses Dokument ist die einzige Quelle
 > für die Abarbeitung — es ersetzt die Roadmap-Prosa für operative Zwecke.
 >
-> **Baseline:** Branch `redesign-astro` @ `42ccae2`. Alle Datei-Referenzen und
+> **Baseline:** Branch `master` @ `86e8caa`. Alle Datei-Referenzen und
 > Ist-Zustände wurden gegen diesen Stand verifiziert.
 
 ## Hinweise zur Abarbeitung (für Mensch & LLM)
@@ -464,19 +464,30 @@ etc. bleiben bewusst außerhalb des 90-Tage-Fensters, siehe Roadmap).
 
 ---
 
-## Abschlussstatus — 2026-07-12
+## Abschlussstatus — 2026-08-19
 
-Die Implementierung von AP1-1 bis AP3-3 ist auf `redesign-astro` abgeschlossen
-und im Pull Request #1 verifiziert:
+Die Implementierung von AP1-1 bis AP3-3 wurde auf `redesign-astro`
+abgeschlossen, im Pull Request #1 verifiziert und ist seither vollständig in
+`master` aufgegangen (`redesign-astro` wurde nach Bestätigung der Identität
+beider Bäume gelöscht):
 
 - `format:check`, `lint`, `typecheck` und `build` grün
 - Playwright: alle 12 Routen, beide Locales und beide Themes grün
+  (`tests/smoke.spec.ts`, `a11y.spec.ts`, `core-flows.spec.ts`)
 - axe-core: keine blockierenden A11y-Verstöße
 - Lighthouse CI: 3 Läufe für `/` und `/about/`, Budgets grün
 - Deploy Preview: Build, Forms, Header-Regeln und Preview-Status grün
-- CSP: keine Inline-Styles aus der Anwendung; verbleibende `cdp`-Meldungen
-  stammen ausschließlich vom Netlify-Review-Drawer
+- CSP: `script-src`/`style-src` ohne `unsafe-inline`; keine Inline-Styles aus
+  der Anwendung
 
-Nach dem Merge bleibt nur die externe Verifikation, dass Dependabot unter
-`master` aktiviert ist und die Required Checks korrekt greifen. Das ist kein
-offener Implementierungspunkt im Repository.
+Die zuvor offene externe Verifikation ist erledigt: Dependabot ist unter
+`master` aktiv, der Required Check `Lint, typecheck & build` greift korrekt.
+Dabei zeigte sich ein zusätzlicher Punkt außerhalb der ursprünglichen
+Arbeitspakete — drei ausstehende Dependabot-PRs scheiterten am
+`npm audit --omit=dev --audit-level=high`-Schritt wegen transitiver
+Hochrisiko-Funde in `js-yaml`, `nanoid` und `postcss`, unabhängig vom
+jeweiligen PR-Inhalt. Behoben per `overrides` in `package.json` (PR #21,
+gleiches Muster wie die bestehenden `tmp`/`uuid`-Einträge). Alle sechs
+offenen PRs sind verarbeitet (gemergt, als Duplikat geschlossen oder nach
+Rebase leer/no-op geschlossen); es gibt keine offenen PRs und kein offenes
+Arbeitspaket mehr im Repository.
