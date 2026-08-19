@@ -25,8 +25,6 @@ export interface Dictionary {
     intro: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    statusUptime: string;
-    statusDeployPrefix: string;
     pipeline: {
       title: string;
       command: string;

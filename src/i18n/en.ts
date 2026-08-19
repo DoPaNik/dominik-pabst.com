@@ -29,8 +29,6 @@ export const en: Dictionary = {
       'I help development teams bake security, platforms and AI into their software supply chain properly — as an Executive Consultant at CGI Germany, as a speaker, and as a trainer.',
     ctaPrimary: 'view talks',
     ctaSecondary: 'work with me',
-    statusUptime: 'available for inquiries',
-    statusDeployPrefix: 'live · ',
     pipeline: {
       title: '~/pipeline — deploy.yml',
       command: 'gh workflow run deploy.yml --ref main',

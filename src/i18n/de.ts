@@ -29,8 +29,6 @@ export const de: Dictionary = {
       'Ich helfe Entwicklungsteams, Sicherheit, Plattformen und KI sinnvoll in ihre Software-Lieferkette einzubauen — als Executive Consultant bei CGI Deutschland, als Speaker und als Trainer.',
     ctaPrimary: 'talks ansehen',
     ctaSecondary: 'projekt anfragen',
-    statusUptime: 'verfügbar für anfragen',
-    statusDeployPrefix: 'aktuell · ',
     pipeline: {
       title: '~/pipeline — deploy.yml',
       command: 'gh workflow run deploy.yml --ref main',
