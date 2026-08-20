@@ -8,6 +8,7 @@ import MatrixPortrait from '../astro/MatrixPortrait.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 import { site } from '../../data/site';
+import dominikPortrait from '../../assets/images/dominik-portrait.jpg';
 import '../../styles/pages/about.css';
 
 interface Props {
@@ -40,10 +41,8 @@ const talksHref = getRelativeLocaleUrl(lang, 'talks');
       </div>
       <div class="dpn-about-hero__portrait">
         <MatrixPortrait
-          src="/images/dominik-portrait.jpg"
+          src={dominikPortrait}
           alt={t.common.portraitAlt}
-          width={840}
-          height={1050}
           caption="~ cat dominik.pixels | decode"
         />
       </div>
