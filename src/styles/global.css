@@ -52,6 +52,9 @@
    No JS overlay — the ClientRouter drives this natively. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
+  /* stylelint-disable-next-line declaration-property-value-disallowed-list --
+     page-transition timing is deliberately its own value, distinct from the
+     micro-interaction --dur-* scale (hover/focus states). */
   animation-duration: 250ms;
   animation-timing-function: ease;
 }

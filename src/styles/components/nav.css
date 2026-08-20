@@ -3,9 +3,13 @@
   top: 0;
   z-index: 50;
   border-bottom: 1px solid transparent;
+  /* stylelint-disable declaration-property-value-disallowed-list --
+     scroll-triggered backdrop fade is deliberately its own timing, distinct
+     from the micro-interaction --dur-* scale (hover/focus states). */
   transition:
     background 0.25s,
     border-color 0.25s;
+  /* stylelint-enable declaration-property-value-disallowed-list */
 }
 
 .dpn-nav.is-scrolled {

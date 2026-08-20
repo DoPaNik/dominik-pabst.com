@@ -92,6 +92,10 @@
 }
 .dpn-btn--danger {
   --_bg: var(--danger);
+  /* stylelint-disable-next-line declaration-property-value-disallowed-list --
+     white text on the danger fill needs to stay white in both themes; the
+     theme-aware --text-inverse token flips (dark text in light mode), which
+     would break contrast here. */
   --_fg: #fff;
 }
 .dpn-btn__prompt {
