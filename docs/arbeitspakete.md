@@ -657,32 +657,51 @@ Budgets gleichzeitig scharf zu schalten.
 ### AP4-5 · Design-Token-Governance automatisieren (Stylelint)
 
 **Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 3 / Risiko 1 · Bereich: Wartbarkeit
+**Status:** ✅ Erledigt am 2026-08-20 — mit bewusst engerem Scope als ursprünglich geplant (siehe unten)
 
 **Beschreibung:**
 `CLAUDE.md` fordert explizit: "Never hardcode a hex, px-size, font, radius or
-duration that a token already provides." Es gibt aber keine Automatisierung.
-Stichprobe (2026-08-20): 4 rohe Hex-Werte außerhalb `tokens/`
-(z. B. `src/styles/components/button.css:95: --_fg: #fff`) sowie über 100
-`px`-Treffer, die einzeln gegen `docs/styleguide/04-layout-effects.md`
-geprüft werden müssen (Radial-/Mask-Gradienten sind zulässige Ausnahmen).
+duration that a token already provides." Es gab aber keine Automatisierung.
 
-**Umsetzung:** `stylelint` + `stylelint-declaration-strict-value` (oder
-äquivalente Regel) als Dev-Dependency, Regelsatz gegen `--color-*`/`--space-*`/
-`--radius-*`/`--duration-*`-Token, mit dokumentierten, minimalen
-`/* stylelint-disable */`-Ausnahmen für die legitimen Mask-Gradient-Fälle.
-Neuer `npm run lint:css`, in `ci.yml`s `quality`-Job nach `npm run lint`
-ergänzt.
+**Tatsächlicher Scope (abweichend vom ursprünglichen Plan):** Bei der
+Umsetzung zeigte sich, dass `--color-*`/`--radius-*`/`--duration-*` bereits
+fast vollständig sauber sind (4 Hex-Ausnahmen, 1 legitime `border-radius: 50%`,
+0 Duration-Verstöße außerhalb `tokens/`) — dort automatisiert durchsetzbar,
+ohne Bestandswerte zu ändern. `font-size` dagegen ist zu 62 % (32 von 52
+Deklarationen) literal statt `var(--text-*)`, teils mit Werten (14px, 19px,
+26px), die gar keinem vorhandenen Token entsprechen — eine Durchsetzung hätte
+entweder Dutzende Bestandswerte umschreiben oder Dutzende Ausnahme-Kommentare
+erzeugen müssen, beides im Widerspruch zur Abgrenzung unten. `font-size` und
+Spacing (`px` in `padding`/`margin`/`gap`) sind daher **bewusst nicht**
+Teil dieser Aufgabe — Kandidat für eine spätere, eigene
+Bestandsbereinigungs-Aufgabe.
+
+**Umsetzung:** `stylelint` (kein zusätzliches Plugin nötig) als
+Dev-Dependency, `stylelint.config.mjs` mit der eingebauten Regel
+`declaration-property-value-disallowed-list`: verbietet rohe Hex-Werte auf
+jeder Property, rohe `px`/`em`/`rem`-Werte auf `border-radius`, und rohe
+`ms`/`s`-Werte auf `transition(-duration/-delay)`/`animation(-duration/-delay)`
+— jeweils via `overrides` ausgenommen für `src/styles/tokens/**`. Neuer
+`npm run lint:css`, in `ci.yml`s `quality`-Job nach `npm run lint` ergänzt.
+
+Sechs gefundene Verstöße (Mask-Gradient-Alphastufen in `matrix-backdrop.css`
+und `home.css`, `--_fg: #fff` im Danger-Button, die View-Transition-Dauer in
+`global.css`, die Scroll-Fade-Dauer in `nav.css`, die Cursor-Blink-Rate in
+`role-rotator.css`) sind allesamt begründete, bleibende Designentscheidungen
+— mit `/* stylelint-disable(-next-line) */` samt Begründungskommentar markiert,
+keine Werte verändert.
 
 **Akzeptanzkriterien:**
 
-- [ ] `npm run lint:css` lokal grün auf dem Bestand (Ausnahmen begründet und minimal)
-- [ ] Neuer roher Hex-/px-Wert außerhalb `tokens/` lässt `lint:css` fehlschlagen (manuell mit einem Testfall verifiziert, dann wieder entfernt)
-- [ ] CI-Schritt in `quality`-Job ergänzt
-- [ ] `docs/styleguide/07-checklist.md` verweist auf den neuen automatisierten Check
+- [x] `npm run lint:css` lokal grün auf dem Bestand (6 Ausnahmen, alle begründet und minimal)
+- [x] Neuer roher Hex-/`border-radius`-Wert außerhalb `tokens/` lässt `lint:css` fehlschlagen (mit Testfall in `badge.css` verifiziert, danach entfernt)
+- [x] CI-Schritt in `quality`-Job ergänzt (`Lint CSS (design tokens)`)
+- [x] `docs/styleguide/07-checklist.md` verweist auf den neuen automatisierten Check (inkl. Hinweis, was er _nicht_ abdeckt)
 
 **Abgrenzung:** Keine Umformulierung bestehender CSS-Werte über die
-notwendigen Ausnahme-Kommentare hinaus — Bestandsbereinigung ist eine
-separate, spätere Aufgabe.
+notwendigen Ausnahme-Kommentare hinaus. `font-size` und Spacing (`px` in
+`padding`/`margin`/`gap`) sind nicht durchgesetzt (siehe oben) —
+Bestandsbereinigung ist eine separate, spätere Aufgabe.
 
 ---
 
