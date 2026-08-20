@@ -13,6 +13,10 @@ export const en: Dictionary = {
     themeToggle: 'toggle theme',
     langSwitch: 'switch language',
     footerTagline: '// versioned with care',
+    footerLegal: {
+      imprint: 'imprint',
+      privacy: 'privacy',
+    },
     portraitAlt: 'Portrait of Dominik Pabst',
     socialCardAlt: 'Social card of Dominik Pabst',
   },
@@ -106,5 +110,127 @@ export const en: Dictionary = {
     successCta: 'back to homepage',
     basedIn: 'Based in Germany 🇩🇪 — open to consulting, training, and speaking.',
     socialsIntro: 'or connect directly:',
+  },
+  legal: {
+    seoTitle: 'Imprint – Dominik Pabst',
+    seoDescription:
+      'Imprint and provider identification for dopanik.de under German law (§ 5 TMG).',
+    eyebrow: '// imprint',
+    title: 'Imprint.',
+    updated: 'Draft as of August 20, 2026',
+    noticeBanner:
+      '⚠ Draft: this page has been technically prepared but not yet legally reviewed, and still contains placeholders. This English version is for convenience only — the German version is the legally binding one. Before publishing: have the text produced by a generator (e.g. e-recht24.de, Datenschutz-Generator.de) or reviewed by a lawyer, and replace every [PLACEHOLDER] with real information.',
+    sections: [
+      {
+        heading: 'Service provider',
+        body: [
+          'Dominik Pabst',
+          '[PLACEHOLDER: full postal address — street, number, postal code, city]',
+          'Email: hi@dopanik.de',
+        ],
+      },
+      {
+        heading: 'Responsible for editorial content',
+        body: [
+          'Responsible for the content under § 18(2) MStV (German Interstate Media Treaty): Dominik Pabst (address as above).',
+        ],
+      },
+      {
+        heading: 'VAT identification number',
+        body: [
+          '[PLACEHOLDER: VAT ID under § 27a UStG, if applicable — otherwise remove this section.]',
+        ],
+      },
+      {
+        heading: 'EU dispute resolution',
+        body: [
+          'The European Commission provides a platform for online dispute resolution (ODR): https://ec.europa.eu/consumers/odr/.',
+          '[PLACEHOLDER: decide and state whether participation in dispute resolution proceedings before a consumer arbitration board takes place.]',
+        ],
+      },
+      {
+        heading: 'Liability for content',
+        body: [
+          'As a service provider, I am responsible for my own content on these pages under general law per § 7(1) TMG. Under §§ 8 to 10 TMG, however, I am not obligated as a service provider to monitor transmitted or stored third-party information.',
+        ],
+      },
+      {
+        heading: 'Liability for links',
+        body: [
+          'This website links to external third-party content (e.g. dev.to, LinkedIn) whose design I have no influence over. No liability is therefore assumed for this external content; the respective provider is always responsible for the content of linked pages.',
+        ],
+      },
+      {
+        heading: 'Copyright',
+        body: [
+          'The content and works created by the site operator on these pages are subject to German copyright law.',
+        ],
+      },
+    ],
+  },
+  privacy: {
+    seoTitle: 'Privacy Policy – Dominik Pabst',
+    seoDescription: 'Privacy policy for dopanik.de under Art. 13 GDPR.',
+    eyebrow: '// privacy',
+    title: 'Privacy policy.',
+    updated: 'Draft as of August 20, 2026',
+    noticeBanner:
+      '⚠ Draft: this page has been technically prepared but not yet legally reviewed, and still contains placeholders. This English version is for convenience only — the German version is the legally binding one. Before publishing: have the text produced by a generator (e.g. e-recht24.de, Datenschutz-Generator.de) or reviewed by a lawyer, and replace every [PLACEHOLDER] with real information.',
+    sections: [
+      {
+        heading: 'Controller',
+        body: [
+          'The party responsible for data processing on this website is:',
+          'Dominik Pabst',
+          '[PLACEHOLDER: full postal address]',
+          'Email: hi@dopanik.de',
+        ],
+      },
+      {
+        heading: 'Your rights',
+        body: [
+          'You have the right to free information about your stored personal data, its origin and recipients, and the purpose of its processing, as well as a right to rectification, restriction, or deletion of this data. You also have a right to data portability and a right to lodge a complaint with the competent supervisory authority.',
+        ],
+      },
+      {
+        heading: 'Hosting',
+        body: [
+          'This website is hosted with Netlify, Inc.',
+          '[PLACEHOLDER: review the current data processing agreement and server location with Netlify and detail it here — in particular whether data is transferred to the US and on what legal basis (e.g. EU-US Data Privacy Framework, standard contractual clauses).]',
+        ],
+      },
+      {
+        heading: 'Server log files',
+        body: [
+          'When you visit this website, the hosting provider automatically collects technical access data (e.g. IP address, date and time of access, page requested, browser used). This data is used for the technical delivery and security of the website and is not combined with other data sources.',
+          '[PLACEHOLDER: add the exact retention period used by Netlify.]',
+        ],
+      },
+      {
+        heading: 'Contact form',
+        body: [
+          'If you use the contact form, the data you provide (name, email address, message) is processed to handle your request. The legal basis is Art. 6(1)(b) GDPR (steps to enter into a contract). The form is processed via Netlify Forms.',
+          '[PLACEHOLDER: define and add the retention period for form data at Netlify.]',
+        ],
+      },
+      {
+        heading: 'Web analytics with Plausible Analytics',
+        body: [
+          'This website uses Plausible Analytics, a privacy-friendly analytics service by Plausible Insights OÜ (Tartu, Estonia). Plausible uses no cookies and stores no personal data or cross-device identifiers; it collects only aggregated, anonymous usage statistics (e.g. page views, referrers, coarse device/browser category). No data can be attributed to individual persons. The legal basis is the legitimate interest in reach-based analysis and improvement of the website (Art. 6(1)(f) GDPR). More information: https://plausible.io/data-policy',
+        ],
+      },
+      {
+        heading: 'Cookies & local storage',
+        body: [
+          'This website sets no tracking or marketing cookies. Your choice of light or dark color scheme is stored, for technical necessity, in your browser\'s local storage (key "dpn-theme") and never leaves your device.',
+        ],
+      },
+      {
+        heading: 'Changes to this privacy policy',
+        body: [
+          'This privacy policy will be updated as needed, for example when the website or legal requirements change. The version currently published on this page always applies.',
+        ],
+      },
+    ],
   },
 };

@@ -13,6 +13,10 @@ export const de: Dictionary = {
     themeToggle: 'Theme umschalten',
     langSwitch: 'sprache wechseln',
     footerTagline: '// versioniert mit sorgfalt',
+    footerLegal: {
+      imprint: 'impressum',
+      privacy: 'datenschutz',
+    },
     portraitAlt: 'Porträt von Dominik Pabst',
     socialCardAlt: 'Social-Card von Dominik Pabst',
   },
@@ -106,5 +110,126 @@ export const de: Dictionary = {
     successCta: 'zurück zur startseite',
     basedIn: 'Basiert in Deutschland 🇩🇪 — offen für Consulting, Trainings und Speaking.',
     socialsIntro: 'oder direkt vernetzen:',
+  },
+  legal: {
+    seoTitle: 'Impressum – Dominik Pabst',
+    seoDescription: 'Impressum und Anbieterkennzeichnung gemäß § 5 TMG für dopanik.de.',
+    eyebrow: '// impressum',
+    title: 'Impressum.',
+    updated: 'Entwurf vom 20. August 2026',
+    noticeBanner:
+      '⚠ Entwurf: Diese Seite wurde technisch vorbereitet, ist aber inhaltlich noch nicht rechtlich geprüft und enthält Platzhalter. Vor Veröffentlichung: Text über einen Generator (z. B. e-recht24.de, Datenschutz-Generator.de) erstellen lassen oder anwaltlich prüfen und alle [PLATZHALTER] durch echte Angaben ersetzen.',
+    sections: [
+      {
+        heading: 'Diensteanbieter',
+        body: [
+          'Dominik Pabst',
+          '[PLATZHALTER: vollständige Anschrift — Straße, Hausnummer, PLZ, Ort]',
+          'E-Mail: hi@dopanik.de',
+        ],
+      },
+      {
+        heading: 'Redaktionell verantwortlich',
+        body: [
+          'Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV: Dominik Pabst (Anschrift wie oben).',
+        ],
+      },
+      {
+        heading: 'Umsatzsteuer-Identifikationsnummer',
+        body: [
+          '[PLATZHALTER: Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG, falls vorhanden — andernfalls diesen Abschnitt entfernen.]',
+        ],
+      },
+      {
+        heading: 'EU-Streitschlichtung',
+        body: [
+          'Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/.',
+          '[PLATZHALTER: bitte festlegen und ergänzen, ob eine Teilnahme an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle erfolgt.]',
+        ],
+      },
+      {
+        heading: 'Haftung für Inhalte',
+        body: [
+          'Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.',
+        ],
+      },
+      {
+        heading: 'Haftung für Links',
+        body: [
+          'Diese Website verlinkt auf externe Inhalte Dritter (z. B. dev.to, LinkedIn), auf deren Gestaltung kein Einfluss besteht. Für diese fremden Inhalte kann daher keine Gewähr übernommen werden; für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.',
+        ],
+      },
+      {
+        heading: 'Urheberrecht',
+        body: [
+          'Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht.',
+        ],
+      },
+    ],
+  },
+  privacy: {
+    seoTitle: 'Datenschutzerklärung – Dominik Pabst',
+    seoDescription: 'Datenschutzerklärung gemäß Art. 13 DSGVO für dopanik.de.',
+    eyebrow: '// datenschutz',
+    title: 'Datenschutzerklärung.',
+    updated: 'Entwurf vom 20. August 2026',
+    noticeBanner:
+      '⚠ Entwurf: Diese Seite wurde technisch vorbereitet, ist aber inhaltlich noch nicht rechtlich geprüft und enthält Platzhalter. Vor Veröffentlichung: Text über einen Generator (z. B. e-recht24.de, Datenschutz-Generator.de) erstellen lassen oder anwaltlich prüfen und alle [PLATZHALTER] durch echte Angaben ersetzen.',
+    sections: [
+      {
+        heading: 'Verantwortlicher',
+        body: [
+          'Verantwortlich für die Datenverarbeitung auf dieser Website ist:',
+          'Dominik Pabst',
+          '[PLATZHALTER: vollständige Anschrift]',
+          'E-Mail: hi@dopanik.de',
+        ],
+      },
+      {
+        heading: 'Ihre Rechte',
+        body: [
+          'Sie haben das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger sowie den Zweck der Datenverarbeitung, sowie ein Recht auf Berichtigung, Einschränkung oder Löschung dieser Daten. Zudem steht Ihnen ein Recht auf Datenübertragbarkeit sowie ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.',
+        ],
+      },
+      {
+        heading: 'Hosting',
+        body: [
+          'Diese Website wird bei Netlify, Inc. gehostet.',
+          '[PLATZHALTER: aktuellen Auftragsverarbeitungsvertrag und Serverstandort mit Netlify prüfen und hier konkretisieren — insbesondere ob eine Datenübermittlung in die USA stattfindet und auf welcher Grundlage (z. B. EU-US Data Privacy Framework, Standardvertragsklauseln).]',
+        ],
+      },
+      {
+        heading: 'Server-Logfiles',
+        body: [
+          'Beim Aufruf dieser Website erfasst der Hosting-Anbieter automatisch technische Zugriffsdaten (z. B. IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser). Diese Daten dienen der technischen Bereitstellung und Absicherung der Website und werden nicht mit anderen Datenquellen zusammengeführt.',
+          '[PLATZHALTER: genaue Speicherdauer bei Netlify ergänzen.]',
+        ],
+      },
+      {
+        heading: 'Kontaktformular',
+        body: [
+          'Wenn Sie das Kontaktformular nutzen, werden die von Ihnen angegebenen Daten (Name, E-Mail-Adresse, Nachricht) zur Bearbeitung Ihrer Anfrage verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anfrage zur Anbahnung eines Vertrags). Das Formular wird über Netlify Forms verarbeitet.',
+          '[PLATZHALTER: Speicherdauer der Formulardaten bei Netlify festlegen und ergänzen.]',
+        ],
+      },
+      {
+        heading: 'Webanalyse mit Plausible Analytics',
+        body: [
+          'Diese Website nutzt Plausible Analytics, einen datenschutzfreundlichen Webanalysedienst der Plausible Insights OÜ (Tartu, Estland). Plausible verzichtet vollständig auf Cookies und auf jegliche Speicherung personenbezogener Daten oder geräteübergreifender Kennungen; erfasst werden ausschließlich aggregierte, anonyme Nutzungsstatistiken (z. B. Seitenaufrufe, Referrer, grobe Geräte- und Browserkategorie). Eine Zuordnung zu einzelnen Personen ist nicht möglich. Rechtsgrundlage ist das berechtigte Interesse an der reichweitenbasierten Analyse und Verbesserung des Webangebots (Art. 6 Abs. 1 lit. f DSGVO). Weitere Informationen: https://plausible.io/data-policy',
+        ],
+      },
+      {
+        heading: 'Cookies & lokale Speicherung',
+        body: [
+          'Diese Website setzt keine Tracking- oder Marketing-Cookies. Ihre Auswahl des hellen oder dunklen Farbschemas wird technisch notwendig im Local Storage Ihres Browsers gespeichert (Schlüssel „dpn-theme“) und verlässt Ihr Gerät nicht.',
+        ],
+      },
+      {
+        heading: 'Änderungen dieser Datenschutzerklärung',
+        body: [
+          'Diese Datenschutzerklärung wird bei Bedarf angepasst, etwa bei Änderungen der Website oder der rechtlichen Vorgaben. Es gilt jeweils die aktuell auf dieser Seite veröffentlichte Fassung.',
+        ],
+      },
+    ],
   },
 };

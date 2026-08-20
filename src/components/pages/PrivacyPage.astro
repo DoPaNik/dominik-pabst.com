@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDictionary } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+import '../../styles/pages/legal.css';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const p = t.privacy;
+---
+
+<BaseLayout
+  lang={lang}
+  current="legal"
+  path="datenschutz"
+  title={p.seoTitle}
+  description={p.seoDescription}
+>
+  <section class="dpn-section">
+    <div class="dpn-section__inner">
+      <header class="dpn-section__header">
+        <div class="dpn-eyebrow"><span class="dpn-eyebrow__rule"></span>{p.eyebrow}</div>
+        <h1 class="dpn-section__title">{p.title}</h1>
+        <p class="dpn-legal__updated">{p.updated}</p>
+      </header>
+
+      <p class="dpn-legal__notice">{p.noticeBanner}</p>
+
+      <div class="dpn-legal__sections">
+        {
+          p.sections.map((section) => (
+            <div class="dpn-legal__section">
+              <h2 class="dpn-legal__section-title">{section.heading}</h2>
+              {section.body.map((paragraph) => (
+                <p>{paragraph}</p>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
