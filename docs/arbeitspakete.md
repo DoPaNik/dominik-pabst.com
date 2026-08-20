@@ -28,16 +28,19 @@
 
 ### Schlüsseldateien (Referenz)
 
-| Datei                              | Rolle                                                                      |
-| ---------------------------------- | -------------------------------------------------------------------------- |
-| `src/layouts/BaseLayout.astro`     | `<head>`: Meta, OG/Twitter, canonical/hreflang, JSON-LD, Theme-FOUC-Script |
-| `src/data/site.ts`                 | Einzige Quelle für Name/Firma/Kontakt/Social-Links/Foto-Pfad               |
-| `src/i18n/de.ts`, `src/i18n/en.ts` | Alle User-Facing-Strings, typisiert über `src/i18n/types.ts`               |
-| `src/content.config.ts`            | Zod-Schemata der Content Collections (`talks`, `writing`)                  |
-| `src/lib/schema.ts`                | JSON-LD-Generatoren (`Person`, `SpeakingEvent`)                            |
-| `netlify.toml` / `public/_headers` | Build-Kommando bzw. ausgelieferte Security-Header inkl. CSP                |
-| `.github/workflows/ci.yml`         | CI: Format → Lint → Typecheck → Build → `npm audit`                        |
-| `CONTENT.md`                       | Deklarierte "authoritative reference" für Inhalts-Fakten                   |
+| Datei                                | Rolle                                                                      |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| `src/layouts/BaseLayout.astro`       | `<head>`: Meta, OG/Twitter, canonical/hreflang, JSON-LD, Theme-FOUC-Script |
+| `src/data/site.ts`                   | Einzige Quelle für Name/Firma/Kontakt/Social-Links/Foto-Pfad               |
+| `src/i18n/de.ts`, `src/i18n/en.ts`   | Alle User-Facing-Strings, typisiert über `src/i18n/types.ts`               |
+| `src/content.config.ts`              | Zod-Schemata der Content Collections (`talks`, `writing`)                  |
+| `src/lib/schema.ts`                  | JSON-LD-Generatoren (`Person`, `SpeakingEvent`)                            |
+| `netlify.toml` / `public/_headers`   | Build-Kommando bzw. ausgelieferte Security-Header inkl. CSP                |
+| `.github/workflows/ci.yml`           | CI: Format → Lint → Typecheck → Build → Skript-Drift-Check → `npm audit`   |
+| `CONTENT.md`                         | Deklarierte "authoritative reference" für Inhalts-Fakten                   |
+| `src/scripts/*.ts`                   | Alle client-seitigen Skripte (TS-Quelle, typgeprüft, gelintet)             |
+| `scripts/build-critical-scripts.mjs` | Erzeugt `public/scripts/theme-bootstrap.js` (einzige Ausnahme, s. AP4-1)   |
+| `.lighthouserc.cjs`                  | Lighthouse-CI-Konfiguration (Routen + Assertions)                          |
 
 ---
 
@@ -456,9 +459,372 @@ etc. bleiben bewusst außerhalb des 90-Tage-Fensters, siehe Roadmap).
 
 ---
 
+## Paket 4 — Astro-Best-Practice-Audit (ab Tag 91)
+
+**Baseline dieses Pakets:** Branch `master` @ `97ef975`, verifiziert per
+Repository-Analyse am 2026-08-20. Paket 1–3 (siehe Abschlussstatus oben) sind
+vollständig umgesetzt — dieses Paket baut darauf auf und adressiert Punkte,
+die außerhalb des ursprünglichen 90-Tage-Fensters lagen: Bild- und
+JS-Auslieferungspipeline, Messbarkeit (KPIs) und deren Verankerung in der CI.
+
+**Reihenfolge:** frei, außer wo `Hängt ab von:` es erzwingt. AP4-1 ist
+zuerst umgesetzt, weil er das höchste Wartbarkeits-/Performance-Risiko trägt
+und keine Abhängigkeiten zu anderen Punkten hat.
+
+---
+
+### AP4-1 · JS-Auslieferung entduplizieren und durch die Astro/Vite-Pipeline führen
+
+**Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 5 / Risiko 2 · Bereich: Technik/Performance
+**Status:** ✅ Erledigt am 2026-08-20
+
+**Beschreibung:**
+`public/scripts/*.js` lief vollständig am Astro/Vite-Build vorbei
+(`is:inline` + `src=`, kein Bundling/Minify/Hashing) und war über
+`eslint.config.js`s `ignores: ['public/**']` komplett ungeprüft. Die
+Kern-Ticker-Engine der Matrix-Effekte war dabei **vierfach** dupliziert:
+als toter, nie referenzierter `public/scripts/matrix-engine.js`, als toter,
+nie importierter `src/scripts/matrix-engine.ts` (dokumentierte Quelle) und
+zusätzlich noch einmal händisch hineinkopiert in sowohl
+`matrix-backdrop.js` als auch `matrix-portrait.js`.
+
+**Umsetzung:**
+
+- Alle Skripte außer dem FOUC-kritischen Theme-Bootstrap nach
+  `src/scripts/*.ts` migriert und über Astros reguläre (nicht-inline)
+  `<script>`-Verarbeitung geladen (`<script>import '../../scripts/x';</script>`)
+  → automatisches Bundling, Minify, Content-Hash über Vite.
+  Betroffen: `theme-toggle`, `nav`, `role-rotator`, `matrix-backdrop`,
+  `matrix-portrait`.
+- `matrix-backdrop.ts` und `matrix-portrait.ts` importieren jetzt beide die
+  eine reale `src/scripts/matrix-engine.ts` (`addMatrixInstance`,
+  `clampedDpr`) statt sie zu duplizieren — Vite dedupliziert den gemeinsamen
+  Code automatisch in einen einzigen gehashten Chunk (`matrix-engine.*.js`).
+- **Ausnahme, bewusst:** `theme-bootstrap.ts` muss ein synchroner,
+  nicht-modularer Head-Script bleiben (FOUC-Prävention vor dem ersten Paint) —
+  Astros Standard-Skriptverarbeitung liefert dafür immer `type="module"`
+  (deferred), was den Dark-Flash zurückbringen würde. Quelle bleibt daher in
+  TS (`src/scripts/theme-bootstrap.ts`, typgeprüft/gelintet), wird aber per
+  `scripts/build-critical-scripts.mjs` (esbuild, IIFE, minifiziert) zu
+  `public/scripts/theme-bootstrap.js` gebaut — neue npm-Scripts
+  `build:critical-scripts`, als `predev`/`prebuild`-Hook verdrahtet.
+- Neuer CI-Schritt `Verify generated critical scripts are up to date`
+  (`quality`-Job) verhindert Drift zwischen Quelle und generierter Datei.
+- `matrix-portrait-referenz.js` (unversionierte Altlast im Repo-Root) sowie
+  alle sechs toten `public/scripts/*.js`-Dateien entfernt.
+- `eslint.config.js`: `public/**`-Blindspot geschlossen (nur noch die eine
+  generierte Datei ausgenommen). `tsconfig.json`: dieselbe Datei von
+  `astro check` ausgeschlossen (ist Build-Output, keine Quelle).
+
+**Akzeptanzkriterien:**
+
+- [x] Kein `public/scripts/*.js` mehr außer der generierten `theme-bootstrap.js`
+- [x] `matrix-engine`-Logik existiert nur noch einmal (`src/scripts/matrix-engine.ts`), von beiden Matrix-Komponenten importiert
+- [x] `eslint.config.js` schließt nur noch die eine generierte Datei aus, nicht mehr `public/**`
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run build` grün
+- [x] Vollständige Playwright-Suite (Smoke, A11y × 2 Themes, Kernflows — 40 Tests) grün gegen den neuen Build
+- [x] CI verifiziert Drift zwischen `src/scripts/theme-bootstrap.ts` und dem generierten Output
+
+**Abgrenzung:** Keine Verhaltensänderung der Skripte (1:1-Portierung der
+Logik); keine CSP-Änderung (Scripts bleiben `'self'`); AP4-2 (Bilder) und
+AP4-5 (CSS-Governance) sind separate Aufgaben.
+
+---
+
+### AP4-2 · `astro:assets` für alle Bilder nutzen
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Performance
+
+**Beschreibung:**
+`sharp` ist als devDependency installiert, wird aber nirgends verwendet.
+Porträt (`MatrixPortrait.astro`) und Avatar (`Avatar.astro`) sind rohe
+`<img src>` auf statische Dateien in `public/images/` — kein automatisches
+WebP/AVIF, kein responsives `srcset`, keine build-zeitige Maßvalidierung.
+
+**Umsetzung:** Bilder nach `src/assets/` verschieben, `getImage()` (nicht die
+`<Image>`-Komponente, da `MatrixPortrait` das `<img>`-Element für die
+Canvas-Überlagerung braucht) aus `astro:assets` nutzen, um optimierte
+Quellen + Dimensionen zu erzeugen; Ergebnis als `src`/`width`/`height` an
+die bestehenden Komponenten durchreichen.
+
+**Akzeptanzkriterien:**
+
+- [ ] Portrait und Avatar-Bilder laufen durch `astro:assets` (Build-Output enthält optimierte, gehashte Bilddateien)
+- [ ] `width`/`height` kommen aus den tatsächlichen Bilddaten, nicht aus manuell gepflegten Props
+- [ ] Mindestens WebP als Ausgabeformat (AVIF optional, falls Dateigröße es rechtfertigt)
+- [ ] `MatrixPortrait`-Canvas-Overlay funktioniert unverändert (Playwright-Kernflow-Test ergänzen oder bestehenden A11y-Lauf als Regressionsschutz nutzen)
+- [ ] Lighthouse-Bild-Byte-Metrik (`resource-summary:image:size`) sinkt messbar gegenüber der Baseline aus AP4-3
+
+**Abgrenzung:** Keine Änderung an `og/dopanik.png` (statisches Social-Card-Bild, bewusst nicht durch die Bildpipeline optimiert, da es 1:1 als Meta-Tag-URL referenziert wird).
+
+---
+
+### AP4-3 · Lighthouse-Budget auf alle 12 Routen ausweiten
+
+**Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 3 / Risiko 1 · Bereich: Messbarkeit
+
+**Beschreibung:**
+`.lighthouserc.cjs` prüft aktuell nur `/` und `/about/`. Talks, Writing,
+Contact und alle `/en/*`-Seiten sind Performance-blind, obwohl
+`tests/site-routes.ts` bereits alle 12 Routen kennt (dort für die A11y-Suite
+genutzt).
+
+**Umsetzung:** `collect.url` in `.lighthouserc.cjs` auf dieselben 12 Pfade
+wie `smokeRoutes` erweitern (Import aus `tests/site-routes.ts` ist wegen
+CJS/ESM-Mix des LHCI-Configs nicht direkt möglich — Liste dupliziert
+pflegen, mit Kommentar-Verweis auf die Quelle der Wahrheit).
+
+**Akzeptanzkriterien:**
+
+- [ ] Alle 12 Routen in `collect.url`
+- [ ] 3 Runs pro Route (bestehende Einstellung beibehalten)
+- [ ] CI-Laufzeit des `lighthouse`-Jobs bleibt < 15 Minuten (ggf. Runs pro Route auf 2 reduzieren, falls nicht)
+- [ ] Kommentar in `.lighthouserc.cjs` verweist auf `tests/site-routes.ts` als Ort, an dem Routen zuerst gepflegt werden
+
+**Abgrenzung:** Keine neuen Assertions/Budgets (→ AP4-4).
+
+---
+
+### AP4-4 · Harte Ressourcen-Budgets — zunächst als Audit, vorbereitet für Blocking
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit
+**Hängt ab von:** AP4-3
+**Entscheidung (2026-08-20):** Läuft zunächst **nicht-blockierend** (reine
+Audit-/Reporting-Funktion). Struktur ist so angelegt, dass das Umschalten
+auf blockierend eine Ein-Zeilen-Änderung pro Assertion ist (`warn` → `error`).
+
+**Beschreibung:**
+Aktuell nur `categories:performance`/`categories:accessibility` als
+Score-Schwellen, beide auf `warn`. Ein Score kann trotz spürbarer
+Byte-Regression (z. B. +80 kB JS) stabil bleiben — der Score allein ist kein
+verlässliches Frühwarnsystem.
+
+**Umsetzung:** In `.lighthouserc.cjs` unter `assert.assertions` ergänzen:
+
+```js
+'resource-summary:script:size': ['warn', { maxNumericValue: 180000 }], // ~176 KB
+'resource-summary:image:size': ['warn', { maxNumericValue: 150000 }],
+'resource-summary:total:size': ['warn', { maxNumericValue: 600000 }],
+'unused-javascript': ['warn', { maxLength: 0 }],
+```
+
+Zahlenwerte aus einem Messlauf auf der aktuellen `master`-Baseline ableiten
+(nicht raten) und als Kommentar mit Datum im Config-File dokumentieren.
+Jede Zeile bekommt einen Kommentar `// BLOCKING: warn → error`, damit das
+Umschalten pro Metrik einzeln und gezielt erfolgen kann, statt alle
+Budgets gleichzeitig scharf zu schalten.
+
+**Akzeptanzkriterien:**
+
+- [ ] Mindestens die vier oben genannten Assertions ergänzt, Schwellen aus echtem Messlauf abgeleitet und dokumentiert
+- [ ] Alle Assertions auf `warn` (CI wird durch diese Aufgabe nicht rot)
+- [ ] Jede neue Assertion trägt den `BLOCKING`-Kommentar zur einfachen späteren Umschaltung
+- [ ] Kurzanleitung im PR-Text: welche Zeile wie zu ändern ist, um eine einzelne Metrik blockierend zu machen
+
+**Abgrenzung:** Kein tatsächliches Umschalten auf `error` in dieser Aufgabe — das ist eine bewusste Folgeentscheidung, siehe Rückfrage im Chat-Verlauf.
+
+---
+
+### AP4-5 · Design-Token-Governance automatisieren (Stylelint)
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 3 / Risiko 1 · Bereich: Wartbarkeit
+
+**Beschreibung:**
+`CLAUDE.md` fordert explizit: "Never hardcode a hex, px-size, font, radius or
+duration that a token already provides." Es gibt aber keine Automatisierung.
+Stichprobe (2026-08-20): 4 rohe Hex-Werte außerhalb `tokens/`
+(z. B. `src/styles/components/button.css:95: --_fg: #fff`) sowie über 100
+`px`-Treffer, die einzeln gegen `docs/styleguide/04-layout-effects.md`
+geprüft werden müssen (Radial-/Mask-Gradienten sind zulässige Ausnahmen).
+
+**Umsetzung:** `stylelint` + `stylelint-declaration-strict-value` (oder
+äquivalente Regel) als Dev-Dependency, Regelsatz gegen `--color-*`/`--space-*`/
+`--radius-*`/`--duration-*`-Token, mit dokumentierten, minimalen
+`/* stylelint-disable */`-Ausnahmen für die legitimen Mask-Gradient-Fälle.
+Neuer `npm run lint:css`, in `ci.yml`s `quality`-Job nach `npm run lint`
+ergänzt.
+
+**Akzeptanzkriterien:**
+
+- [ ] `npm run lint:css` lokal grün auf dem Bestand (Ausnahmen begründet und minimal)
+- [ ] Neuer roher Hex-/px-Wert außerhalb `tokens/` lässt `lint:css` fehlschlagen (manuell mit einem Testfall verifiziert, dann wieder entfernt)
+- [ ] CI-Schritt in `quality`-Job ergänzt
+- [ ] `docs/styleguide/07-checklist.md` verweist auf den neuen automatisierten Check
+
+**Abgrenzung:** Keine Umformulierung bestehender CSS-Werte über die
+notwendigen Ausnahme-Kommentare hinaus — Bestandsbereinigung ist eine
+separate, spätere Aufgabe.
+
+---
+
+### AP4-6 · Datenschutzfreundliches Tracking (Plausible) + Feld-Performance-Daten
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit/Recht
+**Entscheidung (2026-08-20):** Tool ist **Plausible Analytics**
+(Plausible Insights OÜ, Estland; EU-Hosting-Option in Frankfurt via Hetzner),
+gewählt wegen EU-Sitz, keinem Cookie-Bedarf und nativer Custom-Events-Unterstützung
+für die Feld-CWV-Anbindung.
+
+**Beschreibung:**
+Lighthouse CI liefert ausschließlich Lab-Daten (synthetische Bedingungen).
+Ohne Felddaten (echte Nutzer:innen, echte Geräte/Netzwerke) bleibt unklar,
+ob Optimierungen im Feld ankommen — das widerspricht direkt der Prämisse
+"nur was wir messen, können wir verbessern". Aktuell ist auf der Seite kein
+Analytics-Tool aktiv.
+
+**Wichtiger rechtlicher Hinweis:** Das Repository enthält aktuell **keine
+Datenschutzerklärung und kein Impressum** (`grep` über `src/pages` liefert
+keine Treffer). Auch ein cookie-freies, DSGVO-konformes Tool wie Plausible
+befreit nicht von der Informationspflicht nach Art. 13 DSGVO — die
+Datenverarbeitung muss in einer Datenschutzerklärung offengelegt werden,
+und ein Impressum ist für eine Seite mit klarem geschäftlichem Bezug
+(§5 TMG / §18 MStV) ohnehin unabhängig vom Tracking-Thema fällig. Diese
+Aufgabe liefert eine technische Vorlage (Struktur, Pflichtangaben als
+Platzhalter) — keine Rechtsberatung. Vor Go-Live: anwaltliche Prüfung oder
+ein Generator (z. B. e-recht24, Datenschutz-Generator.de) empfohlen.
+
+**Umsetzung:**
+
+1. Plausible-Script in `BaseLayout.astro` einbinden, nur in Production
+   (`import.meta.env.PROD`-Guard), damit lokale Dev-Sessions nicht mitzählen.
+2. `public/_headers`: CSP um `script-src` + `connect-src` für die
+   Plausible-Domain erweitern (exakte Domain hängt von EU- vs.
+   Standard-Hosting ab, siehe Einrichtungsanleitung unten).
+3. Custom Event `pageview-props` bzw. eigenes Event für Core-Web-Vitals
+   (LCP/INP/CLS) aus dem `web-vitals`-Package an Plausible senden
+   (Growth-Plan+ für Custom Properties nötig) — alternativ, falls kein
+   Growth-Plan gewünscht: CWV weiterhin nur über Google Search Console
+   beziehen und Plausible nur für Seitenaufrufe/Referrer nutzen.
+4. Minimal-Datenschutzerklärung (`/datenschutz`, `/en/privacy`) und
+   Impressum (`/impressum`) als eigene Seiten anlegen, i18n-Strings über
+   `src/i18n/{de,en}.ts`, Verlinkung im Footer.
+
+**Einrichtungsanleitung (für dich, manuell — kann ich nicht automatisiert für dich tun):**
+
+1. Account unter <https://plausible.io/register> anlegen.
+2. Beim Hinzufügen der Domain `dopanik.de`: Zeitzone `Europe/Berlin`, und
+   unter den Erweiterten Einstellungen **EU-Datenhaltung** aktivieren, falls
+   als Option angeboten (sonst Standard-EU-Server verifizieren — Plausible
+   verarbeitet grundsätzlich in der EU, unabhängig vom gewählten Plan).
+3. Das Tracking-Snippet aus dem Dashboard kopieren, typischerweise:
+   `<script defer data-domain="dopanik.de" src="https://plausible.io/js/script.js"></script>`
+4. Mir das Snippet (oder nur die Domain-Angabe) geben — ich baue es dann mit
+   dem Production-Guard und der CSP-Anpassung ein.
+5. Nach dem Deploy: im Plausible-Dashboard verifizieren, dass Seitenaufrufe
+   ankommen (kann bis zu einigen Minuten dauern).
+6. Optional, für Custom Events (Kontaktformular-Absendung, Talk-Link-Klicks):
+   im Plausible-Plan auf "Growth" oder höher wechseln — sag Bescheid, wenn
+   das gewünscht ist, dann ergänze ich die Event-Aufrufe im Code.
+
+**Akzeptanzkriterien:**
+
+- [ ] Plausible-Script nur im Production-Build aktiv, CSP entsprechend angepasst
+- [ ] `/impressum` und `/datenschutz` (+ EN-Pendants) existieren, im Footer verlinkt, als Platzhalter klar mit einem Prüfhinweis markiert
+- [ ] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten
+- [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert)
+- [ ] Entscheidung zu Custom Events (CWV-Beacon ja/nein, welcher Plan) dokumentiert
+
+**Abgrenzung:** Keine automatisierte Auswertung/Reporting-Pipeline der
+Plausible-Daten in dieser Aufgabe (z. B. kein wöchentlicher CI-Report) —
+das Dashboard selbst ist die erste Stufe der Messbarkeit.
+
+---
+
+### AP4-7 · RSS-Feed für die Writing-Collection
+
+**Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 2 / Risiko 1 · Bereich: SEO/Reichweite
+
+**Beschreibung:** `src/content/writing/*` existiert nur als Linkliste zu
+dev.to/LinkedIn-Artikeln, kein Feed vorhanden.
+
+**Umsetzung:** `@astrojs/rss` einbinden, `/rss.xml` (DE) und `/en/rss.xml`
+(EN) aus der jeweiligen `writing`-Collection generieren, in `robots.txt`
+bzw. `<link rel="alternate" type="application/rss+xml">` im `<head>`
+verlinken.
+
+**Akzeptanzkriterien:**
+
+- [ ] `/rss.xml` und `/en/rss.xml` im Build-Output, valide gegen den W3C Feed Validator
+- [ ] Item-Anzahl entspricht der jeweiligen Collection-Größe
+- [ ] `<link rel="alternate">` in `BaseLayout.astro` ergänzt
+
+**Abgrenzung:** Kein Feed für `talks` (Veranstaltungen sind kein
+klassischer Feed-Inhalt).
+
+---
+
+### AP4-8 · Dynamische OG-Image-Generierung
+
+**Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 2 / Risiko 2 · Bereich: SEO
+
+**Beschreibung:** Nur `AboutPage.astro` überschreibt `ogImage` (Porträt);
+Talks, Writing, Contact teilen sich das eine statische `/og/dopanik.png`.
+
+**Umsetzung:** Astro-Endpoint (`src/pages/og/[...].ts` o. ä.) mit `satori`
+
+- `resvg`/`@vercel/og`-Äquivalent, das Titel + Kontext (z. B. Talk-Jahr)
+  serverseitig zur Build-Zeit in ein PNG rendert, im Design-System-Look
+  (dunkles Slate, Mono-Font, Brand-Grün).
+
+**Akzeptanzkriterien:**
+
+- [ ] Talks- und Writing-Übersichtsseite bekommen ein kontextspezifisches OG-Bild
+- [ ] Generierung läuft zur Build-Zeit (kein Laufzeit-Rendering, keine Serverless-Function nötig für die statische Seite)
+- [ ] Bildgröße/-format entspricht dem bisherigen Standard (1200×630, PNG)
+- [ ] Fallback auf `/og/dopanik.png` bleibt für Seiten ohne spezifisches Bild erhalten
+
+**Abgrenzung:** Niedrigste Priorität in Paket 4 — erst nach AP4-1 bis AP4-6 angehen.
+
+---
+
+### AP4-9 · Nachgelagertes Aufräumen (Restspuren aus AP4-1)
+
+**Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 1 / Risiko 1 · Bereich: Wartbarkeit
+**Hängt ab von:** AP4-1
+
+**Beschreibung:** Kontrollpunkt, ob nach AP4-1 wirklich keine Restspuren
+bleiben (z. B. falls in einem parallelen Branch neue `is:inline`-Skripte
+hinzukamen, die denselben Fehler wiederholen).
+
+**Akzeptanzkriterien:**
+
+- [ ] `grep -rn 'is:inline' src` liefert nur noch den dokumentierten
+      Theme-Bootstrap-Fall in `BaseLayout.astro` und `application/ld+json`-Blöcke
+- [ ] `public/scripts/` enthält ausschließlich die generierte `theme-bootstrap.js`
+
+**Abgrenzung:** Reiner Kontrollpunkt, keine neue Funktionalität.
+
+---
+
+### AP4-10 · Visuelles Regressionstesting
+
+**Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 3 / Risiko 1 · Bereich: Qualität
+**Hinweis:** Bisher unter "Bewusst nicht enthalten" geführt — wird mit
+Paket 4 aktiv eingeplant, da die Basis aus Paket 2/3 (Playwright-Infrastruktur)
+jetzt seit Monaten stabil läuft.
+
+**Beschreibung:** Bei einem stark gestalteten Dual-Theme-System (Dark/Light,
+Matrix-Canvas-Effekte) gibt es keine Screenshot-Snapshots. Unbeabsichtigte
+visuelle Drift bei CSS-Refactorings fällt aktuell nur manuell auf.
+
+**Umsetzung:** `toHaveScreenshot()`-Assertions für die 12 Routen × 2 Themes
+in einem neuen, separaten Playwright-Projekt/Testfile, das **nicht** den
+`tests`-Job blockiert (eigener CI-Job, `continue-on-error: true` oder nur
+bei manuellem `workflow_dispatch`), da Screenshot-Diffs bei bewussten
+Redesigns hohe Update-Last erzeugen.
+
+**Akzeptanzkriterien:**
+
+- [ ] Baseline-Screenshots für alle 12 Routen × 2 Themes committed
+- [ ] Neuer CI-Job/Step meldet Diffs, ohne den PR standardmäßig zu blockieren
+- [ ] Dokumentierter Befehl zum bewussten Update der Baseline (`--update-snapshots`)
+
+**Abgrenzung:** Kein Cross-Browser-Vergleich (nur Chromium, konsistent mit der bestehenden Suite).
+
+---
+
 ## Bewusst nicht enthalten (aus der Roadmap übernommen)
 
-- **Visuelle Regressionstests** — erst sinnvoll, wenn die Basis aus Paket 2/3 steht.
 - **CSP-Report-Only-Monitoring** mit Reporting-Endpoint — bräuchte einen
   Report-Collector und damit Infrastruktur außerhalb des Backend-losen Setups.
 
