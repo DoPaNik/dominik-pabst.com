@@ -2,7 +2,22 @@ module.exports = {
   ci: {
     collect: {
       staticDistDir: './dist',
-      url: ['/', '/about/'],
+      // Kept in sync by hand with `smokeRoutes` in tests/site-routes.ts —
+      // that file is the source of truth for "all routes on the site".
+      url: [
+        '/',
+        '/about/',
+        '/talks/',
+        '/writing/',
+        '/contact/',
+        '/contact/success/',
+        '/en/',
+        '/en/about/',
+        '/en/talks/',
+        '/en/writing/',
+        '/en/contact/',
+        '/en/contact/success/',
+      ],
       numberOfRuns: 3,
     },
     assert: {
