@@ -111,6 +111,16 @@ const rssHref = lang === 'de' ? '/rss.xml' : '/en/rss.xml';
     <script is:inline src="/scripts/theme-bootstrap.js"></script>
 
     <ClientRouter />
+
+    {
+      import.meta.env.PROD && (
+        <>
+          {/* Privacy-friendly analytics by Plausible (EU-hosted, no cookies) */}
+          <script async is:inline src="https://plausible.io/js/pa-33V-5Z57sBF9ak1Vy55p9.js" />
+          <script is:inline src="/scripts/plausible-init.js" />
+        </>
+      )
+    }
   </head>
   <body>
     <a href="#main" class="skip-link">{t.common.skipToContent}</a>

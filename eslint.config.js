@@ -27,7 +27,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/**/*.astro', 'src/scripts/**/*.ts'],
+    files: ['src/**/*.astro', 'src/scripts/**/*.ts', 'public/scripts/**/*.js'],
     languageOptions: {
       globals: globals.browser,
     },
