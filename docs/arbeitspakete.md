@@ -926,25 +926,47 @@ Kriterien unten sind entsprechend präzisiert.
 ### AP4-10 · Visuelles Regressionstesting
 
 **Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 3 / Risiko 1 · Bereich: Qualität
+**Status:** ✅ Infrastruktur erledigt am 2026-08-20 — Baseline selbst ist
+**offen** und kann nur aus einem echten CI-Lauf entstehen (siehe unten)
 **Hinweis:** Bisher unter "Bewusst nicht enthalten" geführt — wird mit
 Paket 4 aktiv eingeplant, da die Basis aus Paket 2/3 (Playwright-Infrastruktur)
 jetzt seit Monaten stabil läuft.
 
 **Beschreibung:** Bei einem stark gestalteten Dual-Theme-System (Dark/Light,
-Matrix-Canvas-Effekte) gibt es keine Screenshot-Snapshots. Unbeabsichtigte
-visuelle Drift bei CSS-Refactorings fällt aktuell nur manuell auf.
+Matrix-Canvas-Effekte) gab es keine Screenshot-Snapshots. Unbeabsichtigte
+visuelle Drift bei CSS-Refactorings fiel bisher nur manuell auf.
 
-**Umsetzung:** `toHaveScreenshot()`-Assertions für die 12 Routen × 2 Themes
-in einem neuen, separaten Playwright-Projekt/Testfile, das **nicht** den
-`tests`-Job blockiert (eigener CI-Job, `continue-on-error: true` oder nur
-bei manuellem `workflow_dispatch`), da Screenshot-Diffs bei bewussten
-Redesigns hohe Update-Last erzeugen.
+**Umsetzung:** `tests/visual.spec.ts`, neues Playwright-Projekt `visual` in
+`playwright.config.ts` (per `testMatch`/`testIgnore` sauber vom
+`chromium`-Projekt getrennt, damit `npm test` — der Required Check — davon
+unberührt bleibt). `toHaveScreenshot()` für alle 16 Routen × 2 Themes,
+`reducedMotion: 'reduce'` erzwungen (über `contextOptions`, da `reducedMotion`
+in dieser Playwright-Version kein Top-Level-`use`-Feld ist) — sonst wären die
+Matrix-Portrait-/Backdrop-Canvas-Animationen eine garantierte Flakiness-Quelle.
+Neuer CI-Job `visual-regression`, `continue-on-error: true`, lädt
+Report + Testergebnisse als Artefakt hoch, blockiert also nie den PR.
+
+**Warum keine Baseline committed ist:** Playwright hängt den Betriebssystem-Namen
+an den Snapshot-Dateinamen (z. B. `-about-dark-visual-darwin.png` lokal auf
+macOS vs. `-visual-linux.png` in der Ubuntu-CI) — lokal erzeugte Baselines
+würden in der CI schlicht nie gefunden, nicht nur leicht abweichen. Das wurde
+beim Testen genau so beobachtet und ist kein theoretisches Risiko. Die Baseline
+kann daher nur aus einem echten Lauf auf `ubuntu-latest` entstehen: der erste
+`visual-regression`-Lauf schlägt für alle 32 Kombinationen mit "kein Baseline
+gefunden" fehl (harmlos dank `continue-on-error`), schreibt aber die Ist-Bilder
+in `test-results/`. Diese aus dem hochgeladenen Artefakt herunterladen, nach
+`tests/visual.spec.ts-snapshots/` mit dem korrekten `*-linux.png`-Namensschema
+verschieben und committen — danach vergleicht jeder weitere Lauf echt.
+Für spätere bewusste Updates (nach einem Redesign): `npm run test:visual --
+--update-snapshots` in genau dieser CI-Umgebung ausführen.
 
 **Akzeptanzkriterien:**
 
-- [ ] Baseline-Screenshots für alle 12 Routen × 2 Themes committed
-- [ ] Neuer CI-Job/Step meldet Diffs, ohne den PR standardmäßig zu blockieren
-- [ ] Dokumentierter Befehl zum bewussten Update der Baseline (`--update-snapshots`)
+- [x] Test-Infrastruktur für alle 16 Routen × 2 Themes steht (`tests/visual.spec.ts`)
+- [x] Eigenes Playwright-Projekt, `npm test`/Required Check unverändert (lokal verifiziert: 52/52 im `chromium`-Projekt weiterhin grün)
+- [x] Neuer CI-Job meldet Diffs, ohne den PR zu blockieren (`continue-on-error: true`)
+- [x] Dokumentierter Befehl zum bewussten Update der Baseline (`npm run test:visual -- --update-snapshots`, s. o.)
+- [ ] Baseline-Screenshots selbst committed — **erst möglich nach dem ersten echten `ubuntu-latest`-CI-Lauf**, siehe Anleitung oben
 
 **Abgrenzung:** Kein Cross-Browser-Vergleich (nur Chromium, konsistent mit der bestehenden Suite).
 
