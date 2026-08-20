@@ -23,6 +23,8 @@ const talks = allTalks.sort((a, b) => b.data.year - a.data.year);
 const schema = talks
   .filter((talk) => !talk.data.placeholder)
   .map((talk) => buildSpeakingEventSchema(talk.data, lang));
+
+const ogImage = lang === 'de' ? '/og/talks.png' : '/og/en/talks.png';
 ---
 
 <BaseLayout
@@ -32,6 +34,7 @@ const schema = talks
   title={talksT.seoTitle}
   description={talksT.seoDescription}
   schema={schema}
+  ogImage={ogImage}
 >
   <section class="dpn-section">
     <div class="dpn-section__inner">
