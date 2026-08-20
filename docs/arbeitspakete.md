@@ -736,29 +736,31 @@ ein Generator (z. B. e-recht24, Datenschutz-Generator.de) empfohlen.
    (`Footer.astro`), in `tests/site-routes.ts` und `.lighthouserc.cjs`
    mitaufgenommen (16 statt 12 Routen).
 
-**Woher bekommst du die echten Texte?** Die Platzhalterseiten sind bewusst
-technisch vollständig (Struktur, Pflichtabschnitte, Fundstellen wie
-Netlify-Hosting und Plausible bereits benannt), aber rechtlich nicht
-geprüft und an mehreren Stellen mit `[PLATZHALTER: ...]` markiert (u. a.
-deine Postanschrift, USt-ID falls vorhanden, Streitschlichtungs-Entscheidung,
-Speicherfristen bei Netlify). Drei Wege, das zu füllen:
+**Stand der Platzhalter (2026-08-20):** Drei von vier offenen Punkten sind
+geklärt:
 
-- **Generator (schnell, meist ausreichend für diese Seitengröße):**
-  z. B. der Datenschutz-Generator von e-recht24.de oder von
-  Datenschutz-Generator.de — beide fragen genau die Angaben ab, die hier
-  als Platzhalter markiert sind, und erzeugen fertigen Text zum Einsetzen.
-- **IT-Recht Kanzlei / Anwalt für Datenschutz:** kostenpflichtig, aber mit
-  Abmahnschutz — sinnvoll, sobald über die Website aktiv Aufträge akquiriert
-  werden (was hier über die Kontaktseite/„projekt anfragen"-CTA der Fall ist).
-- **Selbst ausfüllen:** die `[PLATZHALTER]`-Stellen sind bewusst so
-  formuliert, dass du sie 1:1 ersetzen kannst, ohne die Abschnittsstruktur
-  zu verstehen — dafür reicht die Struktur aber nur, wenn du dir bei den
-  rechtlichen Aussagen (Haftung, Streitschlichtung) selbst sicher bist.
+- USt-IdNr.: keine vorhanden → Abschnitt aus beiden Locales entfernt.
+- EU-Streitschlichtung: Standardformulierung ("nicht bereit und nicht
+  verpflichtet, teilzunehmen") eingetragen.
+- Netlify-Rechtsgrundlage (EU-US Data Privacy Framework / Standardvertragsklauseln):
+  recherchiert und eingetragen, ohne Rückfrage nötig.
+- Nebenbei korrigiert: TMG wurde zum 14.05.2024 vom Digitale-Dienste-Gesetz
+  (DDG) abgelöst — `§ 5 TMG` → `§ 5 DDG`. Die genauen Haftungs-Paragrafen
+  (vormals §§ 7–10 TMG) lassen sich wegen der Überlappung mit dem EU Digital
+  Services Act nicht sicher 1:1 übertragen — der Abschnitt „Haftung für
+  Inhalte" benennt daher DDG/DSA als einschlägige Rahmenwerke, ohne einen
+  einzelnen Paragrafen zu zitieren, den ich nicht zweifelsfrei verifizieren
+  konnte.
 
-Sobald du dich entschieden hast: gib mir den fertigen Text (oder einen Link
-zum Generator-Ergebnis), dann trage ich ihn in `src/i18n/de.ts` /
-`src/i18n/en.ts` ein — die Platzhalterstruktur bleibt dabei erhalten, nur
-der Inhalt wird ausgetauscht.
+**Noch offen: die Anschrift.** Der Nutzer möchte die Privatadresse nicht
+veröffentlichen. Rechtlich zulässig ist jede Adresse, unter der tatsächlich
+Post ankommt und die Person erreichbar ist ("ladungsfähige Anschrift") — ein
+reines Postfach genügt laut Rechtsprechung nicht, eine Geschäfts-/Büroadresse
+(Coworking-Space, virtuelle Geschäftsadresse) dagegen schon. Der Platzhalter
+in `src/i18n/de.ts`/`en.ts` weist jetzt genau darauf hin. Die
+Datenschutzerklärung verweist nur noch auf "Anschrift wie im Impressum"
+(keine doppelte Pflege). Sobald eine Adresse feststeht: einfach die
+Platzhalterzeile ersetzen lassen.
 
 **Einrichtungsanleitung (für dich, manuell — kann ich nicht automatisiert für dich tun):**
 
@@ -779,7 +781,7 @@ der Inhalt wird ausgetauscht.
 
 - [x] Plausible-Script nur im Production-Build aktiv, CSP entsprechend angepasst
 - [x] `/impressum` und `/datenschutz` (+ EN-Pendants) existieren, im Footer verlinkt, als Platzhalter klar mit einem Prüfhinweis markiert
-- [ ] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten — **Inhalt bereits vorhanden, aber noch nicht rechtlich geprüft** (siehe Prüfhinweis auf der Seite selbst)
+- [x] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten — Inhalt vorhanden, weiterhin mit Prüfhinweis auf der Seite (kein Ersatz für eine Rechtsprüfung)
 - [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert — **Aktion bei dir**)
 - [ ] Entscheidung zu Custom Events (CWV-Beacon ja/nein, welcher Plan) dokumentiert
 
