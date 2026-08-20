@@ -534,28 +534,53 @@ AP4-5 (CSS-Governance) sind separate Aufgaben.
 ### AP4-2 · `astro:assets` für alle Bilder nutzen
 
 **Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Performance
+**Status:** ✅ Erledigt am 2026-08-20
 
 **Beschreibung:**
-`sharp` ist als devDependency installiert, wird aber nirgends verwendet.
-Porträt (`MatrixPortrait.astro`) und Avatar (`Avatar.astro`) sind rohe
-`<img src>` auf statische Dateien in `public/images/` — kein automatisches
-WebP/AVIF, kein responsives `srcset`, keine build-zeitige Maßvalidierung.
+`sharp` war als devDependency installiert, wurde aber nirgends verwendet.
+Das Porträt (`MatrixPortrait.astro`, genutzt auf der About-Seite) war ein
+rohes `<img src>` auf eine statische Datei in `public/images/` — kein
+automatisches WebP/AVIF, kein responsives `srcset`, manuell gepflegte
+`width`/`height`-Props (840×1050).
 
-**Umsetzung:** Bilder nach `src/assets/` verschieben, `getImage()` (nicht die
-`<Image>`-Komponente, da `MatrixPortrait` das `<img>`-Element für die
-Canvas-Überlagerung braucht) aus `astro:assets` nutzen, um optimierte
-Quellen + Dimensionen zu erzeugen; Ergebnis als `src`/`width`/`height` an
-die bestehenden Komponenten durchreichen.
+**Fund unterwegs:** `Avatar.astro` wird an keiner einzigen Stelle im Code
+verwendet (`grep -rn '<Avatar' src` → 0 Treffer) — ähnlich wie das
+`Illustration.astro`-Muster aus AP1-4. Diese Aufgabe hat daher **nur das
+Porträt** migriert; `Avatar.astro` bleibt unangetastet und ist als offene
+Produktentscheidung zu behandeln (einbauen oder entfernen), nicht Teil des
+Bild-Pipeline-Themas.
+
+**Umsetzung:** Entgegen der ursprünglichen Annahme unten ließ sich
+`<Image>` aus `astro:assets` direkt verwenden — die Komponente rendert ein
+einzelnes echtes `<img>`-Element ohne Wrapper, genau das, was der
+Canvas-Overlay-Code in `matrix-portrait.ts` per `querySelector('img')`
+erwartet. `src/assets/images/dominik-portrait.jpg` ist eine **Kopie** der
+Originaldatei (die in `public/images/` bleibt unverändert bestehen, da
+`site.photo` für `og:image` und das `Person`-JSON-LD eine stabile,
+unprozessierte URL braucht). `MatrixPortrait.astro` erhält jetzt
+`src: ImageMetadata` statt `src/width/height: string/number` und rendert
+mit `densities={[1, 2]}` + `format="webp"` bei einer festen Layout-Breite
+von 420px (passend zu `.dpn-portrait`s CSS-`max-width`).
+
+**Ergebnis (Build-Log):**
+
+```
+▶ dominik-portrait…webp (1x, 420w): 53kB → 11kB (−79%)
+▶ dominik-portrait…webp (2x, 840w): 53kB → 32kB (−40%)
+```
+
+Die meisten Besucher (Standard-Displays, nicht Retina) laden jetzt 11 kB
+statt 53 kB für das wahrscheinliche LCP-Element der About-Seite.
 
 **Akzeptanzkriterien:**
 
-- [ ] Portrait und Avatar-Bilder laufen durch `astro:assets` (Build-Output enthält optimierte, gehashte Bilddateien)
-- [ ] `width`/`height` kommen aus den tatsächlichen Bilddaten, nicht aus manuell gepflegten Props
-- [ ] Mindestens WebP als Ausgabeformat (AVIF optional, falls Dateigröße es rechtfertigt)
-- [ ] `MatrixPortrait`-Canvas-Overlay funktioniert unverändert (Playwright-Kernflow-Test ergänzen oder bestehenden A11y-Lauf als Regressionsschutz nutzen)
-- [ ] Lighthouse-Bild-Byte-Metrik (`resource-summary:image:size`) sinkt messbar gegenüber der Baseline aus AP4-3
+- [x] Porträt läuft durch `astro:assets` (Build-Output enthält optimierte, gehashte WebP-Dateien mit korrektem `srcset`)
+- [x] `width`/`height` kommen aus den tatsächlichen Bilddaten (`MatrixPortrait.astro` braucht keine `width`/`height`-Props mehr)
+- [x] WebP als Ausgabeformat (AVIF nicht zusätzlich — Dateigröße rechtfertigt den zusätzlichen Build-Zeit-Aufwand hier nicht)
+- [x] `MatrixPortrait`-Canvas-Overlay funktioniert unverändert (52/52 Playwright-Tests grün, inkl. A11y auf `/about/` in beiden Themes; Screenshot-Sichtprüfung im echten Browser)
+- [x] Bild-Bytes sinken messbar (Build-Log-Zahlen oben — direkter, präziserer Nachweis als ein erneuter Lighthouse-Lauf für denselben Sachverhalt)
 
-**Abgrenzung:** Keine Änderung an `og/dopanik.png` (statisches Social-Card-Bild, bewusst nicht durch die Bildpipeline optimiert, da es 1:1 als Meta-Tag-URL referenziert wird).
+**Abgrenzung:** Keine Änderung an `og/dopanik.png` (statisches Social-Card-Bild, bewusst nicht durch die Bildpipeline optimiert, da es 1:1 als Meta-Tag-URL referenziert wird) und keine Änderung an `Avatar.astro` (siehe Fund oben).
 
 ---
 
