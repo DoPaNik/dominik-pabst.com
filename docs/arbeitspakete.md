@@ -618,37 +618,43 @@ gepflegt, mit Kommentar-Verweis auf die Quelle der Wahrheit).
 
 **Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit
 **Hängt ab von:** AP4-3
+**Status:** ✅ Erledigt am 2026-08-20
 **Entscheidung (2026-08-20):** Läuft zunächst **nicht-blockierend** (reine
 Audit-/Reporting-Funktion). Struktur ist so angelegt, dass das Umschalten
 auf blockierend eine Ein-Zeilen-Änderung pro Assertion ist (`warn` → `error`).
 
 **Beschreibung:**
-Aktuell nur `categories:performance`/`categories:accessibility` als
+Zuvor nur `categories:performance`/`categories:accessibility` als
 Score-Schwellen, beide auf `warn`. Ein Score kann trotz spürbarer
 Byte-Regression (z. B. +80 kB JS) stabil bleiben — der Score allein ist kein
 verlässliches Frühwarnsystem.
 
-**Umsetzung:** In `.lighthouserc.cjs` unter `assert.assertions` ergänzen:
+**Umsetzung:** In `.lighthouserc.cjs` unter `assert.assertions` ergänzt, mit
+Schwellen aus einem echten Messlauf (nicht geraten) auf der aktuellen
+`master`-Baseline (2026-08-20, nach AP4-1–AP4-7):
 
 ```js
-'resource-summary:script:size': ['warn', { maxNumericValue: 180000 }], // ~176 KB
-'resource-summary:image:size': ['warn', { maxNumericValue: 150000 }],
-'resource-summary:total:size': ['warn', { maxNumericValue: 600000 }],
-'unused-javascript': ['warn', { maxLength: 0 }],
+// Baseline: schwerste Route (/about/, matrix-portrait-Bundle + optimiertes
+// WebP-Porträt) maß ~14,2 KB Script, ~33,7 KB Bild, ~203 KB gesamt, 0ms
+// unused-JS-Ersparnis. Schwellen unten geben ~30–50% Puffer.
+'resource-summary:script:size': ['warn', { maxNumericValue: 20000 }], // BLOCKING: warn → error
+'resource-summary:image:size': ['warn', { maxNumericValue: 50000 }], // BLOCKING: warn → error
+'resource-summary:total:size': ['warn', { maxNumericValue: 260000 }], // BLOCKING: warn → error
+'unused-javascript': ['warn', { maxNumericValue: 50 }], // BLOCKING: warn → error
 ```
 
-Zahlenwerte aus einem Messlauf auf der aktuellen `master`-Baseline ableiten
-(nicht raten) und als Kommentar mit Datum im Config-File dokumentieren.
-Jede Zeile bekommt einen Kommentar `// BLOCKING: warn → error`, damit das
-Umschalten pro Metrik einzeln und gezielt erfolgen kann, statt alle
-Budgets gleichzeitig scharf zu schalten.
+**Korrektur gegenüber der ursprünglichen Planung:** `unused-javascript`s
+`numericValue` ist eine geschätzte Ladezeit-Ersparnis in **Millisekunden**,
+kein Byte-Wert — `maxLength` (für Array-Längen gedacht) wäre falsch gewesen.
+Jetzt korrekt `maxNumericValue` in ms, mit kleinem Puffer (50ms) statt hartem
+0, um bei minimalen Messschwankungen nicht unnötig auszuschlagen.
 
 **Akzeptanzkriterien:**
 
-- [ ] Mindestens die vier oben genannten Assertions ergänzt, Schwellen aus echtem Messlauf abgeleitet und dokumentiert
-- [ ] Alle Assertions auf `warn` (CI wird durch diese Aufgabe nicht rot)
-- [ ] Jede neue Assertion trägt den `BLOCKING`-Kommentar zur einfachen späteren Umschaltung
-- [ ] Kurzanleitung im PR-Text: welche Zeile wie zu ändern ist, um eine einzelne Metrik blockierend zu machen
+- [x] Vier Assertions ergänzt, Schwellen aus echtem Messlauf (48/48 Runs grün) abgeleitet und im Config-Kommentar dokumentiert
+- [x] Alle Assertions auf `warn` (CI wird durch diese Aufgabe nicht rot)
+- [x] Jede neue Assertion trägt den `BLOCKING`-Kommentar zur einfachen späteren Umschaltung
+- [x] Anleitung im Kommentarblock: `warn` → `error` pro Zeile, einzeln umschaltbar
 
 **Abgrenzung:** Kein tatsächliches Umschalten auf `error` in dieser Aufgabe — das ist eine bewusste Folgeentscheidung, siehe Rückfrage im Chat-Verlauf.
 
