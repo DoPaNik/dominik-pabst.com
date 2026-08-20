@@ -1006,3 +1006,57 @@ gleiches Muster wie die bestehenden `tmp`/`uuid`-Einträge). Alle sechs
 offenen PRs sind verarbeitet (gemergt, als Duplikat geschlossen oder nach
 Rebase leer/no-op geschlossen); es gibt keine offenen PRs und kein offenes
 Arbeitspaket mehr im Repository.
+
+---
+
+## Abschlussstatus Paket 4 — Stand 2026-08-20
+
+AP4-1 bis AP4-10 sind bearbeitet, 22 Commits auf `master` (lokal; `master`
+liegt insgesamt 24 Commits vor `origin/master`, die zwei ältesten davon aus
+einer vorherigen Session — **nichts ist gepusht**, siehe unten). `format:check`, `lint`, `lint:css`, `typecheck`
+und `build` sind durchgehend grün gehalten worden; die volle Playwright-Suite
+(52 Tests: Smoke, A11y × 2 Themes, Kernflows über alle 16 Routen) lief nach
+jeder Code-Änderung erneut grün. Lighthouse CI wurde zweimal komplett gegen
+den finalen Stand laufen lassen (48 Runs über 16 Routen, beide Male grün).
+
+**Vollständig erledigt:** AP4-1 (JS-Konsolidierung), AP4-2 (Bildpipeline),
+AP4-3 (Lighthouse-Routenabdeckung), AP4-4 (Ressourcen-Budgets),
+AP4-5 (Stylelint-Token-Governance), AP4-7 (RSS-Feed), AP4-8 (dynamische
+OG-Bilder), AP4-9 (Aufräum-Kontrolle).
+
+**Teilweise erledigt:** AP4-6 (Plausible-Einbindung + Impressum/Datenschutz-
+Platzhalterseiten fertig; Adresse und CWV-Beacon-Entscheidung offen) und
+AP4-10 (Test-Infrastruktur fertig; Baseline-Screenshots können erst nach
+einem echten CI-Lauf auf `ubuntu-latest` entstehen).
+
+### Punktliste für morgen
+
+1. **Deine Adresse fürs Impressum** (AP4-6) — Geschäfts-/Büroadresse oder
+   Privatadresse, sobald entschieden: mir geben, ich trage sie in
+   `src/i18n/de.ts`/`en.ts` ein (Platzhalter ist bereits an der richtigen
+   Stelle, siehe Chat-Verlauf für die Optionen).
+2. **CWV-Custom-Event-Entscheidung** (AP4-6) — willst du für Core-Web-Vitals-
+   Tracking auf den Plausible-"Growth"-Plan wechseln? Falls ja, baue ich die
+   Event-Aufrufe im Code.
+3. **Push nach GitHub** — sobald gepusht, läuft die echte CI auf
+   `ubuntu-latest`. Das schließt AP4-10 ab (Baseline aus dem Artefakt des
+   `visual-regression`-Jobs herunterladen, nach
+   `tests/visual.spec.ts-snapshots/` committen) und ist die erste scharfe
+   Probe für die neuen CI-Schritte (Skript-Drift-Check, `lint:css`,
+   Ressourcen-Budgets, OG-Bild-Generierung, Lighthouse mit 16 Routen).
+4. **`Avatar.astro`-Entscheidung** — unbenutzte Komponente (Fund aus AP4-2),
+   analog zum `Illustration.astro`-Fall aus AP1-4: einbauen oder entfernen.
+5. **font-size-/Spacing-Bereinigung** — Fund aus AP4-5: 62 % der
+   `font-size`-Deklarationen sind literal statt `var(--text-*)`, teils ohne
+   passenden Token. Kein neues Arbeitspaket-Kürzel vergeben, da Umfang und
+   Ansatz (Bestandswerte anpassen vs. Token-Skala erweitern) erst geklärt
+   werden sollten.
+
+### Aufräumen (erledigt vor der Pause)
+
+- Alter `astro dev`-Hintergrundprozess (Uptime ~8,4 h) gestoppt.
+- Build-/Test-Artefakte gelöscht: `dist/`, `.lighthouseci/` (115 MB),
+  `test-results/`, `playwright-report/`, `.DS_Store`-Dateien. Alle
+  regenerierbar per `npm run build` bzw. den jeweiligen Test-Befehlen.
+- Working Tree ist sauber (`git status` liefert nichts), keine offenen
+  Ports, keine Hintergrundprozesse.
