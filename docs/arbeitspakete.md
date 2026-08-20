@@ -896,16 +896,28 @@ anderen Seiten. Jetzt echte Props mit Default 1200×630, `AboutPage.astro`
 
 **Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 1 / Risiko 1 · Bereich: Wartbarkeit
 **Hängt ab von:** AP4-1
+**Status:** ✅ Erledigt am 2026-08-20
 
 **Beschreibung:** Kontrollpunkt, ob nach AP4-1 wirklich keine Restspuren
 bleiben (z. B. falls in einem parallelen Branch neue `is:inline`-Skripte
 hinzukamen, die denselben Fehler wiederholen).
 
+**Ergebnis:** Zwei neue `is:inline`-Stellen sind seit AP4-1 dazugekommen
+(AP4-6, Plausible) — beide bewusst und aus demselben Grund wie der
+ursprüngliche Theme-Bootstrap-Fall (CSP-konformes, nicht gebündeltes
+Vendor-Snippet): der externe Plausible-Tracker-Script-Tag und
+`public/scripts/plausible-init.js`. Keine unbeabsichtigte Drift — die
+Kriterien unten sind entsprechend präzisiert.
+
 **Akzeptanzkriterien:**
 
-- [ ] `grep -rn 'is:inline' src` liefert nur noch den dokumentierten
-      Theme-Bootstrap-Fall in `BaseLayout.astro` und `application/ld+json`-Blöcke
-- [ ] `public/scripts/` enthält ausschließlich die generierte `theme-bootstrap.js`
+- [x] `grep -rn 'is:inline' src` liefert nur den JSON-LD-Block, den
+      Theme-Bootstrap-Fall und die zwei Plausible-Script-Tags aus
+      `BaseLayout.astro` — alle vier dokumentiert und begründet, keine
+      unbegründeten neuen Treffer
+- [x] `public/scripts/` enthält ausschließlich `theme-bootstrap.js`
+      (generiert, AP4-1) und `plausible-init.js` (Vendor-Stub, AP4-6) —
+      keine weiteren, undokumentierten Dateien
 
 **Abgrenzung:** Reiner Kontrollpunkt, keine neue Funktionalität.
 
