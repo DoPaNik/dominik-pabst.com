@@ -846,23 +846,49 @@ klassischer Feed-Inhalt).
 ### AP4-8 · Dynamische OG-Image-Generierung
 
 **Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 2 / Risiko 2 · Bereich: SEO
+**Status:** ✅ Erledigt am 2026-08-20
 
-**Beschreibung:** Nur `AboutPage.astro` überschreibt `ogImage` (Porträt);
-Talks, Writing, Contact teilen sich das eine statische `/og/dopanik.png`.
+**Beschreibung:** Nur `AboutPage.astro` überschrieb `ogImage` (Porträt);
+Talks, Writing, Contact teilten sich das eine statische `/og/dopanik.png`.
 
-**Umsetzung:** Astro-Endpoint (`src/pages/og/[...].ts` o. ä.) mit `satori`
-und einem `resvg`/`@vercel/og`-Äquivalent, das Titel und Kontext (z. B.
-Talk-Jahr) serverseitig zur Build-Zeit in ein PNG rendert, im
-Design-System-Look (dunkles Slate, Mono-Font, Brand-Grün).
+**Umsetzung:** `src/lib/og-image.ts` rendert mit `satori` + `@resvg/resvg-js`
+zur Build-Zeit ein 1200×630-PNG im Design-System-Look (Terminal-Chrome mit
+Ampel-Punkten, `//`-Eyebrow in Phosphor-Grün, Titel in JetBrains Mono 800,
+DoPaNik-Wortmarke) — Farben sind die aufgelösten Hex-Werte aus
+`src/styles/tokens/colors.css` (Satori kann keine CSS-Custom-Properties
+lesen). Vier schlanke Astro-Endpoints (`src/pages/og/{talks,writing}.png.ts`
+
+- `en/`-Pendants) rufen das gemeinsam genutzte Modul auf, analog zum
+  `src/lib/rss.ts`-Muster aus AP4-7.
+
+**Zwei Stolpersteine unterwegs, beide gelöst:**
+
+1. Satori kann die WOFF2-Variable-Font-Dateien aus `public/fonts/` nicht
+   parsen (`Unsupported OpenType signature wOF2`) — und selbst eine TTF-Variable-Font
+   von Google Fonts scheiterte an einem `fvar`-Table-Parsing-Fehler in Satoris
+   `opentype.js`-Fork. Lösung: `scripts/fetch-og-fonts.mjs` (nach dem Muster von
+   `fetch-portrait.mjs` — einmalig ausgeführt, Ergebnis committed) lädt
+   statische, nicht-variable JetBrains-Mono-TTFs direkt vom offiziellen
+   JetBrains-Repo nach `src/assets/fonts/`.
+2. `import.meta.url`-relative Pfade zu den Font-Dateien brachen im Build,
+   weil Astro/Vite den Endpoint-Code nach `dist/.prerender/chunks/`
+   verschiebt. Gelöst über `path.join(process.cwd(), 'src/assets/fonts')` —
+   `astro build` läuft immer vom Projekt-Root aus.
+
+**Nebenbei gefundener und behobener Bestandsfehler:** `og:image:width`/
+`og:image:height` in `BaseLayout.astro` waren fest auf 840×1050
+(Porträt-Maße) verdrahtet — auch für das 1200×630-Standardbild auf allen
+anderen Seiten. Jetzt echte Props mit Default 1200×630, `AboutPage.astro`
+überschreibt explizit auf 840×1050.
 
 **Akzeptanzkriterien:**
 
-- [ ] Talks- und Writing-Übersichtsseite bekommen ein kontextspezifisches OG-Bild
-- [ ] Generierung läuft zur Build-Zeit (kein Laufzeit-Rendering, keine Serverless-Function nötig für die statische Seite)
-- [ ] Bildgröße/-format entspricht dem bisherigen Standard (1200×630, PNG)
-- [ ] Fallback auf `/og/dopanik.png` bleibt für Seiten ohne spezifisches Bild erhalten
+- [x] Talks- und Writing-Übersichtsseite (DE+EN) bekommen ein kontextspezifisches OG-Bild
+- [x] Generierung läuft zur Build-Zeit (verifiziert: `dist/og/{talks,writing}.png` + `en/`-Pendants nach `npm run build`, kein Laufzeit-Rendering)
+- [x] Bildgröße/-format entspricht dem bisherigen Standard (1200×630 PNG, verifiziert per `file`)
+- [x] Fallback auf `/og/dopanik.png` bleibt für Seiten ohne spezifisches Bild erhalten (Home/Contact/Impressum/Datenschutz unverändert)
 
-**Abgrenzung:** Niedrigste Priorität in Paket 4 — erst nach AP4-1 bis AP4-6 angehen.
+**Abgrenzung:** Niedrigste Priorität in Paket 4 — nach AP4-1 bis AP4-6 angegangen. Kein OG-Bild pro einzelnem Talk/Artikel (keine eigenen Permalinks auf dieser Seite).
 
 ---
 
