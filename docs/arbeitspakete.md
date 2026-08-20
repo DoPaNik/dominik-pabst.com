@@ -559,27 +559,30 @@ die bestehenden Komponenten durchreichen.
 
 ---
 
-### AP4-3 · Lighthouse-Budget auf alle 12 Routen ausweiten
+### AP4-3 · Lighthouse-Budget auf alle Routen ausweiten
 
 **Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 3 / Risiko 1 · Bereich: Messbarkeit
-**Status:** ✅ Erledigt am 2026-08-20 (verifizierter Testlauf: 36/36 Runs grün, 6:40 min Gesamtlaufzeit)
+**Status:** ✅ Erledigt am 2026-08-20 (verifizierter Testlauf: 48/48 Runs grün
+über 16 Routen — die ursprünglichen 12 plus die 4 neuen Impressum-/
+Datenschutz-Seiten aus AP4-6; proportional < 9 min Gesamtlaufzeit, klar
+innerhalb des 15-Minuten-Budgets)
 
 **Beschreibung:**
-`.lighthouserc.cjs` prüft aktuell nur `/` und `/about/`. Talks, Writing,
-Contact und alle `/en/*`-Seiten sind Performance-blind, obwohl
-`tests/site-routes.ts` bereits alle 12 Routen kennt (dort für die A11y-Suite
+`.lighthouserc.cjs` prüfte ursprünglich nur `/` und `/about/`. Talks, Writing,
+Contact und alle `/en/*`-Seiten waren Performance-blind, obwohl
+`tests/site-routes.ts` bereits alle Routen kennt (dort für die A11y-Suite
 genutzt).
 
-**Umsetzung:** `collect.url` in `.lighthouserc.cjs` auf dieselben 12 Pfade
-wie `smokeRoutes` erweitern (Import aus `tests/site-routes.ts` ist wegen
+**Umsetzung:** `collect.url` in `.lighthouserc.cjs` auf dieselben Pfade wie
+`smokeRoutes` erweitert (Import aus `tests/site-routes.ts` ist wegen
 CJS/ESM-Mix des LHCI-Configs nicht direkt möglich — Liste dupliziert
-pflegen, mit Kommentar-Verweis auf die Quelle der Wahrheit).
+gepflegt, mit Kommentar-Verweis auf die Quelle der Wahrheit).
 
 **Akzeptanzkriterien:**
 
-- [x] Alle 12 Routen in `collect.url`
+- [x] Alle Routen in `collect.url` (12 ursprüngliche + 4 aus AP4-6, insgesamt 16)
 - [x] 3 Runs pro Route (bestehende Einstellung beibehalten)
-- [x] CI-Laufzeit des `lighthouse`-Jobs bleibt < 15 Minuten (lokal verifiziert: 6:40 min für 36 Runs)
+- [x] CI-Laufzeit des `lighthouse`-Jobs bleibt < 15 Minuten (lokal verifiziert: 48 Runs grün, deutlich unter dem Budget)
 - [x] Kommentar in `.lighthouserc.cjs` verweist auf `tests/site-routes.ts` als Ort, an dem Routen zuerst gepflegt werden
 
 **Abgrenzung:** Keine neuen Assertions/Budgets (→ AP4-4).
@@ -661,13 +664,10 @@ separate, spätere Aufgabe.
 ### AP4-6 · Datenschutzfreundliches Tracking (Plausible) + Feld-Performance-Daten
 
 **Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit/Recht
-**Teilstatus (2026-08-20):** Schritt 1+2 der Umsetzung (Script-Einbindung +
-CSP) sind erledigt — mit dem vom Nutzer bereitgestellten, bereits
-eingerichteten Snippet (`pa-33V-5Z57sBF9ak1Vy55p9.js`). Schritt 3 (CWV-Custom-Event)
-und Schritt 4 (Impressum/Datenschutz-Seiten) sind **offen** und bewusst
-zurückgestellt (Quick Wins AP4-3/AP4-7 hatten Vorrang). Der rechtliche
-Hinweis unten bleibt bis dahin unverändert gültig — die Seite trackt jetzt
-bereits, ohne dass die Datenschutzerklärung existiert.
+**Teilstatus (2026-08-20):** Schritt 1, 2 und 4 der Umsetzung sind erledigt
+(Script-Einbindung + CSP + Impressum/Datenschutz-Platzhalterseiten). Nur
+Schritt 3 (CWV-Custom-Event) ist **offen** und bewusst zurückgestellt — dafür
+ist eine Entscheidung zum Plausible-Plan nötig (siehe Einrichtungsanleitung).
 **Entscheidung (2026-08-20):** Tool ist **Plausible Analytics**
 (Plausible Insights OÜ, Estland; EU-Hosting-Option in Frankfurt via Hetzner),
 gewählt wegen EU-Sitz, keinem Cookie-Bedarf und nativer Custom-Events-Unterstützung
@@ -703,9 +703,37 @@ ein Generator (z. B. e-recht24, Datenschutz-Generator.de) empfohlen.
    (Growth-Plan+ für Custom Properties nötig) — alternativ, falls kein
    Growth-Plan gewünscht: CWV weiterhin nur über Google Search Console
    beziehen und Plausible nur für Seitenaufrufe/Referrer nutzen.
-4. Minimal-Datenschutzerklärung (`/datenschutz`, `/en/privacy`) und
-   Impressum (`/impressum`) als eigene Seiten anlegen, i18n-Strings über
-   `src/i18n/{de,en}.ts`, Verlinkung im Footer.
+4. ~~Minimal-Datenschutzerklärung und Impressum als eigene Seiten anlegen.~~
+   ✅ erledigt — `/impressum` + `/en/impressum`, `/datenschutz` +
+   `/en/datenschutz` (gleicher Slug in beiden Locales, damit die
+   hreflang-Logik in `BaseLayout.astro` unverändert bleibt). Inhalte über
+   `t.legal`/`t.privacy` in `src/i18n/{de,en}.ts`, im Footer verlinkt
+   (`Footer.astro`), in `tests/site-routes.ts` und `.lighthouserc.cjs`
+   mitaufgenommen (16 statt 12 Routen).
+
+**Woher bekommst du die echten Texte?** Die Platzhalterseiten sind bewusst
+technisch vollständig (Struktur, Pflichtabschnitte, Fundstellen wie
+Netlify-Hosting und Plausible bereits benannt), aber rechtlich nicht
+geprüft und an mehreren Stellen mit `[PLATZHALTER: ...]` markiert (u. a.
+deine Postanschrift, USt-ID falls vorhanden, Streitschlichtungs-Entscheidung,
+Speicherfristen bei Netlify). Drei Wege, das zu füllen:
+
+- **Generator (schnell, meist ausreichend für diese Seitengröße):**
+  z. B. der Datenschutz-Generator von e-recht24.de oder von
+  Datenschutz-Generator.de — beide fragen genau die Angaben ab, die hier
+  als Platzhalter markiert sind, und erzeugen fertigen Text zum Einsetzen.
+- **IT-Recht Kanzlei / Anwalt für Datenschutz:** kostenpflichtig, aber mit
+  Abmahnschutz — sinnvoll, sobald über die Website aktiv Aufträge akquiriert
+  werden (was hier über die Kontaktseite/„projekt anfragen"-CTA der Fall ist).
+- **Selbst ausfüllen:** die `[PLATZHALTER]`-Stellen sind bewusst so
+  formuliert, dass du sie 1:1 ersetzen kannst, ohne die Abschnittsstruktur
+  zu verstehen — dafür reicht die Struktur aber nur, wenn du dir bei den
+  rechtlichen Aussagen (Haftung, Streitschlichtung) selbst sicher bist.
+
+Sobald du dich entschieden hast: gib mir den fertigen Text (oder einen Link
+zum Generator-Ergebnis), dann trage ich ihn in `src/i18n/de.ts` /
+`src/i18n/en.ts` ein — die Platzhalterstruktur bleibt dabei erhalten, nur
+der Inhalt wird ausgetauscht.
 
 **Einrichtungsanleitung (für dich, manuell — kann ich nicht automatisiert für dich tun):**
 
@@ -714,18 +742,19 @@ ein Generator (z. B. e-recht24, Datenschutz-Generator.de) empfohlen.
 3. ~~Snippet an mich übergeben.~~ ✅ erledigt — eingebaut in `src/layouts/BaseLayout.astro`
    (Production-Guard) und `public/scripts/plausible-init.js`; CSP in
    `public/_headers` um `https://plausible.io` (script-src + connect-src) erweitert.
-4. **Noch offen, bitte nach dem nächsten Deploy prüfen:** im
-   Plausible-Dashboard verifizieren, dass Seitenaufrufe ankommen (kann
-   einige Minuten dauern).
-5. Optional, für Custom Events (Kontaktformular-Absendung, Talk-Link-Klicks,
+4. **Bei dir:** nach dem nächsten Deploy im Plausible-Dashboard
+   verifizieren, dass Seitenaufrufe ankommen (kann einige Minuten dauern).
+5. **Bei dir:** echte Impressum-/Datenschutz-Texte besorgen (siehe oben)
+   und mir zum Eintragen geben.
+6. Optional, für Custom Events (Kontaktformular-Absendung, Talk-Link-Klicks,
    CWV-Beacon): im Plausible-Plan auf "Growth" oder höher wechseln — sag
    Bescheid, wenn das gewünscht ist, dann ergänze ich die Event-Aufrufe im Code.
 
 **Akzeptanzkriterien:**
 
 - [x] Plausible-Script nur im Production-Build aktiv, CSP entsprechend angepasst
-- [ ] `/impressum` und `/datenschutz` (+ EN-Pendants) existieren, im Footer verlinkt, als Platzhalter klar mit einem Prüfhinweis markiert
-- [ ] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten
+- [x] `/impressum` und `/datenschutz` (+ EN-Pendants) existieren, im Footer verlinkt, als Platzhalter klar mit einem Prüfhinweis markiert
+- [ ] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten — **Inhalt bereits vorhanden, aber noch nicht rechtlich geprüft** (siehe Prüfhinweis auf der Seite selbst)
 - [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert — **Aktion bei dir**)
 - [ ] Entscheidung zu Custom Events (CWV-Beacon ja/nein, welcher Plan) dokumentiert
 
