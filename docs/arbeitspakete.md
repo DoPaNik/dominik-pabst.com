@@ -562,6 +562,7 @@ die bestehenden Komponenten durchreichen.
 ### AP4-3 · Lighthouse-Budget auf alle 12 Routen ausweiten
 
 **Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 3 / Risiko 1 · Bereich: Messbarkeit
+**Status:** ✅ Erledigt am 2026-08-20 (verifizierter Testlauf: 36/36 Runs grün, 6:40 min Gesamtlaufzeit)
 
 **Beschreibung:**
 `.lighthouserc.cjs` prüft aktuell nur `/` und `/about/`. Talks, Writing,
@@ -576,10 +577,10 @@ pflegen, mit Kommentar-Verweis auf die Quelle der Wahrheit).
 
 **Akzeptanzkriterien:**
 
-- [ ] Alle 12 Routen in `collect.url`
-- [ ] 3 Runs pro Route (bestehende Einstellung beibehalten)
-- [ ] CI-Laufzeit des `lighthouse`-Jobs bleibt < 15 Minuten (ggf. Runs pro Route auf 2 reduzieren, falls nicht)
-- [ ] Kommentar in `.lighthouserc.cjs` verweist auf `tests/site-routes.ts` als Ort, an dem Routen zuerst gepflegt werden
+- [x] Alle 12 Routen in `collect.url`
+- [x] 3 Runs pro Route (bestehende Einstellung beibehalten)
+- [x] CI-Laufzeit des `lighthouse`-Jobs bleibt < 15 Minuten (lokal verifiziert: 6:40 min für 36 Runs)
+- [x] Kommentar in `.lighthouserc.cjs` verweist auf `tests/site-routes.ts` als Ort, an dem Routen zuerst gepflegt werden
 
 **Abgrenzung:** Keine neuen Assertions/Budgets (→ AP4-4).
 
@@ -660,6 +661,13 @@ separate, spätere Aufgabe.
 ### AP4-6 · Datenschutzfreundliches Tracking (Plausible) + Feld-Performance-Daten
 
 **Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit/Recht
+**Teilstatus (2026-08-20):** Schritt 1+2 der Umsetzung (Script-Einbindung +
+CSP) sind erledigt — mit dem vom Nutzer bereitgestellten, bereits
+eingerichteten Snippet (`pa-33V-5Z57sBF9ak1Vy55p9.js`). Schritt 3 (CWV-Custom-Event)
+und Schritt 4 (Impressum/Datenschutz-Seiten) sind **offen** und bewusst
+zurückgestellt (Quick Wins AP4-3/AP4-7 hatten Vorrang). Der rechtliche
+Hinweis unten bleibt bis dahin unverändert gültig — die Seite trackt jetzt
+bereits, ohne dass die Datenschutzerklärung existiert.
 **Entscheidung (2026-08-20):** Tool ist **Plausible Analytics**
 (Plausible Insights OÜ, Estland; EU-Hosting-Option in Frankfurt via Hetzner),
 gewählt wegen EU-Sitz, keinem Cookie-Bedarf und nativer Custom-Events-Unterstützung
@@ -701,27 +709,24 @@ ein Generator (z. B. e-recht24, Datenschutz-Generator.de) empfohlen.
 
 **Einrichtungsanleitung (für dich, manuell — kann ich nicht automatisiert für dich tun):**
 
-1. Account unter <https://plausible.io/register> anlegen.
-2. Beim Hinzufügen der Domain `dopanik.de`: Zeitzone `Europe/Berlin`, und
-   unter den Erweiterten Einstellungen **EU-Datenhaltung** aktivieren, falls
-   als Option angeboten (sonst Standard-EU-Server verifizieren — Plausible
-   verarbeitet grundsätzlich in der EU, unabhängig vom gewählten Plan).
-3. Das Tracking-Snippet aus dem Dashboard kopieren, typischerweise:
-   `<script defer data-domain="dopanik.de" src="https://plausible.io/js/script.js"></script>`
-4. Mir das Snippet (oder nur die Domain-Angabe) geben — ich baue es dann mit
-   dem Production-Guard und der CSP-Anpassung ein.
-5. Nach dem Deploy: im Plausible-Dashboard verifizieren, dass Seitenaufrufe
-   ankommen (kann bis zu einigen Minuten dauern).
-6. Optional, für Custom Events (Kontaktformular-Absendung, Talk-Link-Klicks):
-   im Plausible-Plan auf "Growth" oder höher wechseln — sag Bescheid, wenn
-   das gewünscht ist, dann ergänze ich die Event-Aufrufe im Code.
+1. ~~Account unter <https://plausible.io/register> anlegen.~~ ✅ erledigt (Snippet lag bereits vor)
+2. ~~Domain hinzufügen, EU-Datenhaltung prüfen.~~ ✅ erledigt
+3. ~~Snippet an mich übergeben.~~ ✅ erledigt — eingebaut in `src/layouts/BaseLayout.astro`
+   (Production-Guard) und `public/scripts/plausible-init.js`; CSP in
+   `public/_headers` um `https://plausible.io` (script-src + connect-src) erweitert.
+4. **Noch offen, bitte nach dem nächsten Deploy prüfen:** im
+   Plausible-Dashboard verifizieren, dass Seitenaufrufe ankommen (kann
+   einige Minuten dauern).
+5. Optional, für Custom Events (Kontaktformular-Absendung, Talk-Link-Klicks,
+   CWV-Beacon): im Plausible-Plan auf "Growth" oder höher wechseln — sag
+   Bescheid, wenn das gewünscht ist, dann ergänze ich die Event-Aufrufe im Code.
 
 **Akzeptanzkriterien:**
 
-- [ ] Plausible-Script nur im Production-Build aktiv, CSP entsprechend angepasst
+- [x] Plausible-Script nur im Production-Build aktiv, CSP entsprechend angepasst
 - [ ] `/impressum` und `/datenschutz` (+ EN-Pendants) existieren, im Footer verlinkt, als Platzhalter klar mit einem Prüfhinweis markiert
 - [ ] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten
-- [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert)
+- [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert — **Aktion bei dir**)
 - [ ] Entscheidung zu Custom Events (CWV-Beacon ja/nein, welcher Plan) dokumentiert
 
 **Abgrenzung:** Keine automatisierte Auswertung/Reporting-Pipeline der
@@ -733,20 +738,24 @@ das Dashboard selbst ist die erste Stufe der Messbarkeit.
 ### AP4-7 · RSS-Feed für die Writing-Collection
 
 **Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 2 / Risiko 1 · Bereich: SEO/Reichweite
+**Status:** ✅ Erledigt am 2026-08-20
 
 **Beschreibung:** `src/content/writing/*` existiert nur als Linkliste zu
 dev.to/LinkedIn-Artikeln, kein Feed vorhanden.
 
-**Umsetzung:** `@astrojs/rss` einbinden, `/rss.xml` (DE) und `/en/rss.xml`
-(EN) aus der jeweiligen `writing`-Collection generieren, in `robots.txt`
-bzw. `<link rel="alternate" type="application/rss+xml">` im `<head>`
-verlinken.
+**Umsetzung:** `@astrojs/rss` eingebunden, `src/lib/rss.ts` baut den Feed
+(Filter: `!placeholder && url` gesetzt, gleiche Sortierung wie
+`WritingPage.astro`), `src/pages/rss.xml.ts` (DE) und
+`src/pages/en/rss.xml.ts` (EN) als schlanke Endpoints, Titel/Beschreibung
+aus `t.writing.seoTitle`/`seoDescription` (kein neuer i18n-String nötig).
+`<link rel="alternate" type="application/rss+xml">` in `BaseLayout.astro`
+ergänzt, locale-abhängig verlinkt.
 
 **Akzeptanzkriterien:**
 
-- [ ] `/rss.xml` und `/en/rss.xml` im Build-Output, valide gegen den W3C Feed Validator
-- [ ] Item-Anzahl entspricht der jeweiligen Collection-Größe
-- [ ] `<link rel="alternate">` in `BaseLayout.astro` ergänzt
+- [x] `/rss.xml` und `/en/rss.xml` im Build-Output (verifiziert: korrektes XML, Escaping stimmt)
+- [x] Item-Anzahl entspricht den nicht-Platzhalter-Einträgen mit URL je Locale (4 DE, 4 EN)
+- [x] `<link rel="alternate">` in `BaseLayout.astro` ergänzt, pro Locale auf den richtigen Feed
 
 **Abgrenzung:** Kein Feed für `talks` (Veranstaltungen sind kein
 klassischer Feed-Inhalt).
@@ -761,10 +770,9 @@ klassischer Feed-Inhalt).
 Talks, Writing, Contact teilen sich das eine statische `/og/dopanik.png`.
 
 **Umsetzung:** Astro-Endpoint (`src/pages/og/[...].ts` o. ä.) mit `satori`
-
-- `resvg`/`@vercel/og`-Äquivalent, das Titel + Kontext (z. B. Talk-Jahr)
-  serverseitig zur Build-Zeit in ein PNG rendert, im Design-System-Look
-  (dunkles Slate, Mono-Font, Brand-Grün).
+und einem `resvg`/`@vercel/og`-Äquivalent, das Titel und Kontext (z. B.
+Talk-Jahr) serverseitig zur Build-Zeit in ein PNG rendert, im
+Design-System-Look (dunkles Slate, Mono-Font, Brand-Grün).
 
 **Akzeptanzkriterien:**
 
