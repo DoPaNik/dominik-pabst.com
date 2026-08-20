@@ -114,7 +114,7 @@ export const en: Dictionary = {
   legal: {
     seoTitle: 'Imprint – Dominik Pabst',
     seoDescription:
-      'Imprint and provider identification for dopanik.de under German law (§ 5 TMG).',
+      'Imprint and provider identification for dopanik.de under German law (§ 5 DDG).',
     eyebrow: '// imprint',
     title: 'Imprint.',
     updated: 'Draft as of August 20, 2026',
@@ -125,7 +125,7 @@ export const en: Dictionary = {
         heading: 'Service provider',
         body: [
           'Dominik Pabst',
-          '[PLACEHOLDER: full postal address — street, number, postal code, city]',
+          '[PLACEHOLDER: address where service of legal documents is possible — street, number, postal code, city. This does not have to be a home address: a business/office address (e.g. a coworking space or virtual business address) is acceptable as long as mail is actually received and the person can be reached there — German courts have held that a plain PO box is not sufficient.]',
           'Email: hi@dopanik.de',
         ],
       },
@@ -136,22 +136,15 @@ export const en: Dictionary = {
         ],
       },
       {
-        heading: 'VAT identification number',
-        body: [
-          '[PLACEHOLDER: VAT ID under § 27a UStG, if applicable — otherwise remove this section.]',
-        ],
-      },
-      {
         heading: 'EU dispute resolution',
         body: [
-          'The European Commission provides a platform for online dispute resolution (ODR): https://ec.europa.eu/consumers/odr/.',
-          '[PLACEHOLDER: decide and state whether participation in dispute resolution proceedings before a consumer arbitration board takes place.]',
+          'The European Commission provides a platform for online dispute resolution (ODR): https://ec.europa.eu/consumers/odr/. I am neither willing nor obligated to participate in dispute resolution proceedings before a consumer arbitration board.',
         ],
       },
       {
         heading: 'Liability for content',
         body: [
-          'As a service provider, I am responsible for my own content on these pages under general law per § 7(1) TMG. Under §§ 8 to 10 TMG, however, I am not obligated as a service provider to monitor transmitted or stored third-party information.',
+          "As a service provider, I am responsible for my own content on these pages under general law. Liability privileges under the Digitale-Dienste-Gesetz (DDG, Germany's Digital Services Act implementation) and the EU Digital Services Act (DSA) apply to third-party information that is merely transmitted or cached; under these, no general obligation exists to monitor transmitted or stored third-party information.",
         ],
       },
       {
@@ -182,7 +175,7 @@ export const en: Dictionary = {
         body: [
           'The party responsible for data processing on this website is:',
           'Dominik Pabst',
-          '[PLACEHOLDER: full postal address]',
+          '[PLACEHOLDER: address as stated in the imprint]',
           'Email: hi@dopanik.de',
         ],
       },

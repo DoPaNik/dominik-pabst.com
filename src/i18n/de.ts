@@ -113,7 +113,7 @@ export const de: Dictionary = {
   },
   legal: {
     seoTitle: 'Impressum – Dominik Pabst',
-    seoDescription: 'Impressum und Anbieterkennzeichnung gemäß § 5 TMG für dopanik.de.',
+    seoDescription: 'Impressum und Anbieterkennzeichnung gemäß § 5 DDG für dopanik.de.',
     eyebrow: '// impressum',
     title: 'Impressum.',
     updated: 'Entwurf vom 20. August 2026',
@@ -124,7 +124,7 @@ export const de: Dictionary = {
         heading: 'Diensteanbieter',
         body: [
           'Dominik Pabst',
-          '[PLATZHALTER: vollständige Anschrift — Straße, Hausnummer, PLZ, Ort]',
+          '[PLATZHALTER: ladungsfähige Anschrift — Straße, Hausnummer, PLZ, Ort. Das muss nicht die Privatadresse sein: eine Geschäfts-/Büroadresse (z. B. Coworking-Space, virtuelle Geschäftsadresse) ist zulässig, solange dort tatsächlich Post entgegengenommen und die Person erreicht werden kann — ein reines Postfach genügt laut Rechtsprechung nicht.]',
           'E-Mail: hi@dopanik.de',
         ],
       },
@@ -135,22 +135,15 @@ export const de: Dictionary = {
         ],
       },
       {
-        heading: 'Umsatzsteuer-Identifikationsnummer',
-        body: [
-          '[PLATZHALTER: Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG, falls vorhanden — andernfalls diesen Abschnitt entfernen.]',
-        ],
-      },
-      {
         heading: 'EU-Streitschlichtung',
         body: [
-          'Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/.',
-          '[PLATZHALTER: bitte festlegen und ergänzen, ob eine Teilnahme an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle erfolgt.]',
+          'Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/. Ich bin nicht bereit und nicht verpflichtet, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.',
         ],
       },
       {
         heading: 'Haftung für Inhalte',
         body: [
-          'Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.',
+          'Als Diensteanbieter bin ich für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Für fremde, lediglich durchgeleitete oder zwischengespeicherte Informationen gelten die Haftungsprivilegierungen des Digitale-Dienste-Gesetzes (DDG) sowie der EU-Verordnung über digitale Dienste (Digital Services Act, DSA); eine allgemeine Pflicht zur Überwachung übermittelter oder gespeicherter fremder Informationen besteht danach nicht.',
         ],
       },
       {
@@ -181,7 +174,7 @@ export const de: Dictionary = {
         body: [
           'Verantwortlich für die Datenverarbeitung auf dieser Website ist:',
           'Dominik Pabst',
-          '[PLATZHALTER: vollständige Anschrift]',
+          '[PLATZHALTER: Anschrift wie im Impressum]',
           'E-Mail: hi@dopanik.de',
         ],
       },
