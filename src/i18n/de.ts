@@ -194,22 +194,21 @@ export const de: Dictionary = {
       {
         heading: 'Hosting',
         body: [
-          'Diese Website wird bei Netlify, Inc. gehostet.',
-          '[PLATZHALTER: aktuellen Auftragsverarbeitungsvertrag und Serverstandort mit Netlify prüfen und hier konkretisieren — insbesondere ob eine Datenübermittlung in die USA stattfindet und auf welcher Grundlage (z. B. EU-US Data Privacy Framework, Standardvertragsklauseln).]',
+          'Diese Website wird bei Netlify, Inc. (San Francisco, USA) gehostet. Dabei können personenbezogene Daten (insbesondere Server-Logfiles) in die USA übermittelt werden. Netlify stützt diese Übermittlung laut eigener Data Processing Agreement auf das EU-US Data Privacy Framework (bzw. dessen UK-Erweiterung) sowie, wo dieses nicht greift, auf die von der Europäischen Kommission veröffentlichten Standardvertragsklauseln. Weitere Informationen: https://www.netlify.com/gdpr-ccpa/ und https://www.netlify.com/legal/subprocessors/',
         ],
       },
       {
         heading: 'Server-Logfiles',
         body: [
-          'Beim Aufruf dieser Website erfasst der Hosting-Anbieter automatisch technische Zugriffsdaten (z. B. IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser). Diese Daten dienen der technischen Bereitstellung und Absicherung der Website und werden nicht mit anderen Datenquellen zusammengeführt.',
-          '[PLATZHALTER: genaue Speicherdauer bei Netlify ergänzen.]',
+          'Beim Aufruf dieser Website erfasst der Hosting-Anbieter automatisch technische Zugriffsdaten (z. B. IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser). Diese Daten dienen der technischen Bereitstellung und Absicherung der Website und werden nicht mit anderen Datenquellen zusammengeführt. Sie werden nur so lange gespeichert, wie es für diesen Zweck erforderlich ist.',
+          '[PLATZHALTER: falls im Netlify-Dashboard eine abweichende, konkrete Aufbewahrungsfrist eingestellt ist, hier durch die genaue Frist ersetzen.]',
         ],
       },
       {
         heading: 'Kontaktformular',
         body: [
-          'Wenn Sie das Kontaktformular nutzen, werden die von Ihnen angegebenen Daten (Name, E-Mail-Adresse, Nachricht) zur Bearbeitung Ihrer Anfrage verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anfrage zur Anbahnung eines Vertrags). Das Formular wird über Netlify Forms verarbeitet.',
-          '[PLATZHALTER: Speicherdauer der Formulardaten bei Netlify festlegen und ergänzen.]',
+          'Wenn Sie das Kontaktformular nutzen, werden die von Ihnen angegebenen Daten (Name, E-Mail-Adresse, Nachricht) zur Bearbeitung Ihrer Anfrage verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anfrage zur Anbahnung eines Vertrags). Das Formular wird über Netlify Forms verarbeitet und so lange gespeichert, wie es zur Bearbeitung Ihrer Anfrage und zur Erfüllung etwaiger gesetzlicher Aufbewahrungspflichten erforderlich ist.',
+          '[PLATZHALTER: falls im Netlify-Dashboard eine abweichende, konkrete Aufbewahrungsfrist eingestellt ist, hier durch die genaue Frist ersetzen.]',
         ],
       },
       {

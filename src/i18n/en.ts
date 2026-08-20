@@ -195,22 +195,21 @@ export const en: Dictionary = {
       {
         heading: 'Hosting',
         body: [
-          'This website is hosted with Netlify, Inc.',
-          '[PLACEHOLDER: review the current data processing agreement and server location with Netlify and detail it here — in particular whether data is transferred to the US and on what legal basis (e.g. EU-US Data Privacy Framework, standard contractual clauses).]',
+          'This website is hosted with Netlify, Inc. (San Francisco, USA). Personal data (in particular server log files) may therefore be transferred to the US. According to its Data Processing Agreement, Netlify bases this transfer on the EU-US Data Privacy Framework (and its UK Extension) and, where that does not apply, on the standard contractual clauses published by the European Commission. More information: https://www.netlify.com/gdpr-ccpa/ and https://www.netlify.com/legal/subprocessors/',
         ],
       },
       {
         heading: 'Server log files',
         body: [
-          'When you visit this website, the hosting provider automatically collects technical access data (e.g. IP address, date and time of access, page requested, browser used). This data is used for the technical delivery and security of the website and is not combined with other data sources.',
-          '[PLACEHOLDER: add the exact retention period used by Netlify.]',
+          'When you visit this website, the hosting provider automatically collects technical access data (e.g. IP address, date and time of access, page requested, browser used). This data is used for the technical delivery and security of the website, is not combined with other data sources, and is kept only as long as necessary for that purpose.',
+          '[PLACEHOLDER: if a specific retention period is configured in the Netlify dashboard, replace this with the exact period.]',
         ],
       },
       {
         heading: 'Contact form',
         body: [
-          'If you use the contact form, the data you provide (name, email address, message) is processed to handle your request. The legal basis is Art. 6(1)(b) GDPR (steps to enter into a contract). The form is processed via Netlify Forms.',
-          '[PLACEHOLDER: define and add the retention period for form data at Netlify.]',
+          'If you use the contact form, the data you provide (name, email address, message) is processed to handle your request. The legal basis is Art. 6(1)(b) GDPR (steps to enter into a contract). The form is processed via Netlify Forms and kept for as long as needed to handle your request and to meet any applicable statutory retention obligations.',
+          '[PLACEHOLDER: if a specific retention period is configured in the Netlify dashboard, replace this with the exact period.]',
         ],
       },
       {
