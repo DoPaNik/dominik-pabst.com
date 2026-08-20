@@ -17,4 +17,6 @@ const { roles, class: className = '' } = Astro.props;
   >{roles.join(', ')}</span
 >
 
-<script is:inline src="/scripts/role-rotator.js"></script>
+<script>
+  import '../../scripts/role-rotator';
+</script>

@@ -1,80 +1,4 @@
-const DEFAULT_FPS = 27;
-const MAX_DPR = 1.5;
-
-const entries = new Set();
-let running = false;
-
-function clampedDpr() {
-  return Math.min(window.devicePixelRatio || 1, MAX_DPR);
-}
-
-function anyActive() {
-  if (document.hidden) return false;
-  for (const entry of entries) if (entry.visible) return true;
-  return false;
-}
-
-function removeEntry(entry) {
-  entry.io.disconnect();
-  entries.delete(entry);
-}
-
-function loop(now) {
-  if (!running) return;
-  for (const entry of entries) {
-    if (!entry.visible) continue;
-    if (!entry.opts.el.isConnected) {
-      removeEntry(entry);
-      continue;
-    }
-    const interval = 1000 / (entry.opts.fps ?? DEFAULT_FPS);
-    if (entry.last && now - entry.last < interval) continue;
-    const dtMs = entry.last ? Math.min(now - entry.last, 100) : interval;
-    entry.last = now;
-    entry.opts.draw(now, dtMs);
-  }
-  if (!anyActive()) {
-    running = false;
-    return;
-  }
-  requestAnimationFrame(loop);
-}
-
-function wake() {
-  if (running || !anyActive()) return;
-  running = true;
-  requestAnimationFrame(loop);
-}
-
-function addMatrixInstance(opts) {
-  const entry = {
-    opts,
-    visible: false,
-    last: 0,
-    io: new IntersectionObserver(
-      (observations) => {
-        for (const observation of observations) {
-          entry.visible = observation.isIntersecting;
-          if (entry.visible) {
-            entry.last = 0;
-            wake();
-          }
-        }
-      },
-      { threshold: opts.visibleThreshold ?? 0.02 },
-    ),
-  };
-  entry.io.observe(opts.el);
-  entries.add(entry);
-  return () => removeEntry(entry);
-}
-
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) {
-    for (const entry of entries) entry.last = 0;
-    wake();
-  }
-});
+import { addMatrixInstance, clampedDpr } from './matrix-engine';
 
 const GLYPHS = '01ﾊﾏｲﾑｳｵﾗｷｹﾜｺｴﾈｾﾀﾈﾇﾓﾔﾝﾛﾍｦｱｸ'.split('');
 const FONT_FAMILY = "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace";
@@ -85,7 +9,7 @@ function randomChar() {
   return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
 }
 
-function cssVar(name, fallback) {
+function cssVar(name: string, fallback: string) {
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   return value || fallback;
 }
@@ -104,7 +28,15 @@ function themeColors() {
       };
 }
 
-function makeColumn(x, height, seedAcrossView = false) {
+interface Column {
+  x: number;
+  headY: number;
+  speed: number;
+  trailSteps: number;
+  chars: string[];
+}
+
+function makeColumn(x: number, height: number, seedAcrossView = false): Column {
   const trailSteps = 8 + Math.floor(Math.random() * 10);
   const headY = seedAcrossView
     ? Math.random() * (height + trailSteps * ROW_HEIGHT) - trailSteps * ROW_HEIGHT
@@ -118,13 +50,13 @@ function makeColumn(x, height, seedAcrossView = false) {
   };
 }
 
-function setupBackdrop(root) {
+function setupBackdrop(root: HTMLElement) {
   if (root.dataset.backdropDone) return;
   root.dataset.backdropDone = 'true';
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const canvas = root.querySelector('[data-matrix-backdrop-canvas]');
+  const canvas = root.querySelector<HTMLCanvasElement>('[data-matrix-backdrop-canvas]');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -132,15 +64,15 @@ function setupBackdrop(root) {
   const dpr = clampedDpr();
   let width = 0;
   let height = 0;
-  let columns = [];
+  let columns: Column[] = [];
 
   function resize() {
     const rect = root.getBoundingClientRect();
     width = rect.width;
     height = rect.height;
-    canvas.width = Math.max(1, Math.round(width * dpr));
-    canvas.height = Math.max(1, Math.round(height * dpr));
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    canvas!.width = Math.max(1, Math.round(width * dpr));
+    canvas!.height = Math.max(1, Math.round(height * dpr));
+    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const colCount = Math.max(4, Math.round(width / COL_SPACING));
     columns = Array.from({ length: colCount }, (_, i) =>
@@ -148,16 +80,16 @@ function setupBackdrop(root) {
     );
   }
 
-  function draw(_now, dtMs) {
+  function draw(_now: number, dtMs: number) {
     if (width === 0 || height === 0) {
       resize();
       if (width === 0 || height === 0) return;
     }
 
-    ctx.clearRect(0, 0, width, height);
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = `${(ROW_HEIGHT * 0.8).toFixed(1)}px ${FONT_FAMILY}`;
+    ctx!.clearRect(0, 0, width, height);
+    ctx!.textAlign = 'center';
+    ctx!.textBaseline = 'middle';
+    ctx!.font = `${(ROW_HEIGHT * 0.8).toFixed(1)}px ${FONT_FAMILY}`;
     const colors = themeColors();
 
     for (const col of columns) {
@@ -165,10 +97,10 @@ function setupBackdrop(root) {
         const y = col.headY - i * ROW_HEIGHT;
         if (y < -ROW_HEIGHT || y > height + ROW_HEIGHT) continue;
         const t = 1 - i / col.trailSteps;
-        ctx.globalAlpha = i === 0 ? 0.9 : t * t * 0.7;
-        ctx.fillStyle = i === 0 ? colors.head : colors.trail;
+        ctx!.globalAlpha = i === 0 ? 0.9 : t * t * 0.7;
+        ctx!.fillStyle = i === 0 ? colors.head : colors.trail;
         if (Math.random() < 0.02) col.chars[i] = randomChar();
-        ctx.fillText(col.chars[i], col.x, y);
+        ctx!.fillText(col.chars[i], col.x, y);
       }
 
       col.headY += (col.speed * dtMs) / 1000;
@@ -180,7 +112,7 @@ function setupBackdrop(root) {
         col.chars = fresh.chars;
       }
     }
-    ctx.globalAlpha = 1;
+    ctx!.globalAlpha = 1;
   }
 
   resize();
@@ -195,7 +127,9 @@ function setupBackdrop(root) {
 }
 
 function initBackdrops() {
-  document.querySelectorAll('[data-matrix-backdrop]').forEach((root) => setupBackdrop(root));
+  document
+    .querySelectorAll<HTMLElement>('[data-matrix-backdrop]')
+    .forEach((root) => setupBackdrop(root));
 }
 
 initBackdrops();

@@ -34,4 +34,6 @@ const { src, alt, width, height, caption, class: className = '' } = Astro.props;
   {caption && <figcaption class="dpn-portrait__caption">{caption}</figcaption>}
 </figure>
 
-<script is:inline type="module" src="/scripts/matrix-portrait.js"></script>
+<script>
+  import '../../scripts/matrix-portrait';
+</script>
