@@ -80,6 +80,44 @@ jobs:
           path: playwright-report
           if-no-files-found: ignore
 
+  visual-regression:
+    name: Visual regression (non-blocking)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Informational only: a design change is expected to produce diffs here,
+    # and the baseline (tests/visual.spec.ts-snapshots/) can only be
+    # generated/updated from an actual run on this runner — see the comment
+    # at the top of tests/visual.spec.ts for the bootstrap/update procedure.
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run visual regression suite
+        run: npm run test:visual
+
+      - name: Upload visual diff report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-regression-report
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+
   lighthouse:
     name: Lighthouse budget
     runs-on: ubuntu-latest

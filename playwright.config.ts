@@ -27,6 +27,16 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: '**/visual.spec.ts',
+    },
+    {
+      // Separate project so `npm test` (the required CI check) never runs
+      // these — screenshot baselines must come from an actual GitHub
+      // Actions run, not this sandbox, so `npm run test:visual` is the only
+      // thing that targets it. See tests/visual.spec.ts.
+      name: 'visual',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: '**/visual.spec.ts',
     },
   ],
 });
