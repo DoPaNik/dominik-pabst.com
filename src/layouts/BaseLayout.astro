@@ -42,6 +42,7 @@ const resolvedOgImage = new URL(ogImage, site.url).toString();
 const resolvedOgImageAlt = ogImageAlt ?? t.common.socialCardAlt;
 
 const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+const rssHref = lang === 'de' ? '/rss.xml' : '/en/rss.xml';
 ---
 
 <!doctype html>
@@ -77,6 +78,8 @@ const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <link rel="alternate" type="application/rss+xml" title={t.writing.seoTitle} href={rssHref} />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
