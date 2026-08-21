@@ -1134,3 +1134,41 @@ Alle fünf Punkte von gestern sind bearbeitet:
 - Spacing-Governance (`px` in `padding`/`margin`/`gap`) bleibt ein
   unbearbeiteter Fund aus AP4-5/AP4-11 — kein Arbeitspaket-Kürzel vergeben,
   da Umfang (deutlich größer als `font-size`) erst geklärt werden müsste.
+
+## Nachtrag — Impressum & Datenschutzerklärung final abgeglichen (2026-08-21)
+
+Beide Rechtstexte-Platzhalter aus AP4-6 sind jetzt mit echten, generatorbasierten
+Inhalten gefüllt statt nur technisch vorbereitet:
+
+- **Impressum:** an den vom Nutzer bereitgestellten Text von
+  Datenschutz-Generator.de (Dr. Thomas Schwenke) angeglichen. Struktur
+  geändert (Diensteanbieter → Kontaktmöglichkeiten → Haftungs- und
+  Schutzrechtshinweise), EU-Streitschlichtung entfernt (Plattform am
+  20.07.2025 endgültig abgeschaltet — Verordnung (EU) 2024/3228 —, ein
+  Verweis wäre jetzt abmahnfähig), „Redaktionell verantwortlich" nach
+  Rückfrage entfernt. Pflicht-Backlink zum kostenlosen Generator ergänzt
+  (nur DE-Seite).
+- **Datenschutzerklärung:** Der erste vom Nutzer geteilte Text
+  (Datenschutz-Generator.de) stellte sich als gesperrte Bezahl-Demo heraus
+  (Dutzende „Premium Lizenz erforderlich"-Fragmente mitten im Fließtext,
+  unausgefüllte Platzhalter, falsche Dienste wie Ghost/Bluesky/Xing) —
+  wurde nicht übernommen. Stattdessen: echtes PDF von e-recht24.de
+  (`docs/datenschutzerklaerung_dopanik_de_de.pdf`) als Basis, deutlich
+  ausgebaut gegenüber dem ursprünglichen Entwurf (Rechtsgrundlagen-Übersicht,
+  vollständiges Rechte-Kapitel inkl. Art.-21-Widerspruchsrecht in
+  Großschreibung, Empfänger von Daten, TLS-Sicherheitsmaßnahmen) — die
+  bereits recherchierten, seitenspezifischen Abschnitte (Netlify-Hosting
+  mit DPF/SCC, Plausible, Netlify-Forms-Kontaktformular) blieben erhalten
+  statt durch generische Generator-Absätze ersetzt zu werden.
+- Beide Seiten: Hinweisbanner von der bernsteinfarbenen "Entwurf,
+  ungeprüft"-Warnung auf eine neutrale Infobox umgestellt, da keine
+  Platzhalter mehr offen sind.
+- Zwei Kontrastfehler (neue Seal-Zeile im Impressum) von der bestehenden
+  A11y-Suite vor dem Commit abgefangen und behoben — `--text-faint` durch
+  `--text-muted` ersetzt, Link-Unterstreichung ergänzt.
+
+**Damit ist AP4-6 inhaltlich vollständig abgeschlossen** — beide Rechtstexte
+enthalten keine offenen Platzhalter mehr. Weiterhin gilt: keine Rechtsberatung,
+beide Seiten sollten vor tatsächlichem Geschäftsbetrieb einmal anwaltlich
+gegengelesen werden (jetzt aber auf Basis vollständiger, korrekter Inhalte
+statt Lückentext).
