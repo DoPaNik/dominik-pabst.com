@@ -124,7 +124,10 @@ export const de: Dictionary = {
         heading: 'Diensteanbieter',
         body: [
           'Dominik Pabst',
-          '[PLATZHALTER: ladungsfähige Anschrift — Straße, Hausnummer, PLZ, Ort. Das muss nicht die Privatadresse sein: eine Geschäfts-/Büroadresse (z. B. Coworking-Space, virtuelle Geschäftsadresse) ist zulässig, solange dort tatsächlich Post entgegengenommen und die Person erreicht werden kann — ein reines Postfach genügt laut Rechtsprechung nicht.]',
+          'c/o flexdienst – #21920',
+          'Kurt-Schumacher-Straße 76',
+          '67663 Kaiserslautern',
+          'Deutschland',
           'E-Mail: hi@dopanik.de',
         ],
       },

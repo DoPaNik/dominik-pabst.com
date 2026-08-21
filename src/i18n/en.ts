@@ -125,7 +125,10 @@ export const en: Dictionary = {
         heading: 'Service provider',
         body: [
           'Dominik Pabst',
-          '[PLACEHOLDER: address where service of legal documents is possible — street, number, postal code, city. This does not have to be a home address: a business/office address (e.g. a coworking space or virtual business address) is acceptable as long as mail is actually received and the person can be reached there — German courts have held that a plain PO box is not sufficient.]',
+          'c/o flexdienst – #21920',
+          'Kurt-Schumacher-Straße 76',
+          '67663 Kaiserslautern',
+          'Germany',
           'Email: hi@dopanik.de',
         ],
       },
