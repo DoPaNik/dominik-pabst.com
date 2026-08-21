@@ -79,6 +79,7 @@ export const de: Dictionary = {
       'Workshops und Vorträge zu DevSecOps, Platform Engineering und dem sicheren Einsatz von KI in der Softwareentwicklung — auf den IT-Tagen Frankfurt und der heise Academy.',
     workshopLabel: 'workshop',
     talkLabel: 'vortrag',
+    webinarLabel: 'webinar',
   },
   writing: {
     seoTitle: 'Artikel & Beiträge – Dominik Pabst | DevSecOps & DevOps',

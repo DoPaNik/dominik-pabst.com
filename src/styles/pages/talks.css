@@ -46,3 +46,19 @@
 .dpn-talks__link {
   margin-top: var(--space-3);
 }
+
+.dpn-talks__related {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  margin: var(--space-2) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.dpn-talks__related a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

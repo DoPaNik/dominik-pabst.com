@@ -1168,7 +1168,83 @@ Inhalten gefüllt statt nur technisch vorbereitet:
   `--text-muted` ersetzt, Link-Unterstreichung ergänzt.
 
 **Damit ist AP4-6 inhaltlich vollständig abgeschlossen** — beide Rechtstexte
-enthalten keine offenen Platzhalter mehr. Weiterhin gilt: keine Rechtsberatung,
-beide Seiten sollten vor tatsächlichem Geschäftsbetrieb einmal anwaltlich
-gegengelesen werden (jetzt aber auf Basis vollständiger, korrekter Inhalte
-statt Lückentext).
+enthalten keine offenen Platzhalter mehr. Update 2026-08-21: Der Nutzer hat
+bestätigt, dass Datenschutzerklärung und Impressum inzwischen geprüft sind —
+der bisherige Hinweis „sollte vor Geschäftsbetrieb noch anwaltlich
+gegengelesen werden" entfällt damit.
+
+## Nachtrag — SEO-Content-Agent & Webinar/Workshop-Korrektur (2026-08-21)
+
+- Neuer Subagent `.claude/agents/seo-content-strategist.md` ergänzt das
+  Team: prüft Content-SEO (Themen-Abdeckung, Content-Typ-Genauigkeit,
+  Aktualität, Duplicate-Titel, interne Verlinkung, Structured-Data-
+  Vollständigkeit) für `src/content/talks/*` und `src/content/writing/*`.
+  Ergänzt den bestehenden `seo-metadata`-Agent, der nur technische
+  Meta-Plumbing (Title/OG/JSON-LD-Wiring/Sitemap) verantwortet — nicht den
+  Content selbst.
+- **Heise-Webinar-Fix:** Die 3-teilige heise-Webinar-Serie 2024 war
+  fälschlich als `type: workshop` gelabelt (es ist eine reine Online-
+  Webinar-Serie, kein Präsenz-Workshop). Behoben: Zod-Enum in
+  `content.config.ts` um `'webinar'` erweitert, `webinarLabel` in
+  `de.ts`/`en.ts` ergänzt, 3-Wege-Badge-Logik in `TalksPage.astro`, sowie
+  `eventAttendanceMode` in `schema.ts` — Webinare erhalten jetzt
+  `OnlineEventAttendanceMode` statt `OfflineEventAttendanceMode` im
+  SpeakingEvent-JSON-LD. Der 2025 heise-„Classroom"-Kurs bleibt bewusst
+  `type: workshop` (mehrsessioniger strukturierter Kurs, kein Webinar).
+- Der neue Agent hat direkt im Anschluss eine vollständige Content-SEO-
+  Analyse der Talks/Writing-Collections durchgeführt (siehe Chat-Antwort
+  für die priorisierte Findings-Liste) und dabei einen Folgefehler in der
+  eigenen `eventAttendanceMode`-Logik gefunden: die Kopplung an `type`
+  (nur `webinar` → online) hätte den heise-„Classroom"-Kurs 2025
+  fälschlich als Präsenzveranstaltung ausgezeichnet, obwohl er laut
+  Live-Check der heise-academy.de-Seite eine reine Online-Veranstaltung
+  ist (vier Live-Sessions im November 2025, danach als Aufzeichnung im
+  Campus verfügbar). Behoben durch Entkopplung: neues Content-Feld
+  `online: boolean` (Default `false`) in `content.config.ts` und
+  `src/content/talks/*`, `schema.ts` liest jetzt `talk.online` statt
+  `talk.type` für `eventAttendanceMode`. Beide heise-Einträge (2024
+  Webinar, 2025 Classroom) haben jetzt `online: true`; beide IT-Tage-
+  Workshops bleiben `online: false` (Default, unverändert).
+- **Nutzer-Feedback zur Findings-Liste umgesetzt:**
+  - Duplicate-Titel-Fund bestätigt und stärker gelöst als vorgeschlagen:
+    statt Titel zu differenzieren wurde der 2023-IT-Tage-Eintrag (DE+EN)
+    komplett entfernt, da echtes Duplikat des 2025-Eintrags (Nutzer:
+    „das 2023 event kann raus"). CONTENT.md und die Talks-Tabelle
+    aktualisiert.
+  - IT-Tage-2025-Ortsangabe vom Nutzer bestätigt: er war persönlich vor
+    Ort in Frankfurt am Main — die auf der Quellseite gefundene
+    Bezeichnung „Remote Theme Days" war nur ein Track-/Markenname, kein
+    Hinweis auf eine Remote-Durchführung. Kein Content-Fix nötig.
+  - Interne Verlinkung umgesetzt: neues optionales Content-Feld
+    `related: {href, label}[]` in `content.config.ts` (talks + writing),
+    `Card.astro` erhält eine `id`-Prop für Anker-Links, `TalksPage.astro`
+    und `WritingPage.astro` setzen `id={entry.id.split('/').pop()}` auf
+    jede Card und rendern `related`-Links (neue CSS-Klassen
+    `.dpn-talks__related` / `.dpn-writing__related`, gleiches Muster wie
+    `.dpn-talks__co`). Verlinkt: heise-KI-Talk ↔ LinkedIn-KI-Artikel
+    (bidirektional, DE+EN), `devto-iac.md` → About-Seite
+    (`AboutPage.astro` erhält `id="stack"` auf der Tech-Stack-Section).
+  - Nebenbei behoben: `devto-iac.md`-Datum (DE+EN) war 4 Tage falsch
+    (`2021-03-15` statt `2021-03-19` laut Live-Artikel) — korrigiert.
+  - Platform-Engineering/GitOps-Content-Lücke: Nutzer plant dazu Content
+    ein, kein Handlungsbedarf hier.
+  - Rechtstexte: Nutzer hat bestätigt, dass Datenschutzerklärung und
+    Impressum inzwischen geprüft sind — interner Prüf-Hinweis in der
+    AP4-6-Doku entfernt (kein rendertes Element auf der Seite betroffen,
+    es gab dort ohnehin keinen "ungeprüft"-Banner mehr).
+- **GEO-Analyse (KI-Answer-Engine-Lesbarkeit) durchgeführt und teilweise
+  umgesetzt** — der neue Agent hat zusätzlich geprüft, wie gut die Seite
+  von ChatGPT/Perplexity/Claude & Co. gelesen/zitiert werden kann (nicht
+  klassisches Google-SEO). Umgesetzt:
+  - `public/llms.txt` neu angelegt (aufkommende llmstxt.org-Konvention):
+    kuratierte Markdown-Übersicht mit 1-Satz-Zusammenfassung und
+    Linkblöcken für DE/EN-Seiten + Social-Profile.
+  - `src/lib/schema.ts`: `buildPersonSchema` liefert jetzt ein
+    `description`-Feld im Person-JSON-LD (gespiegelter, unveränderter
+    Bio-Text aus `about.bio` in `de.ts`/`en.ts` — bislang lieferte das
+    Schema nur Einzelfelder wie `jobTitle`/`knowsAbout`, keinen
+    zitierfähigen Zusammenfassungssatz).
+  - Zurückgestellt (größere Content-/Produktentscheidungen, nicht
+    stillschweigend umgesetzt): Q&A-/FAQ-Block auf der About-Seite,
+    eigenständige URLs pro Talk/Artikel statt Anker-Fragmenten. `robots.txt`
+    bewusst unverändert gelassen (Wildcard erlaubt bereits alle KI-Crawler).

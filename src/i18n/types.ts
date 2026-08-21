@@ -72,6 +72,7 @@ export interface Dictionary {
     intro: string;
     workshopLabel: string;
     talkLabel: string;
+    webinarLabel: string;
   };
   writing: {
     seoTitle: string;
