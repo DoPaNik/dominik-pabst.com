@@ -47,13 +47,17 @@ const ogImage = lang === 'de' ? '/og/talks.png' : '/og/en/talks.png';
       <div class="dpn-talks__list">
         {
           talks.map((talk) => (
-            <Card accent>
+            <Card accent id={talk.id.split('/').pop()}>
               <div class="dpn-talks__meta">
                 <Badge tone="brand" variant="outline">
                   {talk.data.year}
                 </Badge>
                 <Badge tone="neutral" variant="soft">
-                  {talk.data.type === 'workshop' ? talksT.workshopLabel : talksT.talkLabel}
+                  {talk.data.type === 'workshop'
+                    ? talksT.workshopLabel
+                    : talk.data.type === 'webinar'
+                      ? talksT.webinarLabel
+                      : talksT.talkLabel}
                 </Badge>
                 <span class="dpn-talks__event">{talk.data.event}</span>
               </div>
@@ -77,6 +81,13 @@ const ogImage = lang === 'de' ? '/og/talks.png' : '/og/en/talks.png';
                     {talk.data.event} →
                   </Button>
                 </div>
+              )}
+              {talk.data.related && talk.data.related.length > 0 && (
+                <p class="dpn-talks__related">
+                  {talk.data.related.map((rel) => (
+                    <a href={rel.href}>{rel.label}</a>
+                  ))}
+                </p>
               )}
             </Card>
           ))

@@ -45,7 +45,7 @@ const ogImage = lang === 'de' ? '/og/writing.png' : '/og/en/writing.png';
       <div class="dpn-writing__list">
         {
           writing.map((article) => (
-            <Card>
+            <Card id={article.id.split('/').pop()}>
               <div class="dpn-writing__meta">
                 <Badge tone="blue" variant="soft">
                   {article.data.source}
@@ -59,6 +59,13 @@ const ogImage = lang === 'de' ? '/og/writing.png' : '/og/en/writing.png';
                     {w.readMore}
                   </Button>
                 </div>
+              )}
+              {article.data.related && article.data.related.length > 0 && (
+                <p class="dpn-writing__related">
+                  {article.data.related.map((rel) => (
+                    <a href={rel.href}>{rel.label}</a>
+                  ))}
+                </p>
               )}
             </Card>
           ))

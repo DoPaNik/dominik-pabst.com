@@ -3,6 +3,7 @@ lang: en
 year: 2025
 type: workshop
 event: heise Academy
+online: true
 startDate: '2025-11-06'
 endDate: '2025-11-27'
 title: 'DevSecOps and AI – Secure Software Development in the Age of Artificial Intelligence'
@@ -11,4 +12,7 @@ description: >
 coInstructor: 'Andreas Falk'
 coInstructorUrl: 'https://www.linkedin.com/in/andifalk/'
 url: 'https://heise-academy.de/kurs/classroom-devsecops-und-ki-sichere-softwareentwicklung-im-gns4pj'
+related:
+  - href: '/en/writing/#linkedin-ai-knowledge-work'
+    label: 'Related reading: When AI Systems Take Over Knowledge Work →'
 ---
