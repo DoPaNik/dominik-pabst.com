@@ -37,6 +37,12 @@
   margin: var(--space-2) 0 0;
 }
 
+.dpn-talks__co a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .dpn-talks__link {
   margin-top: var(--space-3);
 }

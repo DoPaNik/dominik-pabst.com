@@ -61,7 +61,14 @@ const ogImage = lang === 'de' ? '/og/talks.png' : '/og/en/talks.png';
               <p class="dpn-talks__description">{talk.data.description}</p>
               {talk.data.coInstructor && (
                 <p class="dpn-talks__co">
-                  {lang === 'de' ? 'gemeinsam mit' : 'together with'} {talk.data.coInstructor}
+                  {lang === 'de' ? 'gemeinsam mit' : 'together with'}{' '}
+                  {talk.data.coInstructorUrl ? (
+                    <a href={talk.data.coInstructorUrl} target="_blank" rel="noreferrer">
+                      {talk.data.coInstructor}
+                    </a>
+                  ) : (
+                    talk.data.coInstructor
+                  )}
                 </p>
               )}
               {talk.data.url && (
