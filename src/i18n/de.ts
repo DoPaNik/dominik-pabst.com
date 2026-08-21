@@ -149,23 +149,45 @@ export const de: Dictionary = {
     seoDescription: 'Datenschutzerklärung gemäß Art. 13 DSGVO für dopanik.de.',
     eyebrow: '// datenschutz',
     title: 'Datenschutzerklärung.',
-    updated: 'Entwurf vom 20. August 2026',
+    updated: 'Aktualisiert am 21. August 2026',
     noticeBanner:
-      '⚠ Entwurf: Diese Seite wurde technisch vorbereitet, ist aber inhaltlich noch nicht rechtlich geprüft und enthält Platzhalter. Vor Veröffentlichung: Text über einen Generator (z. B. e-recht24.de, Datenschutz-Generator.de) erstellen lassen oder anwaltlich prüfen und alle [PLATZHALTER] durch echte Angaben ersetzen.',
+      'Diese Seite basiert auf der kostenlosen Vorlage von e-recht24.de, ergänzt um Angaben zu Hosting (Netlify) und Webanalyse (Plausible).',
     sections: [
       {
         heading: 'Verantwortlicher',
         body: [
-          'Verantwortlich für die Datenverarbeitung auf dieser Website ist:',
-          'Dominik Pabst',
-          '[PLATZHALTER: Anschrift wie im Impressum]',
+          'Verantwortlich für die Datenverarbeitung auf dieser Website bin ich:',
+          'Dominik Pabst (Anschrift: siehe Impressum)',
           'E-Mail: hi@dopanik.de',
+        ],
+      },
+      {
+        heading: 'Maßgebliche Rechtsgrundlagen',
+        body: [
+          'Soweit ich zur Verarbeitung personenbezogener Daten Ihre Einwilligung einhole, dient Art. 6 Abs. 1 lit. a DSGVO als Rechtsgrundlage. Bei Daten, die zur Erfüllung eines Vertrags oder zur Durchführung vorvertraglicher Maßnahmen erforderlich sind, ist Art. 6 Abs. 1 lit. b DSGVO die Rechtsgrundlage. Ist die Verarbeitung zur Wahrung meines berechtigten Interesses oder des Interesses eines Dritten erforderlich und überwiegen die Interessen, Grundrechte und Grundfreiheiten der betroffenen Person nicht, dient Art. 6 Abs. 1 lit. f DSGVO als Rechtsgrundlage. Welche Rechtsgrundlage im Einzelfall einschlägig ist, ist bei den jeweiligen Verarbeitungsvorgängen in dieser Erklärung angegeben.',
         ],
       },
       {
         heading: 'Ihre Rechte',
         body: [
-          'Sie haben das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger sowie den Zweck der Datenverarbeitung, sowie ein Recht auf Berichtigung, Einschränkung oder Löschung dieser Daten. Zudem steht Ihnen ein Recht auf Datenübertragbarkeit sowie ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.',
+          'Auskunft, Berichtigung und Löschung: Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre bei mir gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ggf. ein Recht auf Berichtigung oder Löschung dieser Daten.',
+          'Recht auf Einschränkung der Verarbeitung: Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen, etwa solange Sie die Richtigkeit der Daten bestreiten oder ein von Ihnen eingelegter Widerspruch noch nicht abschließend geprüft ist.',
+          'Widerruf Ihrer Einwilligung: Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit für die Zukunft widerrufen; die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung bleibt davon unberührt.',
+          'Widerspruchsrecht: WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRÜNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN. WENN SIE WIDERSPRUCH EINLEGEN, WERDE ICH IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, ICH KANN ZWINGENDE SCHUTZWÜRDIGE GRÜNDE FÜR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN ÜBERWIEGEN, ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSÜBUNG ODER VERTEIDIGUNG VON RECHTSANSPRÜCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).',
+          'Recht auf Datenübertragbarkeit: Sie haben das Recht, Daten, die ich auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeite, in einem gängigen, maschinenlesbaren Format zu erhalten oder deren Übermittlung an einen anderen Verantwortlichen zu verlangen, soweit dies technisch machbar ist.',
+          'Beschwerderecht: Ihnen steht zudem ein Beschwerderecht bei der zuständigen Datenschutz-Aufsichtsbehörde zu, insbesondere in dem Mitgliedstaat Ihres gewöhnlichen Aufenthalts, Ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes.',
+        ],
+      },
+      {
+        heading: 'Empfänger von personenbezogenen Daten',
+        body: [
+          'Ich gebe personenbezogene Daten nur dann an Dritte weiter, wenn dies zur Vertragserfüllung erforderlich ist, ich gesetzlich dazu verpflichtet bin oder ich ein berechtigtes Interesse an der Weitergabe habe (Art. 6 Abs. 1 lit. f DSGVO). Mit Dienstleistern, die in meinem Auftrag personenbezogene Daten verarbeiten (Auftragsverarbeiter, z. B. Hosting- oder Analyse-Anbieter), bestehen entsprechende Verträge zur Auftragsverarbeitung.',
+        ],
+      },
+      {
+        heading: 'Sicherheitsmaßnahmen',
+        body: [
+          'Diese Website nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte, insbesondere bei Anfragen über das Kontaktformular, eine TLS-Verschlüsselung (HTTPS). Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile Ihres Browsers von „http://“ auf „https://“ wechselt.',
         ],
       },
       {
@@ -177,15 +199,19 @@ export const de: Dictionary = {
       {
         heading: 'Server-Logfiles',
         body: [
-          'Beim Aufruf dieser Website erfasst der Hosting-Anbieter automatisch technische Zugriffsdaten (z. B. IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser). Diese Daten dienen der technischen Bereitstellung und Absicherung der Website und werden nicht mit anderen Datenquellen zusammengeführt. Sie werden nur so lange gespeichert, wie es für diesen Zweck erforderlich ist.',
-          '[PLATZHALTER: falls im Netlify-Dashboard eine abweichende, konkrete Aufbewahrungsfrist eingestellt ist, hier durch die genaue Frist ersetzen.]',
+          'Beim Aufruf dieser Website erfasst der Hosting-Anbieter automatisch technische Zugriffsdaten (z. B. IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser). Diese Daten dienen der technischen Bereitstellung und Absicherung der Website, werden nicht mit anderen Datenquellen zusammengeführt und nur so lange gespeichert, wie es für diesen Zweck erforderlich ist.',
+        ],
+      },
+      {
+        heading: 'Allgemeine Angaben zur Speicherdauer',
+        body: [
+          'Sofern in dieser Datenschutzerklärung keine speziellere Speicherdauer genannt ist, verbleiben Ihre personenbezogenen Daten bei mir, bis der Zweck für die Datenverarbeitung entfällt. Fordern Sie berechtigterweise die Löschung an oder widerrufen Sie eine Einwilligung, werden Ihre Daten gelöscht, sofern keine anderen rechtlich zulässigen Gründe für eine weitere Speicherung bestehen (z. B. steuer- oder handelsrechtliche Aufbewahrungsfristen) — in diesem Fall erfolgt die Löschung nach Fortfall dieser Gründe.',
         ],
       },
       {
         heading: 'Kontaktformular',
         body: [
-          'Wenn Sie das Kontaktformular nutzen, werden die von Ihnen angegebenen Daten (Name, E-Mail-Adresse, Nachricht) zur Bearbeitung Ihrer Anfrage verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anfrage zur Anbahnung eines Vertrags). Das Formular wird über Netlify Forms verarbeitet und so lange gespeichert, wie es zur Bearbeitung Ihrer Anfrage und zur Erfüllung etwaiger gesetzlicher Aufbewahrungspflichten erforderlich ist.',
-          '[PLATZHALTER: falls im Netlify-Dashboard eine abweichende, konkrete Aufbewahrungsfrist eingestellt ist, hier durch die genaue Frist ersetzen.]',
+          'Wenn Sie das Kontaktformular nutzen, verarbeite ich die von Ihnen angegebenen Daten (Name, E-Mail-Adresse, Nachricht) zur Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen. Das Formular wird über Netlify Forms verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage der Anbahnung eines Vertrags dient, andernfalls mein berechtigtes Interesse an der effektiven Bearbeitung Ihrer Anfrage (Art. 6 Abs. 1 lit. f DSGVO). Ihre Daten verbleiben bei mir, bis Sie mich zur Löschung auffordern oder der Zweck der Speicherung entfällt; gesetzliche Aufbewahrungsfristen bleiben unberührt.',
         ],
       },
       {

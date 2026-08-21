@@ -150,23 +150,45 @@ export const en: Dictionary = {
     seoDescription: 'Privacy policy for dopanik.de under Art. 13 GDPR.',
     eyebrow: '// privacy',
     title: 'Privacy policy.',
-    updated: 'Draft as of August 20, 2026',
+    updated: 'Updated August 21, 2026',
     noticeBanner:
-      '⚠ Draft: this page has been technically prepared but not yet legally reviewed, and still contains placeholders. This English version is for convenience only — the German version is the legally binding one. Before publishing: have the text produced by a generator (e.g. e-recht24.de, Datenschutz-Generator.de) or reviewed by a lawyer, and replace every [PLACEHOLDER] with real information.',
+      'This English version is for convenience only — the German version (based on the free template from e-recht24.de, extended with the hosting and analytics specifics below) is the legally binding one.',
     sections: [
       {
         heading: 'Controller',
         body: [
           'The party responsible for data processing on this website is:',
-          'Dominik Pabst',
-          '[PLACEHOLDER: address as stated in the imprint]',
+          'Dominik Pabst (address: see the imprint)',
           'Email: hi@dopanik.de',
+        ],
+      },
+      {
+        heading: 'Applicable legal bases',
+        body: [
+          'Where I obtain your consent for processing personal data, Art. 6(1)(a) GDPR serves as the legal basis. For data required to fulfil a contract or to carry out pre-contractual measures, Art. 6(1)(b) GDPR is the legal basis. Where processing is necessary to protect my legitimate interests or those of a third party, and your interests, fundamental rights, and freedoms do not override them, Art. 6(1)(f) GDPR serves as the legal basis. Which legal basis applies in a given case is stated alongside the relevant processing activity in this policy.',
         ],
       },
       {
         heading: 'Your rights',
         body: [
-          'You have the right to free information about your stored personal data, its origin and recipients, and the purpose of its processing, as well as a right to rectification, restriction, or deletion of this data. You also have a right to data portability and a right to lodge a complaint with the competent supervisory authority.',
+          'Access, rectification, and erasure: Under the applicable statutory provisions, you have the right at any time to free information about your personal data stored by me, its origin and recipients, and the purpose of its processing, and, where applicable, a right to rectification or erasure of this data.',
+          'Right to restriction of processing: You have the right to request that processing of your personal data be restricted, for example while you contest the accuracy of the data or while an objection you have raised has not yet been finally assessed.',
+          'Withdrawing your consent: Many data-processing operations are only possible with your express consent. You may withdraw consent already given at any time with effect for the future; the lawfulness of processing carried out until the withdrawal remains unaffected.',
+          'Right to object: IF THE PROCESSING OF YOUR PERSONAL DATA IS BASED ON ART. 6(1)(E) OR (F) GDPR, YOU HAVE THE RIGHT AT ANY TIME, FOR REASONS ARISING FROM YOUR PARTICULAR SITUATION, TO OBJECT TO THE PROCESSING OF YOUR PERSONAL DATA. IF YOU OBJECT, I WILL NO LONGER PROCESS YOUR PERSONAL DATA UNLESS I CAN DEMONSTRATE COMPELLING LEGITIMATE GROUNDS FOR THE PROCESSING THAT OVERRIDE YOUR INTERESTS, RIGHTS, AND FREEDOMS, OR THE PROCESSING SERVES THE ESTABLISHMENT, EXERCISE, OR DEFENCE OF LEGAL CLAIMS (OBJECTION UNDER ART. 21(1) GDPR).',
+          'Right to data portability: You have the right to receive data that I process automatically on the basis of your consent or in performance of a contract in a common, machine-readable format, or to request its direct transfer to another controller, insofar as this is technically feasible.',
+          'Right to lodge a complaint: You also have the right to lodge a complaint with the competent data protection supervisory authority, in particular in the member state of your habitual residence, place of work, or the place of the alleged infringement.',
+        ],
+      },
+      {
+        heading: 'Recipients of personal data',
+        body: [
+          'I only disclose personal data to third parties where this is necessary to fulfil a contract, where I am legally obligated to do so, or where I have a legitimate interest in the disclosure (Art. 6(1)(f) GDPR). Where service providers process personal data on my behalf (processors, e.g. hosting or analytics providers), corresponding data processing agreements are in place.',
+        ],
+      },
+      {
+        heading: 'Security measures',
+        body: [
+          'For security reasons and to protect the transmission of confidential content, in particular inquiries via the contact form, this website uses TLS encryption (HTTPS). You can recognise an encrypted connection by the fact that your browser\'s address bar changes from "http://" to "https://".',
         ],
       },
       {
@@ -179,14 +201,18 @@ export const en: Dictionary = {
         heading: 'Server log files',
         body: [
           'When you visit this website, the hosting provider automatically collects technical access data (e.g. IP address, date and time of access, page requested, browser used). This data is used for the technical delivery and security of the website, is not combined with other data sources, and is kept only as long as necessary for that purpose.',
-          '[PLACEHOLDER: if a specific retention period is configured in the Netlify dashboard, replace this with the exact period.]',
+        ],
+      },
+      {
+        heading: 'General information on retention',
+        body: [
+          'Unless a more specific retention period is stated elsewhere in this policy, your personal data remains with me until the purpose for processing it no longer applies. If you make a legitimate request for erasure or withdraw your consent, your data will be deleted unless I have other legally permissible grounds for continued storage (e.g. statutory retention obligations under tax or commercial law) — in that case, the data is deleted once those grounds no longer apply.',
         ],
       },
       {
         heading: 'Contact form',
         body: [
-          'If you use the contact form, the data you provide (name, email address, message) is processed to handle your request. The legal basis is Art. 6(1)(b) GDPR (steps to enter into a contract). The form is processed via Netlify Forms and kept for as long as needed to handle your request and to meet any applicable statutory retention obligations.',
-          '[PLACEHOLDER: if a specific retention period is configured in the Netlify dashboard, replace this with the exact period.]',
+          'If you use the contact form, I process the data you provide (name, email address, message) to handle your request and any follow-up questions. The form is processed via Netlify Forms. The legal basis is Art. 6(1)(b) GDPR where your inquiry relates to entering into a contract, otherwise my legitimate interest in handling your inquiry effectively (Art. 6(1)(f) GDPR). Your data remains with me until you request its deletion or the purpose for storing it no longer applies; statutory retention obligations remain unaffected.',
         ],
       },
       {
