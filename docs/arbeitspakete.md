@@ -714,10 +714,7 @@ Bestandsbereinigung ist eine separate, spätere Aufgabe.
 ### AP4-6 · Datenschutzfreundliches Tracking (Plausible) + Feld-Performance-Daten
 
 **Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit/Recht
-**Teilstatus (2026-08-20):** Schritt 1, 2 und 4 der Umsetzung sind erledigt
-(Script-Einbindung + CSP + Impressum/Datenschutz-Platzhalterseiten). Nur
-Schritt 3 (CWV-Custom-Event) ist **offen** und bewusst zurückgestellt — dafür
-ist eine Entscheidung zum Plausible-Plan nötig (siehe Einrichtungsanleitung).
+**Status:** ✅ Erledigt am 2026-08-21
 **Entscheidung (2026-08-20):** Tool ist **Plausible Analytics**
 (Plausible Insights OÜ, Estland; EU-Hosting-Option in Frankfurt via Hetzner),
 gewählt wegen EU-Sitz, keinem Cookie-Bedarf und nativer Custom-Events-Unterstützung
@@ -748,11 +745,11 @@ ein Generator (z. B. e-recht24, Datenschutz-Generator.de) empfohlen.
 2. `public/_headers`: CSP um `script-src` + `connect-src` für die
    Plausible-Domain erweitern (exakte Domain hängt von EU- vs.
    Standard-Hosting ab, siehe Einrichtungsanleitung unten).
-3. Custom Event `pageview-props` bzw. eigenes Event für Core-Web-Vitals
-   (LCP/INP/CLS) aus dem `web-vitals`-Package an Plausible senden
-   (Growth-Plan+ für Custom Properties nötig) — alternativ, falls kein
-   Growth-Plan gewünscht: CWV weiterhin nur über Google Search Console
-   beziehen und Plausible nur für Seitenaufrufe/Referrer nutzen.
+3. ~~Custom Event für Core-Web-Vitals (LCP/INP/CLS) an Plausible senden.~~
+   **Entschieden (2026-08-21): nein.** Nutzer ist auf dem Plausible
+   Free-/Starter-Plan, der keine Custom Properties unterstützt (erst ab
+   Growth-Plan). Feld-CWV kommt stattdessen weiterhin über Google Search
+   Console; Plausible liefert Seitenaufrufe/Referrer. Kein Code-Änderungsbedarf.
 4. ~~Minimal-Datenschutzerklärung und Impressum als eigene Seiten anlegen.~~
    ✅ erledigt — `/impressum` + `/en/impressum`, `/datenschutz` +
    `/en/datenschutz` (gleicher Slug in beiden Locales, damit die
@@ -777,15 +774,12 @@ geklärt:
   einzelnen Paragrafen zu zitieren, den ich nicht zweifelsfrei verifizieren
   konnte.
 
-**Noch offen: die Anschrift.** Der Nutzer möchte die Privatadresse nicht
-veröffentlichen. Rechtlich zulässig ist jede Adresse, unter der tatsächlich
-Post ankommt und die Person erreichbar ist ("ladungsfähige Anschrift") — ein
-reines Postfach genügt laut Rechtsprechung nicht, eine Geschäfts-/Büroadresse
-(Coworking-Space, virtuelle Geschäftsadresse) dagegen schon. Der Platzhalter
-in `src/i18n/de.ts`/`en.ts` weist jetzt genau darauf hin. Die
-Datenschutzerklärung verweist nur noch auf "Anschrift wie im Impressum"
-(keine doppelte Pflege). Sobald eine Adresse feststeht: einfach die
-Platzhalterzeile ersetzen lassen.
+**Anschrift (2026-08-21):** Nutzer verwendet eine virtuelle Geschäftsadresse
+(c/o flexdienst, Kaiserslautern) statt der Privatadresse — genau die im
+Platzhalter beschriebene, rechtlich zulässige Lösung. In
+`src/i18n/de.ts`/`en.ts` eingetragen (Impressum-Abschnitt "Diensteanbieter"/
+"Service provider"); die Datenschutzerklärung verweist weiterhin nur auf
+"Anschrift wie im Impressum" (keine doppelte Pflege).
 
 **Einrichtungsanleitung (für dich, manuell — kann ich nicht automatisiert für dich tun):**
 
@@ -794,21 +788,22 @@ Platzhalterzeile ersetzen lassen.
 3. ~~Snippet an mich übergeben.~~ ✅ erledigt — eingebaut in `src/layouts/BaseLayout.astro`
    (Production-Guard) und `public/scripts/plausible-init.js`; CSP in
    `public/_headers` um `https://plausible.io` (script-src + connect-src) erweitert.
-4. **Bei dir:** nach dem nächsten Deploy im Plausible-Dashboard
+4. **Bei dir, weiterhin offen:** nach dem nächsten Deploy (Push folgt in
+   diesem Arbeitspaket, siehe Punktliste) im Plausible-Dashboard
    verifizieren, dass Seitenaufrufe ankommen (kann einige Minuten dauern).
-5. **Bei dir:** echte Impressum-/Datenschutz-Texte besorgen (siehe oben)
-   und mir zum Eintragen geben.
-6. Optional, für Custom Events (Kontaktformular-Absendung, Talk-Link-Klicks,
-   CWV-Beacon): im Plausible-Plan auf "Growth" oder höher wechseln — sag
-   Bescheid, wenn das gewünscht ist, dann ergänze ich die Event-Aufrufe im Code.
+5. ~~Echte Impressum-/Datenschutz-Texte besorgen.~~ ✅ erledigt — Adresse,
+   USt-ID-Status und Streitschlichtung geklärt und eingetragen (2026-08-21).
+6. ~~Für Custom Events (CWV-Beacon) ggf. auf "Growth" wechseln.~~
+   **Entschieden: nein** — Free-/Starter-Plan bleibt, CWV weiterhin über
+   Search Console (siehe Umsetzungspunkt 3 oben).
 
 **Akzeptanzkriterien:**
 
 - [x] Plausible-Script nur im Production-Build aktiv, CSP entsprechend angepasst
 - [x] `/impressum` und `/datenschutz` (+ EN-Pendants) existieren, im Footer verlinkt, als Platzhalter klar mit einem Prüfhinweis markiert
 - [x] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten — Inhalt vorhanden, weiterhin mit Prüfhinweis auf der Seite (kein Ersatz für eine Rechtsprüfung)
-- [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert — **Aktion bei dir**)
-- [ ] Entscheidung zu Custom Events (CWV-Beacon ja/nein, welcher Plan) dokumentiert
+- [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert — **Aktion bei dir, nach dem Push**)
+- [x] Entscheidung zu Custom Events (CWV-Beacon ja/nein, welcher Plan) dokumentiert — nein, Free-/Starter-Plan
 
 **Abgrenzung:** Keine automatisierte Auswertung/Reporting-Pipeline der
 Plausible-Daten in dieser Aufgabe (z. B. kein wöchentlicher CI-Report) —
