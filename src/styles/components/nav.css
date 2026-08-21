@@ -90,7 +90,9 @@
   gap: 6px;
 }
 
-.dpn-nav__burger {
+/* Higher specificity than .dpn-iconbtn's unconditional `display: inline-grid`
+   (bundling order isn't guaranteed to put this rule after it). */
+.dpn-nav__actions .dpn-nav__burger {
   display: none;
 }
 
@@ -115,11 +117,13 @@
 }
 
 @media (--below-tablet) {
-  .dpn-nav__cta {
+  /* Higher specificity than .dpn-btn's unconditional `display: inline-flex`
+     (bundling order isn't guaranteed to put this rule after it). */
+  .dpn-nav__actions .dpn-nav__cta {
     display: none;
   }
 
-  .dpn-nav__burger {
+  .dpn-nav__actions .dpn-nav__burger {
     display: inline-grid;
   }
 
