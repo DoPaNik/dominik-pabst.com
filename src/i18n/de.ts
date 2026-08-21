@@ -116,9 +116,9 @@ export const de: Dictionary = {
     seoDescription: 'Impressum und Anbieterkennzeichnung gemäß § 5 DDG für dopanik.de.',
     eyebrow: '// impressum',
     title: 'Impressum.',
-    updated: 'Entwurf vom 20. August 2026',
+    updated: 'Aktualisiert am 21. August 2026',
     noticeBanner:
-      '⚠ Entwurf: Diese Seite wurde technisch vorbereitet, ist aber inhaltlich noch nicht rechtlich geprüft und enthält Platzhalter. Vor Veröffentlichung: Text über einen Generator (z. B. e-recht24.de, Datenschutz-Generator.de) erstellen lassen oder anwaltlich prüfen und alle [PLATZHALTER] durch echte Angaben ersetzen.',
+      'Diese Seite basiert auf dem kostenlosen Datenschutz-Generator.de von Dr. Thomas Schwenke, ergänzt um Angaben zu Hosting (Netlify) und Webanalyse (Plausible).',
     sections: [
       {
         heading: 'Diensteanbieter',
@@ -128,37 +128,18 @@ export const de: Dictionary = {
           'Kurt-Schumacher-Straße 76',
           '67663 Kaiserslautern',
           'Deutschland',
-          'E-Mail: hi@dopanik.de',
         ],
       },
       {
-        heading: 'Redaktionell verantwortlich',
-        body: [
-          'Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV: Dominik Pabst (Anschrift wie oben).',
-        ],
+        heading: 'Kontaktmöglichkeiten',
+        body: ['E-Mail-Adresse: hi@dopanik.de'],
       },
       {
-        heading: 'EU-Streitschlichtung',
+        heading: 'Haftungs- und Schutzrechtshinweise',
         body: [
-          'Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/. Ich bin nicht bereit und nicht verpflichtet, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.',
-        ],
-      },
-      {
-        heading: 'Haftung für Inhalte',
-        body: [
-          'Als Diensteanbieter bin ich für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Für fremde, lediglich durchgeleitete oder zwischengespeicherte Informationen gelten die Haftungsprivilegierungen des Digitale-Dienste-Gesetzes (DDG) sowie der EU-Verordnung über digitale Dienste (Digital Services Act, DSA); eine allgemeine Pflicht zur Überwachung übermittelter oder gespeicherter fremder Informationen besteht danach nicht.',
-        ],
-      },
-      {
-        heading: 'Haftung für Links',
-        body: [
-          'Diese Website verlinkt auf externe Inhalte Dritter (z. B. dev.to, LinkedIn), auf deren Gestaltung kein Einfluss besteht. Für diese fremden Inhalte kann daher keine Gewähr übernommen werden; für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.',
-        ],
-      },
-      {
-        heading: 'Urheberrecht',
-        body: [
-          'Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht.',
+          'Links auf fremde Webseiten: Die Inhalte fremder Webseiten, auf die ich direkt oder indirekt verweise, liegen außerhalb meines Verantwortungsbereiches und ich mache sie mir nicht zu Eigen. Für alle Inhalte und Nachteile, die aus der Nutzung der in den verlinkten Webseiten aufrufbaren Informationen entstehen, übernehme ich keine Verantwortung.',
+          'Urheberrechte und Markenrechte: Alle auf dieser Website dargestellten Inhalte, wie Texte, Fotografien, Grafiken, Marken und Warenzeichen sind durch die jeweiligen Schutzrechte (Urheberrechte, Markenrechte) geschützt. Die Verwendung, Vervielfältigung usw. unterliegen meinen Rechten oder den Rechten der jeweiligen Urheber bzw. Rechteinhaber.',
+          'Hinweise auf Rechtsverstöße: Sollten Sie innerhalb meines Internetauftritts Rechtsverstöße bemerken, bitte ich Sie, mich darauf hinzuweisen. Ich werde rechtswidrige Inhalte und Links nach Kenntnisnahme unverzüglich entfernen.',
         ],
       },
     ],

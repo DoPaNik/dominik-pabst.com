@@ -117,9 +117,9 @@ export const en: Dictionary = {
       'Imprint and provider identification for dopanik.de under German law (§ 5 DDG).',
     eyebrow: '// imprint',
     title: 'Imprint.',
-    updated: 'Draft as of August 20, 2026',
+    updated: 'Updated August 21, 2026',
     noticeBanner:
-      '⚠ Draft: this page has been technically prepared but not yet legally reviewed, and still contains placeholders. This English version is for convenience only — the German version is the legally binding one. Before publishing: have the text produced by a generator (e.g. e-recht24.de, Datenschutz-Generator.de) or reviewed by a lawyer, and replace every [PLACEHOLDER] with real information.',
+      'This English version is for convenience only — the German version (based on the free Datenschutz-Generator.de by Dr. Thomas Schwenke) is the legally binding one.',
     sections: [
       {
         heading: 'Service provider',
@@ -129,37 +129,18 @@ export const en: Dictionary = {
           'Kurt-Schumacher-Straße 76',
           '67663 Kaiserslautern',
           'Germany',
-          'Email: hi@dopanik.de',
         ],
       },
       {
-        heading: 'Responsible for editorial content',
-        body: [
-          'Responsible for the content under § 18(2) MStV (German Interstate Media Treaty): Dominik Pabst (address as above).',
-        ],
+        heading: 'Contact',
+        body: ['Email address: hi@dopanik.de'],
       },
       {
-        heading: 'EU dispute resolution',
+        heading: 'Liability and intellectual property notices',
         body: [
-          'The European Commission provides a platform for online dispute resolution (ODR): https://ec.europa.eu/consumers/odr/. I am neither willing nor obligated to participate in dispute resolution proceedings before a consumer arbitration board.',
-        ],
-      },
-      {
-        heading: 'Liability for content',
-        body: [
-          "As a service provider, I am responsible for my own content on these pages under general law. Liability privileges under the Digitale-Dienste-Gesetz (DDG, Germany's Digital Services Act implementation) and the EU Digital Services Act (DSA) apply to third-party information that is merely transmitted or cached; under these, no general obligation exists to monitor transmitted or stored third-party information.",
-        ],
-      },
-      {
-        heading: 'Liability for links',
-        body: [
-          'This website links to external third-party content (e.g. dev.to, LinkedIn) whose design I have no influence over. No liability is therefore assumed for this external content; the respective provider is always responsible for the content of linked pages.',
-        ],
-      },
-      {
-        heading: 'Copyright',
-        body: [
-          'The content and works created by the site operator on these pages are subject to German copyright law.',
+          'Links to third-party websites: The content of third-party websites that I link to directly or indirectly is outside my area of responsibility, and I do not adopt it as my own. I assume no responsibility for any content or damages arising from the use of information available on linked websites.',
+          'Copyright and trademarks: All content presented on this website, such as text, photographs, graphics, brands, and trademarks, is protected by the respective intellectual property rights (copyright, trademark rights). Use, reproduction, etc. are subject to my rights or the rights of the respective authors or rights holders.',
+          'Notice of legal violations: If you notice any legal violations on my website, please let me know. I will remove unlawful content and links as soon as I become aware of them.',
         ],
       },
     ],

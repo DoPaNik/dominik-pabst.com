@@ -21,6 +21,30 @@
   margin: 0 0 48px;
 }
 
+/* Neutral variant for informational (non-warning) banners, e.g. a source
+   attribution rather than an unreviewed-draft caveat. */
+.dpn-legal__notice--info {
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.dpn-legal__seal {
+  margin: 48px 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.dpn-legal__seal a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dpn-legal__seal a:hover {
+  color: var(--brand-deep);
+}
+
 .dpn-legal__sections {
   max-width: 70ch;
   display: flex;

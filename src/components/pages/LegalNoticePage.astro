@@ -28,7 +28,7 @@ const l = t.legal;
         <p class="dpn-legal__updated">{l.updated}</p>
       </header>
 
-      <p class="dpn-legal__notice">{l.noticeBanner}</p>
+      <p class="dpn-legal__notice dpn-legal__notice--info">{l.noticeBanner}</p>
 
       <div class="dpn-legal__sections">
         {
@@ -42,6 +42,23 @@ const l = t.legal;
           ))
         }
       </div>
+
+      {
+        lang === 'de' && (
+          <p class="dpn-legal__seal">
+            Erstellt mit kostenlosem{' '}
+            <a
+              href="https://datenschutz-generator.de/"
+              title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken."
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              Datenschutz-Generator.de
+            </a>{' '}
+            von Dr. Thomas Schwenke
+          </p>
+        )
+      }
     </div>
   </section>
 </BaseLayout>
