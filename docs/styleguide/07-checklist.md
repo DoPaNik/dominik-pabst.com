@@ -3,6 +3,11 @@
 Self-review before committing UI work. Everything here is shorthand for the
 chapters — when in doubt, read the chapter.
 
+`npm run lint:css` (also part of CI) automatically enforces the hex-color,
+`border-radius`, and transition/animation-duration rules from this list —
+see `stylelint.config.mjs`. It doesn't (yet) cover spacing or font-size
+literals; those still rely on this checklist.
+
 ## Do
 
 - [ ] Semantic tokens only (`--bg`, `--surface-raised`, `--text-muted`, …) —

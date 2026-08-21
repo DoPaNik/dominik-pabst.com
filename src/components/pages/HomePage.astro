@@ -1,6 +1,5 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../astro/Button.astro';
 import MatrixRainBackdrop from '../astro/MatrixRainBackdrop.astro';
@@ -9,7 +8,6 @@ import TerminalWindow from '../astro/TerminalWindow.astro';
 import { getDictionary } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 import { buildPersonSchema } from '../../lib/schema';
-import { formatTalkStatus, getUpcomingTalk } from '../../lib/talks';
 import '../../styles/pages/home.css';
 
 interface Props {
@@ -22,12 +20,6 @@ const h = t.home;
 
 const talksHref = getRelativeLocaleUrl(lang, 'talks');
 const contactHref = getRelativeLocaleUrl(lang, 'contact');
-
-const allTalks = await getCollection('talks', ({ data }) => data.lang === lang);
-const upcomingTalk = getUpcomingTalk(allTalks.map((talk) => talk.data));
-const statusDeploy = upcomingTalk
-  ? `${h.statusDeployPrefix}${formatTalkStatus(upcomingTalk)}`
-  : h.statusUptime;
 ---
 
 <BaseLayout
@@ -60,20 +52,6 @@ const statusDeploy = upcomingTalk
           <Button href={talksHref} variant="primary" prompt size="lg">{h.ctaPrimary}</Button>
           <Button href={contactHref} variant="ghost" size="lg">{h.ctaSecondary}</Button>
         </div>
-        <p class="dpn-hero__meta">
-          <span class="dpn-hero__meta-dot" aria-hidden="true"></span>
-          {h.statusUptime}
-          {
-            upcomingTalk && (
-              <>
-                <span class="dpn-hero__meta-sep" aria-hidden="true">
-                  ·
-                </span>
-                {statusDeploy}
-              </>
-            )
-          }
-        </p>
       </div>
 
       <div class="dpn-hero__art">

@@ -4,7 +4,7 @@
 > `debt_backlog.csv`, 30/60/90-Roadmap). Dieses Dokument ist die einzige Quelle
 > für die Abarbeitung — es ersetzt die Roadmap-Prosa für operative Zwecke.
 >
-> **Baseline:** Branch `redesign-astro` @ `42ccae2`. Alle Datei-Referenzen und
+> **Baseline:** Branch `master` @ `86e8caa`. Alle Datei-Referenzen und
 > Ist-Zustände wurden gegen diesen Stand verifiziert.
 
 ## Hinweise zur Abarbeitung (für Mensch & LLM)
@@ -28,16 +28,19 @@
 
 ### Schlüsseldateien (Referenz)
 
-| Datei                              | Rolle                                                                      |
-| ---------------------------------- | -------------------------------------------------------------------------- |
-| `src/layouts/BaseLayout.astro`     | `<head>`: Meta, OG/Twitter, canonical/hreflang, JSON-LD, Theme-FOUC-Script |
-| `src/data/site.ts`                 | Einzige Quelle für Name/Firma/Kontakt/Social-Links/Foto-Pfad               |
-| `src/i18n/de.ts`, `src/i18n/en.ts` | Alle User-Facing-Strings, typisiert über `src/i18n/types.ts`               |
-| `src/content.config.ts`            | Zod-Schemata der Content Collections (`talks`, `writing`)                  |
-| `src/lib/schema.ts`                | JSON-LD-Generatoren (`Person`, `SpeakingEvent`)                            |
-| `netlify.toml` / `public/_headers` | Build-Kommando bzw. ausgelieferte Security-Header inkl. CSP                |
-| `.github/workflows/ci.yml`         | CI: Format → Lint → Typecheck → Build → `npm audit`                        |
-| `CONTENT.md`                       | Deklarierte "authoritative reference" für Inhalts-Fakten                   |
+| Datei                                | Rolle                                                                      |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| `src/layouts/BaseLayout.astro`       | `<head>`: Meta, OG/Twitter, canonical/hreflang, JSON-LD, Theme-FOUC-Script |
+| `src/data/site.ts`                   | Einzige Quelle für Name/Firma/Kontakt/Social-Links/Foto-Pfad               |
+| `src/i18n/de.ts`, `src/i18n/en.ts`   | Alle User-Facing-Strings, typisiert über `src/i18n/types.ts`               |
+| `src/content.config.ts`              | Zod-Schemata der Content Collections (`talks`, `writing`)                  |
+| `src/lib/schema.ts`                  | JSON-LD-Generatoren (`Person`, `SpeakingEvent`)                            |
+| `netlify.toml` / `public/_headers`   | Build-Kommando bzw. ausgelieferte Security-Header inkl. CSP                |
+| `.github/workflows/ci.yml`           | CI: Format → Lint → Typecheck → Build → Skript-Drift-Check → `npm audit`   |
+| `CONTENT.md`                         | Deklarierte "authoritative reference" für Inhalts-Fakten                   |
+| `src/scripts/*.ts`                   | Alle client-seitigen Skripte (TS-Quelle, typgeprüft, gelintet)             |
+| `scripts/build-critical-scripts.mjs` | Erzeugt `public/scripts/theme-bootstrap.js` (einzige Ausnahme, s. AP4-1)   |
+| `.lighthouserc.cjs`                  | Lighthouse-CI-Konfiguration (Routen + Assertions)                          |
 
 ---
 
@@ -456,27 +459,716 @@ etc. bleiben bewusst außerhalb des 90-Tage-Fensters, siehe Roadmap).
 
 ---
 
+## Paket 4 — Astro-Best-Practice-Audit (ab Tag 91)
+
+**Baseline dieses Pakets:** Branch `master` @ `97ef975`, verifiziert per
+Repository-Analyse am 2026-08-20. Paket 1–3 (siehe Abschlussstatus oben) sind
+vollständig umgesetzt — dieses Paket baut darauf auf und adressiert Punkte,
+die außerhalb des ursprünglichen 90-Tage-Fensters lagen: Bild- und
+JS-Auslieferungspipeline, Messbarkeit (KPIs) und deren Verankerung in der CI.
+
+**Reihenfolge:** frei, außer wo `Hängt ab von:` es erzwingt. AP4-1 ist
+zuerst umgesetzt, weil er das höchste Wartbarkeits-/Performance-Risiko trägt
+und keine Abhängigkeiten zu anderen Punkten hat.
+
+---
+
+### AP4-1 · JS-Auslieferung entduplizieren und durch die Astro/Vite-Pipeline führen
+
+**Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 5 / Risiko 2 · Bereich: Technik/Performance
+**Status:** ✅ Erledigt am 2026-08-20
+
+**Beschreibung:**
+`public/scripts/*.js` lief vollständig am Astro/Vite-Build vorbei
+(`is:inline` + `src=`, kein Bundling/Minify/Hashing) und war über
+`eslint.config.js`s `ignores: ['public/**']` komplett ungeprüft. Die
+Kern-Ticker-Engine der Matrix-Effekte war dabei **vierfach** dupliziert:
+als toter, nie referenzierter `public/scripts/matrix-engine.js`, als toter,
+nie importierter `src/scripts/matrix-engine.ts` (dokumentierte Quelle) und
+zusätzlich noch einmal händisch hineinkopiert in sowohl
+`matrix-backdrop.js` als auch `matrix-portrait.js`.
+
+**Umsetzung:**
+
+- Alle Skripte außer dem FOUC-kritischen Theme-Bootstrap nach
+  `src/scripts/*.ts` migriert und über Astros reguläre (nicht-inline)
+  `<script>`-Verarbeitung geladen (`<script>import '../../scripts/x';</script>`)
+  → automatisches Bundling, Minify, Content-Hash über Vite.
+  Betroffen: `theme-toggle`, `nav`, `role-rotator`, `matrix-backdrop`,
+  `matrix-portrait`.
+- `matrix-backdrop.ts` und `matrix-portrait.ts` importieren jetzt beide die
+  eine reale `src/scripts/matrix-engine.ts` (`addMatrixInstance`,
+  `clampedDpr`) statt sie zu duplizieren — Vite dedupliziert den gemeinsamen
+  Code automatisch in einen einzigen gehashten Chunk (`matrix-engine.*.js`).
+- **Ausnahme, bewusst:** `theme-bootstrap.ts` muss ein synchroner,
+  nicht-modularer Head-Script bleiben (FOUC-Prävention vor dem ersten Paint) —
+  Astros Standard-Skriptverarbeitung liefert dafür immer `type="module"`
+  (deferred), was den Dark-Flash zurückbringen würde. Quelle bleibt daher in
+  TS (`src/scripts/theme-bootstrap.ts`, typgeprüft/gelintet), wird aber per
+  `scripts/build-critical-scripts.mjs` (esbuild, IIFE, minifiziert) zu
+  `public/scripts/theme-bootstrap.js` gebaut — neue npm-Scripts
+  `build:critical-scripts`, als `predev`/`prebuild`-Hook verdrahtet.
+- Neuer CI-Schritt `Verify generated critical scripts are up to date`
+  (`quality`-Job) verhindert Drift zwischen Quelle und generierter Datei.
+- `matrix-portrait-referenz.js` (unversionierte Altlast im Repo-Root) sowie
+  alle sechs toten `public/scripts/*.js`-Dateien entfernt.
+- `eslint.config.js`: `public/**`-Blindspot geschlossen (nur noch die eine
+  generierte Datei ausgenommen). `tsconfig.json`: dieselbe Datei von
+  `astro check` ausgeschlossen (ist Build-Output, keine Quelle).
+
+**Akzeptanzkriterien:**
+
+- [x] Kein `public/scripts/*.js` mehr außer der generierten `theme-bootstrap.js`
+- [x] `matrix-engine`-Logik existiert nur noch einmal (`src/scripts/matrix-engine.ts`), von beiden Matrix-Komponenten importiert
+- [x] `eslint.config.js` schließt nur noch die eine generierte Datei aus, nicht mehr `public/**`
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run build` grün
+- [x] Vollständige Playwright-Suite (Smoke, A11y × 2 Themes, Kernflows — 40 Tests) grün gegen den neuen Build
+- [x] CI verifiziert Drift zwischen `src/scripts/theme-bootstrap.ts` und dem generierten Output
+
+**Abgrenzung:** Keine Verhaltensänderung der Skripte (1:1-Portierung der
+Logik); keine CSP-Änderung (Scripts bleiben `'self'`); AP4-2 (Bilder) und
+AP4-5 (CSS-Governance) sind separate Aufgaben.
+
+---
+
+### AP4-2 · `astro:assets` für alle Bilder nutzen
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Performance
+**Status:** ✅ Erledigt am 2026-08-20
+
+**Beschreibung:**
+`sharp` war als devDependency installiert, wurde aber nirgends verwendet.
+Das Porträt (`MatrixPortrait.astro`, genutzt auf der About-Seite) war ein
+rohes `<img src>` auf eine statische Datei in `public/images/` — kein
+automatisches WebP/AVIF, kein responsives `srcset`, manuell gepflegte
+`width`/`height`-Props (840×1050).
+
+**Fund unterwegs:** `Avatar.astro` wird an keiner einzigen Stelle im Code
+verwendet (`grep -rn '<Avatar' src` → 0 Treffer) — ähnlich wie das
+`Illustration.astro`-Muster aus AP1-4. Diese Aufgabe hat daher **nur das
+Porträt** migriert; `Avatar.astro` bleibt unangetastet und ist als offene
+Produktentscheidung zu behandeln (einbauen oder entfernen), nicht Teil des
+Bild-Pipeline-Themas.
+
+**Umsetzung:** Entgegen der ursprünglichen Annahme unten ließ sich
+`<Image>` aus `astro:assets` direkt verwenden — die Komponente rendert ein
+einzelnes echtes `<img>`-Element ohne Wrapper, genau das, was der
+Canvas-Overlay-Code in `matrix-portrait.ts` per `querySelector('img')`
+erwartet. `src/assets/images/dominik-portrait.jpg` ist eine **Kopie** der
+Originaldatei (die in `public/images/` bleibt unverändert bestehen, da
+`site.photo` für `og:image` und das `Person`-JSON-LD eine stabile,
+unprozessierte URL braucht). `MatrixPortrait.astro` erhält jetzt
+`src: ImageMetadata` statt `src/width/height: string/number` und rendert
+mit `densities={[1, 2]}` + `format="webp"` bei einer festen Layout-Breite
+von 420px (passend zu `.dpn-portrait`s CSS-`max-width`).
+
+**Ergebnis (Build-Log):**
+
+```
+▶ dominik-portrait…webp (1x, 420w): 53kB → 11kB (−79%)
+▶ dominik-portrait…webp (2x, 840w): 53kB → 32kB (−40%)
+```
+
+Die meisten Besucher (Standard-Displays, nicht Retina) laden jetzt 11 kB
+statt 53 kB für das wahrscheinliche LCP-Element der About-Seite.
+
+**Akzeptanzkriterien:**
+
+- [x] Porträt läuft durch `astro:assets` (Build-Output enthält optimierte, gehashte WebP-Dateien mit korrektem `srcset`)
+- [x] `width`/`height` kommen aus den tatsächlichen Bilddaten (`MatrixPortrait.astro` braucht keine `width`/`height`-Props mehr)
+- [x] WebP als Ausgabeformat (AVIF nicht zusätzlich — Dateigröße rechtfertigt den zusätzlichen Build-Zeit-Aufwand hier nicht)
+- [x] `MatrixPortrait`-Canvas-Overlay funktioniert unverändert (52/52 Playwright-Tests grün, inkl. A11y auf `/about/` in beiden Themes; Screenshot-Sichtprüfung im echten Browser)
+- [x] Bild-Bytes sinken messbar (Build-Log-Zahlen oben — direkter, präziserer Nachweis als ein erneuter Lighthouse-Lauf für denselben Sachverhalt)
+
+**Abgrenzung:** Keine Änderung an `og/dopanik.png` (statisches Social-Card-Bild, bewusst nicht durch die Bildpipeline optimiert, da es 1:1 als Meta-Tag-URL referenziert wird) und keine Änderung an `Avatar.astro` (siehe Fund oben).
+
+---
+
+### AP4-3 · Lighthouse-Budget auf alle Routen ausweiten
+
+**Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 3 / Risiko 1 · Bereich: Messbarkeit
+**Status:** ✅ Erledigt am 2026-08-20 (verifizierter Testlauf: 48/48 Runs grün
+über 16 Routen — die ursprünglichen 12 plus die 4 neuen Impressum-/
+Datenschutz-Seiten aus AP4-6; proportional < 9 min Gesamtlaufzeit, klar
+innerhalb des 15-Minuten-Budgets)
+
+**Beschreibung:**
+`.lighthouserc.cjs` prüfte ursprünglich nur `/` und `/about/`. Talks, Writing,
+Contact und alle `/en/*`-Seiten waren Performance-blind, obwohl
+`tests/site-routes.ts` bereits alle Routen kennt (dort für die A11y-Suite
+genutzt).
+
+**Umsetzung:** `collect.url` in `.lighthouserc.cjs` auf dieselben Pfade wie
+`smokeRoutes` erweitert (Import aus `tests/site-routes.ts` ist wegen
+CJS/ESM-Mix des LHCI-Configs nicht direkt möglich — Liste dupliziert
+gepflegt, mit Kommentar-Verweis auf die Quelle der Wahrheit).
+
+**Akzeptanzkriterien:**
+
+- [x] Alle Routen in `collect.url` (12 ursprüngliche + 4 aus AP4-6, insgesamt 16)
+- [x] 3 Runs pro Route (bestehende Einstellung beibehalten)
+- [x] CI-Laufzeit des `lighthouse`-Jobs bleibt < 15 Minuten (lokal verifiziert: 48 Runs grün, deutlich unter dem Budget)
+- [x] Kommentar in `.lighthouserc.cjs` verweist auf `tests/site-routes.ts` als Ort, an dem Routen zuerst gepflegt werden
+
+**Abgrenzung:** Keine neuen Assertions/Budgets (→ AP4-4).
+
+---
+
+### AP4-4 · Harte Ressourcen-Budgets — zunächst als Audit, vorbereitet für Blocking
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit
+**Hängt ab von:** AP4-3
+**Status:** ✅ Erledigt am 2026-08-20
+**Entscheidung (2026-08-20):** Läuft zunächst **nicht-blockierend** (reine
+Audit-/Reporting-Funktion). Struktur ist so angelegt, dass das Umschalten
+auf blockierend eine Ein-Zeilen-Änderung pro Assertion ist (`warn` → `error`).
+
+**Beschreibung:**
+Zuvor nur `categories:performance`/`categories:accessibility` als
+Score-Schwellen, beide auf `warn`. Ein Score kann trotz spürbarer
+Byte-Regression (z. B. +80 kB JS) stabil bleiben — der Score allein ist kein
+verlässliches Frühwarnsystem.
+
+**Umsetzung:** In `.lighthouserc.cjs` unter `assert.assertions` ergänzt, mit
+Schwellen aus einem echten Messlauf (nicht geraten) auf der aktuellen
+`master`-Baseline (2026-08-20, nach AP4-1–AP4-7):
+
+```js
+// Baseline: schwerste Route (/about/, matrix-portrait-Bundle + optimiertes
+// WebP-Porträt) maß ~14,2 KB Script, ~33,7 KB Bild, ~203 KB gesamt, 0ms
+// unused-JS-Ersparnis. Schwellen unten geben ~30–50% Puffer.
+'resource-summary:script:size': ['warn', { maxNumericValue: 20000 }], // BLOCKING: warn → error
+'resource-summary:image:size': ['warn', { maxNumericValue: 50000 }], // BLOCKING: warn → error
+'resource-summary:total:size': ['warn', { maxNumericValue: 260000 }], // BLOCKING: warn → error
+'unused-javascript': ['warn', { maxNumericValue: 50 }], // BLOCKING: warn → error
+```
+
+**Korrektur gegenüber der ursprünglichen Planung:** `unused-javascript`s
+`numericValue` ist eine geschätzte Ladezeit-Ersparnis in **Millisekunden**,
+kein Byte-Wert — `maxLength` (für Array-Längen gedacht) wäre falsch gewesen.
+Jetzt korrekt `maxNumericValue` in ms, mit kleinem Puffer (50ms) statt hartem
+0, um bei minimalen Messschwankungen nicht unnötig auszuschlagen.
+
+**Akzeptanzkriterien:**
+
+- [x] Vier Assertions ergänzt, Schwellen aus echtem Messlauf (48/48 Runs grün) abgeleitet und im Config-Kommentar dokumentiert
+- [x] Alle Assertions auf `warn` (CI wird durch diese Aufgabe nicht rot)
+- [x] Jede neue Assertion trägt den `BLOCKING`-Kommentar zur einfachen späteren Umschaltung
+- [x] Anleitung im Kommentarblock: `warn` → `error` pro Zeile, einzeln umschaltbar
+
+**Abgrenzung:** Kein tatsächliches Umschalten auf `error` in dieser Aufgabe — das ist eine bewusste Folgeentscheidung, siehe Rückfrage im Chat-Verlauf.
+
+---
+
+### AP4-5 · Design-Token-Governance automatisieren (Stylelint)
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 3 / Risiko 1 · Bereich: Wartbarkeit
+**Status:** ✅ Erledigt am 2026-08-20 — mit bewusst engerem Scope als ursprünglich geplant (siehe unten)
+
+**Beschreibung:**
+`CLAUDE.md` fordert explizit: "Never hardcode a hex, px-size, font, radius or
+duration that a token already provides." Es gab aber keine Automatisierung.
+
+**Tatsächlicher Scope (abweichend vom ursprünglichen Plan):** Bei der
+Umsetzung zeigte sich, dass `--color-*`/`--radius-*`/`--duration-*` bereits
+fast vollständig sauber sind (4 Hex-Ausnahmen, 1 legitime `border-radius: 50%`,
+0 Duration-Verstöße außerhalb `tokens/`) — dort automatisiert durchsetzbar,
+ohne Bestandswerte zu ändern. `font-size` dagegen ist zu 62 % (32 von 52
+Deklarationen) literal statt `var(--text-*)`, teils mit Werten (14px, 19px,
+26px), die gar keinem vorhandenen Token entsprechen — eine Durchsetzung hätte
+entweder Dutzende Bestandswerte umschreiben oder Dutzende Ausnahme-Kommentare
+erzeugen müssen, beides im Widerspruch zur Abgrenzung unten. `font-size` und
+Spacing (`px` in `padding`/`margin`/`gap`) sind daher **bewusst nicht**
+Teil dieser Aufgabe — Kandidat für eine spätere, eigene
+Bestandsbereinigungs-Aufgabe.
+
+**Umsetzung:** `stylelint` (kein zusätzliches Plugin nötig) als
+Dev-Dependency, `stylelint.config.mjs` mit der eingebauten Regel
+`declaration-property-value-disallowed-list`: verbietet rohe Hex-Werte auf
+jeder Property, rohe `px`/`em`/`rem`-Werte auf `border-radius`, und rohe
+`ms`/`s`-Werte auf `transition(-duration/-delay)`/`animation(-duration/-delay)`
+— jeweils via `overrides` ausgenommen für `src/styles/tokens/**`. Neuer
+`npm run lint:css`, in `ci.yml`s `quality`-Job nach `npm run lint` ergänzt.
+
+Sechs gefundene Verstöße (Mask-Gradient-Alphastufen in `matrix-backdrop.css`
+und `home.css`, `--_fg: #fff` im Danger-Button, die View-Transition-Dauer in
+`global.css`, die Scroll-Fade-Dauer in `nav.css`, die Cursor-Blink-Rate in
+`role-rotator.css`) sind allesamt begründete, bleibende Designentscheidungen
+— mit `/* stylelint-disable(-next-line) */` samt Begründungskommentar markiert,
+keine Werte verändert.
+
+**Akzeptanzkriterien:**
+
+- [x] `npm run lint:css` lokal grün auf dem Bestand (6 Ausnahmen, alle begründet und minimal)
+- [x] Neuer roher Hex-/`border-radius`-Wert außerhalb `tokens/` lässt `lint:css` fehlschlagen (mit Testfall in `badge.css` verifiziert, danach entfernt)
+- [x] CI-Schritt in `quality`-Job ergänzt (`Lint CSS (design tokens)`)
+- [x] `docs/styleguide/07-checklist.md` verweist auf den neuen automatisierten Check (inkl. Hinweis, was er _nicht_ abdeckt)
+
+**Abgrenzung:** Keine Umformulierung bestehender CSS-Werte über die
+notwendigen Ausnahme-Kommentare hinaus. `font-size` und Spacing (`px` in
+`padding`/`margin`/`gap`) sind nicht durchgesetzt (siehe oben) —
+Bestandsbereinigung ist eine separate, spätere Aufgabe.
+
+**Nachtrag (2026-08-21):** `font-size` ist erledigt, siehe AP4-11 unten —
+die "62 %"-Schätzung oben war ein grober Scan; genauer sortiert waren es
+nur 5 echte Ausreißer von 28. Spacing bleibt weiterhin offen.
+
+---
+
+### AP4-6 · Datenschutzfreundliches Tracking (Plausible) + Feld-Performance-Daten
+
+**Backlog:** Audit 2026-08-20 · Aufwand 2 / Nutzen 4 / Risiko 1 · Bereich: Messbarkeit/Recht
+**Status:** ✅ Erledigt am 2026-08-21
+**Entscheidung (2026-08-20):** Tool ist **Plausible Analytics**
+(Plausible Insights OÜ, Estland; EU-Hosting-Option in Frankfurt via Hetzner),
+gewählt wegen EU-Sitz, keinem Cookie-Bedarf und nativer Custom-Events-Unterstützung
+für die Feld-CWV-Anbindung.
+
+**Beschreibung:**
+Lighthouse CI liefert ausschließlich Lab-Daten (synthetische Bedingungen).
+Ohne Felddaten (echte Nutzer:innen, echte Geräte/Netzwerke) bleibt unklar,
+ob Optimierungen im Feld ankommen — das widerspricht direkt der Prämisse
+"nur was wir messen, können wir verbessern". Aktuell ist auf der Seite kein
+Analytics-Tool aktiv.
+
+**Wichtiger rechtlicher Hinweis:** Das Repository enthält aktuell **keine
+Datenschutzerklärung und kein Impressum** (`grep` über `src/pages` liefert
+keine Treffer). Auch ein cookie-freies, DSGVO-konformes Tool wie Plausible
+befreit nicht von der Informationspflicht nach Art. 13 DSGVO — die
+Datenverarbeitung muss in einer Datenschutzerklärung offengelegt werden,
+und ein Impressum ist für eine Seite mit klarem geschäftlichem Bezug
+(§5 TMG / §18 MStV) ohnehin unabhängig vom Tracking-Thema fällig. Diese
+Aufgabe liefert eine technische Vorlage (Struktur, Pflichtangaben als
+Platzhalter) — keine Rechtsberatung. Vor Go-Live: anwaltliche Prüfung oder
+ein Generator (z. B. e-recht24, Datenschutz-Generator.de) empfohlen.
+
+**Umsetzung:**
+
+1. Plausible-Script in `BaseLayout.astro` einbinden, nur in Production
+   (`import.meta.env.PROD`-Guard), damit lokale Dev-Sessions nicht mitzählen.
+2. `public/_headers`: CSP um `script-src` + `connect-src` für die
+   Plausible-Domain erweitern (exakte Domain hängt von EU- vs.
+   Standard-Hosting ab, siehe Einrichtungsanleitung unten).
+3. ~~Custom Event für Core-Web-Vitals (LCP/INP/CLS) an Plausible senden.~~
+   **Entschieden (2026-08-21): nein.** Nutzer ist auf dem Plausible
+   Free-/Starter-Plan, der keine Custom Properties unterstützt (erst ab
+   Growth-Plan). Feld-CWV kommt stattdessen weiterhin über Google Search
+   Console; Plausible liefert Seitenaufrufe/Referrer. Kein Code-Änderungsbedarf.
+4. ~~Minimal-Datenschutzerklärung und Impressum als eigene Seiten anlegen.~~
+   ✅ erledigt — `/impressum` + `/en/impressum`, `/datenschutz` +
+   `/en/datenschutz` (gleicher Slug in beiden Locales, damit die
+   hreflang-Logik in `BaseLayout.astro` unverändert bleibt). Inhalte über
+   `t.legal`/`t.privacy` in `src/i18n/{de,en}.ts`, im Footer verlinkt
+   (`Footer.astro`), in `tests/site-routes.ts` und `.lighthouserc.cjs`
+   mitaufgenommen (16 statt 12 Routen).
+
+**Stand der Platzhalter (2026-08-20):** Drei von vier offenen Punkten sind
+geklärt:
+
+- USt-IdNr.: keine vorhanden → Abschnitt aus beiden Locales entfernt.
+- EU-Streitschlichtung: Standardformulierung ("nicht bereit und nicht
+  verpflichtet, teilzunehmen") eingetragen.
+- Netlify-Rechtsgrundlage (EU-US Data Privacy Framework / Standardvertragsklauseln):
+  recherchiert und eingetragen, ohne Rückfrage nötig.
+- Nebenbei korrigiert: TMG wurde zum 14.05.2024 vom Digitale-Dienste-Gesetz
+  (DDG) abgelöst — `§ 5 TMG` → `§ 5 DDG`. Die genauen Haftungs-Paragrafen
+  (vormals §§ 7–10 TMG) lassen sich wegen der Überlappung mit dem EU Digital
+  Services Act nicht sicher 1:1 übertragen — der Abschnitt „Haftung für
+  Inhalte" benennt daher DDG/DSA als einschlägige Rahmenwerke, ohne einen
+  einzelnen Paragrafen zu zitieren, den ich nicht zweifelsfrei verifizieren
+  konnte.
+
+**Anschrift (2026-08-21):** Nutzer verwendet eine virtuelle Geschäftsadresse
+(c/o flexdienst, Kaiserslautern) statt der Privatadresse — genau die im
+Platzhalter beschriebene, rechtlich zulässige Lösung. In
+`src/i18n/de.ts`/`en.ts` eingetragen (Impressum-Abschnitt "Diensteanbieter"/
+"Service provider"); die Datenschutzerklärung verweist weiterhin nur auf
+"Anschrift wie im Impressum" (keine doppelte Pflege).
+
+**Einrichtungsanleitung (für dich, manuell — kann ich nicht automatisiert für dich tun):**
+
+1. ~~Account unter <https://plausible.io/register> anlegen.~~ ✅ erledigt (Snippet lag bereits vor)
+2. ~~Domain hinzufügen, EU-Datenhaltung prüfen.~~ ✅ erledigt
+3. ~~Snippet an mich übergeben.~~ ✅ erledigt — eingebaut in `src/layouts/BaseLayout.astro`
+   (Production-Guard) und `public/scripts/plausible-init.js`; CSP in
+   `public/_headers` um `https://plausible.io` (script-src + connect-src) erweitert.
+4. **Bei dir, weiterhin offen:** nach dem nächsten Deploy (Push folgt in
+   diesem Arbeitspaket, siehe Punktliste) im Plausible-Dashboard
+   verifizieren, dass Seitenaufrufe ankommen (kann einige Minuten dauern).
+5. ~~Echte Impressum-/Datenschutz-Texte besorgen.~~ ✅ erledigt — Adresse,
+   USt-ID-Status und Streitschlichtung geklärt und eingetragen (2026-08-21).
+6. ~~Für Custom Events (CWV-Beacon) ggf. auf "Growth" wechseln.~~
+   **Entschieden: nein** — Free-/Starter-Plan bleibt, CWV weiterhin über
+   Search Console (siehe Umsetzungspunkt 3 oben).
+
+**Akzeptanzkriterien:**
+
+- [x] Plausible-Script nur im Production-Build aktiv, CSP entsprechend angepasst
+- [x] `/impressum` und `/datenschutz` (+ EN-Pendants) existieren, im Footer verlinkt, als Platzhalter klar mit einem Prüfhinweis markiert
+- [x] Datenschutzerklärung nennt Plausible als Auftragsverarbeiter, Zweck, keine Cookies, keine personenbezogenen Daten — Inhalt vorhanden, weiterhin mit Prüfhinweis auf der Seite (kein Ersatz für eine Rechtsprüfung)
+- [ ] Erste echte Seitenaufrufe im Plausible-Dashboard sichtbar (manuell nach Deploy verifiziert — **Aktion bei dir, nach dem Push**)
+- [x] Entscheidung zu Custom Events (CWV-Beacon ja/nein, welcher Plan) dokumentiert — nein, Free-/Starter-Plan
+
+**Abgrenzung:** Keine automatisierte Auswertung/Reporting-Pipeline der
+Plausible-Daten in dieser Aufgabe (z. B. kein wöchentlicher CI-Report) —
+das Dashboard selbst ist die erste Stufe der Messbarkeit.
+
+---
+
+### AP4-7 · RSS-Feed für die Writing-Collection
+
+**Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 2 / Risiko 1 · Bereich: SEO/Reichweite
+**Status:** ✅ Erledigt am 2026-08-20
+
+**Beschreibung:** `src/content/writing/*` existiert nur als Linkliste zu
+dev.to/LinkedIn-Artikeln, kein Feed vorhanden.
+
+**Umsetzung:** `@astrojs/rss` eingebunden, `src/lib/rss.ts` baut den Feed
+(Filter: `!placeholder && url` gesetzt, gleiche Sortierung wie
+`WritingPage.astro`), `src/pages/rss.xml.ts` (DE) und
+`src/pages/en/rss.xml.ts` (EN) als schlanke Endpoints, Titel/Beschreibung
+aus `t.writing.seoTitle`/`seoDescription` (kein neuer i18n-String nötig).
+`<link rel="alternate" type="application/rss+xml">` in `BaseLayout.astro`
+ergänzt, locale-abhängig verlinkt.
+
+**Akzeptanzkriterien:**
+
+- [x] `/rss.xml` und `/en/rss.xml` im Build-Output (verifiziert: korrektes XML, Escaping stimmt)
+- [x] Item-Anzahl entspricht den nicht-Platzhalter-Einträgen mit URL je Locale (4 DE, 4 EN)
+- [x] `<link rel="alternate">` in `BaseLayout.astro` ergänzt, pro Locale auf den richtigen Feed
+
+**Abgrenzung:** Kein Feed für `talks` (Veranstaltungen sind kein
+klassischer Feed-Inhalt).
+
+---
+
+### AP4-8 · Dynamische OG-Image-Generierung
+
+**Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 2 / Risiko 2 · Bereich: SEO
+**Status:** ✅ Erledigt am 2026-08-20
+
+**Beschreibung:** Nur `AboutPage.astro` überschrieb `ogImage` (Porträt);
+Talks, Writing, Contact teilten sich das eine statische `/og/dopanik.png`.
+
+**Umsetzung:** `src/lib/og-image.ts` rendert mit `satori` + `@resvg/resvg-js`
+zur Build-Zeit ein 1200×630-PNG im Design-System-Look (Terminal-Chrome mit
+Ampel-Punkten, `//`-Eyebrow in Phosphor-Grün, Titel in JetBrains Mono 800,
+DoPaNik-Wortmarke) — Farben sind die aufgelösten Hex-Werte aus
+`src/styles/tokens/colors.css` (Satori kann keine CSS-Custom-Properties
+lesen). Vier schlanke Astro-Endpoints (`src/pages/og/{talks,writing}.png.ts`
+
+- `en/`-Pendants) rufen das gemeinsam genutzte Modul auf, analog zum
+  `src/lib/rss.ts`-Muster aus AP4-7.
+
+**Zwei Stolpersteine unterwegs, beide gelöst:**
+
+1. Satori kann die WOFF2-Variable-Font-Dateien aus `public/fonts/` nicht
+   parsen (`Unsupported OpenType signature wOF2`) — und selbst eine TTF-Variable-Font
+   von Google Fonts scheiterte an einem `fvar`-Table-Parsing-Fehler in Satoris
+   `opentype.js`-Fork. Lösung: `scripts/fetch-og-fonts.mjs` (nach dem Muster von
+   `fetch-portrait.mjs` — einmalig ausgeführt, Ergebnis committed) lädt
+   statische, nicht-variable JetBrains-Mono-TTFs direkt vom offiziellen
+   JetBrains-Repo nach `src/assets/fonts/`.
+2. `import.meta.url`-relative Pfade zu den Font-Dateien brachen im Build,
+   weil Astro/Vite den Endpoint-Code nach `dist/.prerender/chunks/`
+   verschiebt. Gelöst über `path.join(process.cwd(), 'src/assets/fonts')` —
+   `astro build` läuft immer vom Projekt-Root aus.
+
+**Nebenbei gefundener und behobener Bestandsfehler:** `og:image:width`/
+`og:image:height` in `BaseLayout.astro` waren fest auf 840×1050
+(Porträt-Maße) verdrahtet — auch für das 1200×630-Standardbild auf allen
+anderen Seiten. Jetzt echte Props mit Default 1200×630, `AboutPage.astro`
+überschreibt explizit auf 840×1050.
+
+**Akzeptanzkriterien:**
+
+- [x] Talks- und Writing-Übersichtsseite (DE+EN) bekommen ein kontextspezifisches OG-Bild
+- [x] Generierung läuft zur Build-Zeit (verifiziert: `dist/og/{talks,writing}.png` + `en/`-Pendants nach `npm run build`, kein Laufzeit-Rendering)
+- [x] Bildgröße/-format entspricht dem bisherigen Standard (1200×630 PNG, verifiziert per `file`)
+- [x] Fallback auf `/og/dopanik.png` bleibt für Seiten ohne spezifisches Bild erhalten (Home/Contact/Impressum/Datenschutz unverändert)
+
+**Abgrenzung:** Niedrigste Priorität in Paket 4 — nach AP4-1 bis AP4-6 angegangen. Kein OG-Bild pro einzelnem Talk/Artikel (keine eigenen Permalinks auf dieser Seite).
+
+---
+
+### AP4-9 · Nachgelagertes Aufräumen (Restspuren aus AP4-1)
+
+**Backlog:** Audit 2026-08-20 · Aufwand 1 / Nutzen 1 / Risiko 1 · Bereich: Wartbarkeit
+**Hängt ab von:** AP4-1
+**Status:** ✅ Erledigt am 2026-08-20
+
+**Beschreibung:** Kontrollpunkt, ob nach AP4-1 wirklich keine Restspuren
+bleiben (z. B. falls in einem parallelen Branch neue `is:inline`-Skripte
+hinzukamen, die denselben Fehler wiederholen).
+
+**Ergebnis:** Zwei neue `is:inline`-Stellen sind seit AP4-1 dazugekommen
+(AP4-6, Plausible) — beide bewusst und aus demselben Grund wie der
+ursprüngliche Theme-Bootstrap-Fall (CSP-konformes, nicht gebündeltes
+Vendor-Snippet): der externe Plausible-Tracker-Script-Tag und
+`public/scripts/plausible-init.js`. Keine unbeabsichtigte Drift — die
+Kriterien unten sind entsprechend präzisiert.
+
+**Akzeptanzkriterien:**
+
+- [x] `grep -rn 'is:inline' src` liefert nur den JSON-LD-Block, den
+      Theme-Bootstrap-Fall und die zwei Plausible-Script-Tags aus
+      `BaseLayout.astro` — alle vier dokumentiert und begründet, keine
+      unbegründeten neuen Treffer
+- [x] `public/scripts/` enthält ausschließlich `theme-bootstrap.js`
+      (generiert, AP4-1) und `plausible-init.js` (Vendor-Stub, AP4-6) —
+      keine weiteren, undokumentierten Dateien
+
+**Abgrenzung:** Reiner Kontrollpunkt, keine neue Funktionalität.
+
+---
+
+### AP4-10 · Visuelles Regressionstesting
+
+**Backlog:** Audit 2026-08-20 · Aufwand 3 / Nutzen 3 / Risiko 1 · Bereich: Qualität
+**Status:** ✅ Infrastruktur erledigt am 2026-08-20 — Baseline selbst ist
+**offen** und kann nur aus einem echten CI-Lauf entstehen (siehe unten)
+**Hinweis:** Bisher unter "Bewusst nicht enthalten" geführt — wird mit
+Paket 4 aktiv eingeplant, da die Basis aus Paket 2/3 (Playwright-Infrastruktur)
+jetzt seit Monaten stabil läuft.
+
+**Beschreibung:** Bei einem stark gestalteten Dual-Theme-System (Dark/Light,
+Matrix-Canvas-Effekte) gab es keine Screenshot-Snapshots. Unbeabsichtigte
+visuelle Drift bei CSS-Refactorings fiel bisher nur manuell auf.
+
+**Umsetzung:** `tests/visual.spec.ts`, neues Playwright-Projekt `visual` in
+`playwright.config.ts` (per `testMatch`/`testIgnore` sauber vom
+`chromium`-Projekt getrennt, damit `npm test` — der Required Check — davon
+unberührt bleibt). `toHaveScreenshot()` für alle 16 Routen × 2 Themes,
+`reducedMotion: 'reduce'` erzwungen (über `contextOptions`, da `reducedMotion`
+in dieser Playwright-Version kein Top-Level-`use`-Feld ist) — sonst wären die
+Matrix-Portrait-/Backdrop-Canvas-Animationen eine garantierte Flakiness-Quelle.
+Neuer CI-Job `visual-regression`, `continue-on-error: true`, lädt
+Report + Testergebnisse als Artefakt hoch, blockiert also nie den PR.
+
+**Warum keine Baseline committed ist:** Playwright hängt den Betriebssystem-Namen
+an den Snapshot-Dateinamen (z. B. `-about-dark-visual-darwin.png` lokal auf
+macOS vs. `-visual-linux.png` in der Ubuntu-CI) — lokal erzeugte Baselines
+würden in der CI schlicht nie gefunden, nicht nur leicht abweichen. Das wurde
+beim Testen genau so beobachtet und ist kein theoretisches Risiko. Die Baseline
+kann daher nur aus einem echten Lauf auf `ubuntu-latest` entstehen: der erste
+`visual-regression`-Lauf schlägt für alle 32 Kombinationen mit "kein Baseline
+gefunden" fehl (harmlos dank `continue-on-error`), schreibt aber die Ist-Bilder
+in `test-results/`. Diese aus dem hochgeladenen Artefakt herunterladen, nach
+`tests/visual.spec.ts-snapshots/` mit dem korrekten `*-linux.png`-Namensschema
+verschieben und committen — danach vergleicht jeder weitere Lauf echt.
+Für spätere bewusste Updates (nach einem Redesign): `npm run test:visual --
+--update-snapshots` in genau dieser CI-Umgebung ausführen.
+
+**Akzeptanzkriterien:**
+
+- [x] Test-Infrastruktur für alle 16 Routen × 2 Themes steht (`tests/visual.spec.ts`)
+- [x] Eigenes Playwright-Projekt, `npm test`/Required Check unverändert (lokal verifiziert: 52/52 im `chromium`-Projekt weiterhin grün)
+- [x] Neuer CI-Job meldet Diffs, ohne den PR zu blockieren (`continue-on-error: true`)
+- [x] Dokumentierter Befehl zum bewussten Update der Baseline (`npm run test:visual -- --update-snapshots`, s. o.)
+- [ ] Baseline-Screenshots selbst committed — **erst möglich nach dem ersten echten `ubuntu-latest`-CI-Lauf**, siehe Anleitung oben
+
+**Abgrenzung:** Kein Cross-Browser-Vergleich (nur Chromium, konsistent mit der bestehenden Suite).
+
+---
+
+### AP4-11 · font-size-Bereinigung (Fund aus AP4-5)
+
+**Backlog:** Audit 2026-08-21 · Aufwand 1 / Nutzen 2 / Risiko 1 · Bereich: Wartbarkeit
+**Status:** ✅ Erledigt am 2026-08-21
+
+**Beschreibung:** AP4-5 hatte `font-size` bewusst aus der Stylelint-Regel
+ausgeklammert, weil ein grober Scan 62 % literale Werte zeigte. Genauere
+Analyse (Werte nach Häufigkeit sortiert, nicht nur gezählt) ergab ein
+deutlich klareres Bild: von 28 literalen `font-size`-Deklarationen matchten
+23 (11/12/13/16px) bereits exakt einen vorhandenen Token
+(`--text-2xs`/`-xs`/`-sm`/`-md`) — reines Versehen, kein Gestaltungswille.
+Nur 5 waren echte Ausreißer.
+
+**Umsetzung:**
+
+- 23 exakte Treffer auf den passenden `var(--text-*)`-Token umgestellt —
+  null visuelle Änderung, per Screenshot (Home, Contact) und voller
+  Playwright-Suite verifiziert.
+- 14px (4× konsistent für UI-Textkörper: Card-Body, Input-Text,
+  Button-Label, About-Kolumnenzeile) als neuer Token `--text-14` in
+  `typography.css` aufgenommen — sieht nach einer echten fehlenden
+  Skalen-Sprosse aus, nicht nach Zufall.
+- 19px (Nav-Wortmarke, einmaliges Brand-Element) bleibt literal, mit
+  begründetem `stylelint-disable-next-line`-Kommentar.
+- `stylelint.config.mjs`: `font-size` zur
+  `declaration-property-value-disallowed-list` hinzugefügt — verifiziert
+  per Testverstoß, dass neue rohe Werte jetzt durchfallen.
+
+**Akzeptanzkriterien:**
+
+- [x] Alle exakten Token-Matches umgestellt, keine verbleibenden literalen `font-size`-Werte außer der einen dokumentierten Ausnahme
+- [x] Neuer Token `--text-14` mit Begründungskommentar in `typography.css`
+- [x] `npm run lint:css` erkennt neue rohe `font-size`-Werte (Negativtest verifiziert)
+- [x] Keine visuelle Regression (Screenshots + 52/52 Playwright-Tests grün)
+
+**Abgrenzung:** Spacing (`px` in `padding`/`margin`/`gap`) bleibt weiterhin
+unangetastet und unenforced — deutlich größere, ungeprüfte Fläche als
+`font-size`; eigene, spätere Aufgabe.
+
+---
+
 ## Bewusst nicht enthalten (aus der Roadmap übernommen)
 
-- **Visuelle Regressionstests** — erst sinnvoll, wenn die Basis aus Paket 2/3 steht.
 - **CSP-Report-Only-Monitoring** mit Reporting-Endpoint — bräuchte einen
   Report-Collector und damit Infrastruktur außerhalb des Backend-losen Setups.
 
 ---
 
-## Abschlussstatus — 2026-07-12
+## Abschlussstatus — 2026-08-19
 
-Die Implementierung von AP1-1 bis AP3-3 ist auf `redesign-astro` abgeschlossen
-und im Pull Request #1 verifiziert:
+Die Implementierung von AP1-1 bis AP3-3 wurde auf `redesign-astro`
+abgeschlossen, im Pull Request #1 verifiziert und ist seither vollständig in
+`master` aufgegangen (`redesign-astro` wurde nach Bestätigung der Identität
+beider Bäume gelöscht):
 
 - `format:check`, `lint`, `typecheck` und `build` grün
 - Playwright: alle 12 Routen, beide Locales und beide Themes grün
+  (`tests/smoke.spec.ts`, `a11y.spec.ts`, `core-flows.spec.ts`)
 - axe-core: keine blockierenden A11y-Verstöße
 - Lighthouse CI: 3 Läufe für `/` und `/about/`, Budgets grün
 - Deploy Preview: Build, Forms, Header-Regeln und Preview-Status grün
-- CSP: keine Inline-Styles aus der Anwendung; verbleibende `cdp`-Meldungen
-  stammen ausschließlich vom Netlify-Review-Drawer
+- CSP: `script-src`/`style-src` ohne `unsafe-inline`; keine Inline-Styles aus
+  der Anwendung
 
-Nach dem Merge bleibt nur die externe Verifikation, dass Dependabot unter
-`master` aktiviert ist und die Required Checks korrekt greifen. Das ist kein
-offener Implementierungspunkt im Repository.
+Die zuvor offene externe Verifikation ist erledigt: Dependabot ist unter
+`master` aktiv, der Required Check `Lint, typecheck & build` greift korrekt.
+Dabei zeigte sich ein zusätzlicher Punkt außerhalb der ursprünglichen
+Arbeitspakete — drei ausstehende Dependabot-PRs scheiterten am
+`npm audit --omit=dev --audit-level=high`-Schritt wegen transitiver
+Hochrisiko-Funde in `js-yaml`, `nanoid` und `postcss`, unabhängig vom
+jeweiligen PR-Inhalt. Behoben per `overrides` in `package.json` (PR #21,
+gleiches Muster wie die bestehenden `tmp`/`uuid`-Einträge). Alle sechs
+offenen PRs sind verarbeitet (gemergt, als Duplikat geschlossen oder nach
+Rebase leer/no-op geschlossen); es gibt keine offenen PRs und kein offenes
+Arbeitspaket mehr im Repository.
+
+---
+
+## Abschlussstatus Paket 4 — Stand 2026-08-20
+
+AP4-1 bis AP4-10 sind bearbeitet, 22 Commits auf `master` (lokal; `master`
+liegt insgesamt 24 Commits vor `origin/master`, die zwei ältesten davon aus
+einer vorherigen Session — **nichts ist gepusht**, siehe unten). `format:check`, `lint`, `lint:css`, `typecheck`
+und `build` sind durchgehend grün gehalten worden; die volle Playwright-Suite
+(52 Tests: Smoke, A11y × 2 Themes, Kernflows über alle 16 Routen) lief nach
+jeder Code-Änderung erneut grün. Lighthouse CI wurde zweimal komplett gegen
+den finalen Stand laufen lassen (48 Runs über 16 Routen, beide Male grün).
+
+**Vollständig erledigt:** AP4-1 (JS-Konsolidierung), AP4-2 (Bildpipeline),
+AP4-3 (Lighthouse-Routenabdeckung), AP4-4 (Ressourcen-Budgets),
+AP4-5 (Stylelint-Token-Governance), AP4-7 (RSS-Feed), AP4-8 (dynamische
+OG-Bilder), AP4-9 (Aufräum-Kontrolle).
+
+**Teilweise erledigt:** AP4-6 (Plausible-Einbindung + Impressum/Datenschutz-
+Platzhalterseiten fertig; Adresse und CWV-Beacon-Entscheidung offen) und
+AP4-10 (Test-Infrastruktur fertig; Baseline-Screenshots können erst nach
+einem echten CI-Lauf auf `ubuntu-latest` entstehen).
+
+### Punktliste für morgen (Stand 2026-08-20, historisch)
+
+1. ~~Deine Adresse fürs Impressum (AP4-6).~~ ✅ erledigt 2026-08-21.
+2. ~~CWV-Custom-Event-Entscheidung (AP4-6).~~ ✅ erledigt 2026-08-21 — nein.
+3. ~~Push nach GitHub.~~ ✅ erledigt 2026-08-21, siehe unten.
+4. ~~`Avatar.astro`-Entscheidung.~~ ✅ erledigt 2026-08-21 — entfernt.
+5. ~~font-size-/Spacing-Bereinigung.~~ ✅ font-size erledigt 2026-08-21
+   (AP4-11); Spacing bewusst weiterhin offen.
+
+### Aufräumen (erledigt vor der Pause am 2026-08-20)
+
+- Alter `astro dev`-Hintergrundprozess (Uptime ~8,4 h) gestoppt.
+- Build-/Test-Artefakte gelöscht: `dist/`, `.lighthouseci/` (115 MB),
+  `test-results/`, `playwright-report/`, `.DS_Store`-Dateien. Alle
+  regenerierbar per `npm run build` bzw. den jeweiligen Test-Befehlen.
+- Working Tree ist sauber (`git status` liefert nichts), keine offenen
+  Ports, keine Hintergrundprozesse.
+
+---
+
+## Abschlussstatus — 2026-08-21
+
+Alle fünf Punkte von gestern sind bearbeitet:
+
+1. **Adresse** — virtuelle Geschäftsadresse (c/o flexdienst, Kaiserslautern)
+   in `src/i18n/de.ts`/`en.ts` eingetragen (Impressum + Verweis darauf in der
+   Datenschutzerklärung). AP4-6 damit vollständig abgeschlossen.
+2. **CWV-Custom-Event** — Entscheidung: nein, Plausible Free-/Starter-Plan
+   unterstützt keine Custom Properties. Feld-CWV bleibt über Google Search
+   Console.
+3. **Push** — `master` ist bei GitHub schreibgeschützt (Required Status
+   Check), direkter Push wurde daher abgelehnt. Stattdessen: lokalen
+   `master` in `astro-audit-paket-4` umbenannt, gepusht, PR
+   [#22](https://github.com/DoPaNik/dominik-pabst.com/pull/22) gegen
+   `master` erstellt. Erster echter CI-Lauf auf `ubuntu-latest`:
+   - `Lint, typecheck & build` ✅ grün (bestätigt: Skript-Drift-Check,
+     `lint:css`, alle neuen Build-Schritte funktionieren auf Linux)
+   - `Playwright smoke, a11y & core flows` ✅ grün
+   - `Visual regression (non-blocking)` ❌ erwartungsgemäß rot (keine
+     Baseline vorhanden — `continue-on-error` greift, PR bleibt
+     `MERGEABLE`/`MERGEABLE` trotz `UNSTABLE`-State, wie geplant)
+   - `Lighthouse budget` ✅ grün (9 Min. für 48 Runs über 16 Routen —
+     bestätigt: alle Ressourcen-Budgets aus AP4-4 halten auch auf dem
+     echten Linux-Runner)
+   - Netlify Deploy Preview ist grün: <https://deploy-preview-22--dopanik-portfolio.netlify.app>
+4. **Avatar.astro** — bestätigt unbenutzt (`grep` über `src` und
+   `docs/styleguide/`: 0 Treffer), Komponente + `avatar.css` + Import in
+   `global.css` entfernt.
+5. **font-size-Bereinigung** — geklärt (23 von 28 literalen Werten matchten
+   bereits exakt einen Token, nur 5 echte Ausreißer) und gelöst, siehe
+   AP4-11 oben. Neuer Token `--text-14`, ein dokumentierter Literal-Fall
+   (Nav-Wortmarke), `lint:css` deckt `font-size` jetzt mit ab.
+
+**Noch offen:**
+
+- PR #22 muss gemerged werden (nicht automatisch getan — Merge-Entscheidung
+  liegt beim Nutzer).
+- Baseline-Screenshots für AP4-10 aus dem `visual-regression`-Artefakt des
+  ersten CI-Laufs herunterladen und als `tests/visual.spec.ts-snapshots/`
+  committen.
+- Im Plausible-Dashboard nach dem nächsten Production-Deploy verifizieren,
+  dass Seitenaufrufe ankommen.
+- Spacing-Governance (`px` in `padding`/`margin`/`gap`) bleibt ein
+  unbearbeiteter Fund aus AP4-5/AP4-11 — kein Arbeitspaket-Kürzel vergeben,
+  da Umfang (deutlich größer als `font-size`) erst geklärt werden müsste.
+
+## Nachtrag — Impressum & Datenschutzerklärung final abgeglichen (2026-08-21)
+
+Beide Rechtstexte-Platzhalter aus AP4-6 sind jetzt mit echten, generatorbasierten
+Inhalten gefüllt statt nur technisch vorbereitet:
+
+- **Impressum:** an den vom Nutzer bereitgestellten Text von
+  Datenschutz-Generator.de (Dr. Thomas Schwenke) angeglichen. Struktur
+  geändert (Diensteanbieter → Kontaktmöglichkeiten → Haftungs- und
+  Schutzrechtshinweise), EU-Streitschlichtung entfernt (Plattform am
+  20.07.2025 endgültig abgeschaltet — Verordnung (EU) 2024/3228 —, ein
+  Verweis wäre jetzt abmahnfähig), „Redaktionell verantwortlich" nach
+  Rückfrage entfernt. Pflicht-Backlink zum kostenlosen Generator ergänzt
+  (nur DE-Seite).
+- **Datenschutzerklärung:** Der erste vom Nutzer geteilte Text
+  (Datenschutz-Generator.de) stellte sich als gesperrte Bezahl-Demo heraus
+  (Dutzende „Premium Lizenz erforderlich"-Fragmente mitten im Fließtext,
+  unausgefüllte Platzhalter, falsche Dienste wie Ghost/Bluesky/Xing) —
+  wurde nicht übernommen. Stattdessen: echtes PDF von e-recht24.de
+  (`docs/datenschutzerklaerung_dopanik_de_de.pdf`) als Basis, deutlich
+  ausgebaut gegenüber dem ursprünglichen Entwurf (Rechtsgrundlagen-Übersicht,
+  vollständiges Rechte-Kapitel inkl. Art.-21-Widerspruchsrecht in
+  Großschreibung, Empfänger von Daten, TLS-Sicherheitsmaßnahmen) — die
+  bereits recherchierten, seitenspezifischen Abschnitte (Netlify-Hosting
+  mit DPF/SCC, Plausible, Netlify-Forms-Kontaktformular) blieben erhalten
+  statt durch generische Generator-Absätze ersetzt zu werden.
+- Beide Seiten: Hinweisbanner von der bernsteinfarbenen "Entwurf,
+  ungeprüft"-Warnung auf eine neutrale Infobox umgestellt, da keine
+  Platzhalter mehr offen sind.
+- Zwei Kontrastfehler (neue Seal-Zeile im Impressum) von der bestehenden
+  A11y-Suite vor dem Commit abgefangen und behoben — `--text-faint` durch
+  `--text-muted` ersetzt, Link-Unterstreichung ergänzt.
+
+**Damit ist AP4-6 inhaltlich vollständig abgeschlossen** — beide Rechtstexte
+enthalten keine offenen Platzhalter mehr. Weiterhin gilt: keine Rechtsberatung,
+beide Seiten sollten vor tatsächlichem Geschäftsbetrieb einmal anwaltlich
+gegengelesen werden (jetzt aber auf Basis vollständiger, korrekter Inhalte
+statt Lückentext).

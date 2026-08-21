@@ -11,6 +11,10 @@ export const smokeRoutes = [
   '/en/writing/',
   '/en/contact/',
   '/en/contact/success/',
+  '/impressum/',
+  '/datenschutz/',
+  '/en/impressum/',
+  '/en/datenschutz/',
 ] as const;
 
 export const themeModes = ['dark', 'light'] as const;

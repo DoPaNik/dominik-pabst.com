@@ -9,7 +9,7 @@ import '../styles/components/nav.css';
 
 interface Props {
   lang: Locale;
-  current: 'home' | 'about' | 'talks' | 'writing' | 'contact';
+  current: 'home' | 'about' | 'talks' | 'writing' | 'contact' | 'legal';
 }
 
 const { lang, current } = Astro.props;
@@ -72,4 +72,6 @@ const currentLangPath = current === 'home' ? '' : current;
   </div>
 </nav>
 
-<script is:inline src="/scripts/nav.js"></script>
+<script>
+  import '../scripts/nav';
+</script>

@@ -4,8 +4,13 @@
   overflow: hidden;
   pointer-events: none;
   opacity: 0.08;
+  /* stylelint-disable declaration-property-value-disallowed-list --
+     mask-image gradients use #000/transparent purely for their alpha
+     channel (opacity stops), not as a themed color — a color token
+     wouldn't make sense here. */
   mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  /* stylelint-enable declaration-property-value-disallowed-list */
 }
 
 .dpn-matrix-backdrop canvas {

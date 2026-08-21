@@ -5,7 +5,7 @@
 }
 .dpn-field__label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: 700;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
@@ -52,7 +52,7 @@
   background: transparent;
   color: var(--text-strong);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-14);
 }
 .dpn-input::placeholder {
   color: var(--text-faint);
@@ -65,7 +65,7 @@
 }
 .dpn-field__hint {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-2xs);
   color: var(--text-dim);
 }
 .dpn-field__hint--error {

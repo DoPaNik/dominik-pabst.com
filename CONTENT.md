@@ -20,16 +20,25 @@ All content files are populated with real, SEO-optimized content. Do not overwri
 
 ### Talks (`src/content/talks/`)
 
-| File                               | Event             | Year | Status          |
-| ---------------------------------- | ----------------- | ---- | --------------- |
-| `de/2023-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2023 | ✅ Real content |
-| `en/2023-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2023 | ✅ Real content |
-| `de/2025-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2025 | ✅ Updated      |
-| `en/2025-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2025 | ✅ Updated      |
-| `de/2026-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2026 | ✅ Upcoming     |
-| `en/2026-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2026 | ✅ Upcoming     |
-| `de/heise-academy-devsecops-ki.md` | heise Academy     | 2025 | ✅ Updated      |
-| `en/heise-academy-devsecops-ki.md` | heise Academy     | 2025 | ✅ Updated      |
+Verified 2026-08-21 against the actual event/course pages (see each file's
+`url`). No 2026 entry exists: the user confirmed there is no 2026 IT-Tage
+workshop — they aren't on-site that year — so the previously-listed
+"upcoming" 2026 talk (which never had a real source) was removed rather
+than kept as a guess.
+
+| File                                 | Event             | Year | Status                       |
+| ------------------------------------ | ----------------- | ---- | ---------------------------- |
+| `de/2023-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2023 | ✅ Verified                  |
+| `en/2023-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2023 | ✅ Verified                  |
+| `de/2024-heise-webinar-devsecops.md` | heise Academy     | 2024 | ✅ Verified (3-part webinar) |
+| `en/2024-heise-webinar-devsecops.md` | heise Academy     | 2024 | ✅ Verified (3-part webinar) |
+| `de/2025-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2025 | ✅ Verified                  |
+| `en/2025-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2025 | ✅ Verified                  |
+| `de/heise-academy-devsecops-ki.md`   | heise Academy     | 2025 | ✅ Verified (4 sessions)     |
+| `en/heise-academy-devsecops-ki.md`   | heise Academy     | 2025 | ✅ Verified (4 sessions)     |
+
+All talks list Andreas Falk as `coInstructor`, linked via `coInstructorUrl`
+to <https://www.linkedin.com/in/andifalk/>.
 
 ### Writing (`src/content/writing/`)
 
@@ -71,18 +80,19 @@ All content files are populated with real, SEO-optimized content. Do not overwri
 
 ## Key Facts (Do Not Change Without Updating This File)
 
-| Field                    | Value                                                |
-| ------------------------ | ---------------------------------------------------- |
-| Full name                | Dominik Pabst                                        |
-| Current employer         | CGI Deutschland                                      |
-| Previous employer        | Novatec Consulting (acquired by CGI, June 2025)      |
-| Role                     | Executive Consultant — DevOps & Platform Engineering |
-| Location                 | Stuttgart, Germany                                   |
-| Email                    | hi@dopanik.de                                        |
-| LinkedIn                 | https://www.linkedin.com/in/dominikpabst/            |
-| GitHub                   | https://github.com/dopanik                           |
-| dev.to                   | https://dev.to/dopanik                               |
-| IT-Tage years            | 2023, 2025, 2026 (all with Andreas Falk)             |
-| heise Academy co-trainer | Andreas Falk                                         |
-| Photo                    | see `site.photo` in `src/data/site.ts`               |
-| Certifications           | None currently                                       |
+| Field               | Value                                                  |
+| ------------------- | ------------------------------------------------------ |
+| Full name           | Dominik Pabst                                          |
+| Current employer    | CGI Deutschland                                        |
+| Previous employer   | Novatec Consulting (acquired by CGI, June 2025)        |
+| Role                | Executive Consultant — DevOps & Platform Engineering   |
+| Location            | Stuttgart, Germany                                     |
+| Email               | hi@dopanik.de                                          |
+| LinkedIn            | https://www.linkedin.com/in/dominikpabst/              |
+| GitHub              | https://github.com/dopanik                             |
+| dev.to              | https://dev.to/dopanik                                 |
+| IT-Tage years       | 2023, 2025; no 2026 workshop                           |
+| heise Academy       | 2024 webinar series, 2025 classroom                    |
+| Talks co-instructor | Andreas Falk — <https://www.linkedin.com/in/andifalk/> |
+| Photo               | see `site.photo` in `src/data/site.ts`                 |
+| Certifications      | None currently                                         |

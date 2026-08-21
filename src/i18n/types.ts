@@ -1,3 +1,18 @@
+interface LegalSection {
+  heading: string;
+  body: string[];
+}
+
+interface LegalPageDictionary {
+  seoTitle: string;
+  seoDescription: string;
+  eyebrow: string;
+  title: string;
+  updated: string;
+  noticeBanner: string;
+  sections: LegalSection[];
+}
+
 export interface Dictionary {
   common: {
     skipToContent: string;
@@ -11,6 +26,10 @@ export interface Dictionary {
     themeToggle: string;
     langSwitch: string;
     footerTagline: string;
+    footerLegal: {
+      imprint: string;
+      privacy: string;
+    };
     portraitAlt: string;
     socialCardAlt: string;
   };
@@ -25,8 +44,6 @@ export interface Dictionary {
     intro: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    statusUptime: string;
-    statusDeployPrefix: string;
     pipeline: {
       title: string;
       command: string;
@@ -83,4 +100,6 @@ export interface Dictionary {
     basedIn: string;
     socialsIntro: string;
   };
+  legal: LegalPageDictionary;
+  privacy: LegalPageDictionary;
 }

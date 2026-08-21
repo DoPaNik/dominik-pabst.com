@@ -1,4 +1,5 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { site } from '../data/site';
 import { getDictionary } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
@@ -11,6 +12,10 @@ interface Props {
 const { lang } = Astro.props;
 const t = getDictionary(lang);
 const year = new Date().getFullYear();
+const legalLinks = [
+  { label: t.common.footerLegal.imprint, path: 'impressum' },
+  { label: t.common.footerLegal.privacy, path: 'datenschutz' },
+];
 ---
 
 <footer class="dpn-footer">
@@ -36,5 +41,15 @@ const year = new Date().getFullYear();
 
     <span class="dpn-footer__spacer"></span>
     <span class="dpn-footer__tagline">{t.common.footerTagline}</span>
+
+    <ul class="dpn-footer__legal">
+      {
+        legalLinks.map((link) => (
+          <li>
+            <a href={getRelativeLocaleUrl(lang, link.path)}>{link.label}</a>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </footer>

@@ -23,6 +23,8 @@ const talks = allTalks.sort((a, b) => b.data.year - a.data.year);
 const schema = talks
   .filter((talk) => !talk.data.placeholder)
   .map((talk) => buildSpeakingEventSchema(talk.data, lang));
+
+const ogImage = lang === 'de' ? '/og/talks.png' : '/og/en/talks.png';
 ---
 
 <BaseLayout
@@ -32,6 +34,7 @@ const schema = talks
   title={talksT.seoTitle}
   description={talksT.seoDescription}
   schema={schema}
+  ogImage={ogImage}
 >
   <section class="dpn-section">
     <div class="dpn-section__inner">
@@ -58,7 +61,14 @@ const schema = talks
               <p class="dpn-talks__description">{talk.data.description}</p>
               {talk.data.coInstructor && (
                 <p class="dpn-talks__co">
-                  {lang === 'de' ? 'gemeinsam mit' : 'together with'} {talk.data.coInstructor}
+                  {lang === 'de' ? 'gemeinsam mit' : 'together with'}{' '}
+                  {talk.data.coInstructorUrl ? (
+                    <a href={talk.data.coInstructorUrl} target="_blank" rel="noreferrer">
+                      {talk.data.coInstructor}
+                    </a>
+                  ) : (
+                    talk.data.coInstructor
+                  )}
                 </p>
               )}
               {talk.data.url && (

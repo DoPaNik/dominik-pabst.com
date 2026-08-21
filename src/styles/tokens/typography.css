@@ -16,6 +16,11 @@
   --text-2xs: 11px;
   --text-xs: 12px;
   --text-sm: 13px;
+  /* Not a clean modular step — added because 14px was already the de facto
+     size for UI body copy (buttons, inputs, cards) in four places before
+     this token existed; kept as its own rung rather than snapping those to
+     --text-sm/--text-base and changing real, already-shipped sizes. */
+  --text-14: 14px;
   --text-base: 15px;
   --text-md: 16px;
   --text-lg: 18px;

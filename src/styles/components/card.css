@@ -34,7 +34,7 @@
 }
 .dpn-card__body {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: var(--text-14);
   line-height: 1.6;
 }
 .dpn-card__footer {
