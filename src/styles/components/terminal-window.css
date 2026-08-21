@@ -13,7 +13,7 @@
   background: var(--surface-raised);
   border-bottom: 1px solid var(--border);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--text-xs);
   color: var(--text-dim);
 }
 .dpn-term__lights {
@@ -46,7 +46,7 @@
 .dpn-term__body {
   padding: 16px;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--text-sm);
   line-height: 1.75;
   color: var(--text);
   overflow: auto;

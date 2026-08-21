@@ -50,7 +50,7 @@
 .dpn-about-hero__collab {
   font-family: var(--font-mono);
   color: var(--brand-deep);
-  font-size: 14px;
+  font-size: var(--text-14);
   margin: 0;
 }
 

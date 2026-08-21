@@ -1,12 +1,10 @@
-// Design-token governance (see CLAUDE.md: "never hardcode a hex, radius or
-// duration that a token already provides"). Deliberately narrow — this is
-// not a general CSS style linter (Prettier already formats CSS), just a
-// gate against three specific, currently-clean value categories drifting
-// back into raw literals. Font-size and spacing are NOT enforced yet: the
-// existing codebase mixes literal px and var(--text-*)/var(--space-*)
-// extensively already, so enforcing those now would mean either rewriting
-// a large amount of unrelated CSS or piling up dozens of disable comments —
-// both out of scope here. That's tracked as a future cleanup task.
+// Design-token governance (see CLAUDE.md: "never hardcode a hex, px-size,
+// radius or duration that a token already provides"). Deliberately narrow —
+// this is not a general CSS style linter (Prettier already formats CSS),
+// just a gate against value categories that are actually clean, so new
+// drift gets caught without piling up disable comments for pre-existing
+// literals. Spacing (px in padding/margin/gap) is NOT enforced yet — that's
+// still a much bigger, unaudited surface than font-size was.
 export default {
   rules: {
     'declaration-property-value-disallowed-list': [
@@ -19,6 +17,8 @@ export default {
         'border-radius': [/^-?[\d.]+(px|em|rem)\b/],
         // Transition/animation timing must come from --dur-* tokens.
         '/^(transition|animation)(-duration|-delay)?$/': [/\b[\d.]+m?s\b/],
+        // font-size must come from the --text-* scale in typography.css.
+        'font-size': [/^-?[\d.]+(px|em|rem)\b/],
       },
       {
         message: (property, value) =>

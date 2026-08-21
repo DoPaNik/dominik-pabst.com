@@ -18,7 +18,7 @@
   cursor: pointer;
   padding: 0 16px;
   height: 38px;
-  font-size: 14px;
+  font-size: var(--text-14);
   transition:
     transform var(--dur-fast) var(--ease),
     box-shadow var(--dur) var(--ease),
@@ -47,12 +47,12 @@
 .dpn-btn--sm {
   height: 30px;
   padding: 0 12px;
-  font-size: 12px;
+  font-size: var(--text-xs);
 }
 .dpn-btn--lg {
   height: 46px;
   padding: 0 24px;
-  font-size: 16px;
+  font-size: var(--text-md);
 }
 .dpn-btn--block {
   display: flex;

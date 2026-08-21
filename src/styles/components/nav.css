@@ -33,6 +33,10 @@
   align-items: center;
   font-family: var(--font-mono);
   font-weight: 800;
+  /* stylelint-disable-next-line declaration-property-value-disallowed-list --
+     one-off brand-wordmark size, not a --text-* scale member (sits between
+     --text-lg/18px and --text-xl/22px; picked to fit the nav bar, not part
+     of a reusable type step). */
   font-size: 19px;
   letter-spacing: var(--tracking-tighter);
   text-decoration: none;
@@ -61,7 +65,7 @@
 
 .dpn-nav__links a {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--text-sm);
   color: var(--text-muted);
   text-decoration: none;
   padding: 8px 12px;
