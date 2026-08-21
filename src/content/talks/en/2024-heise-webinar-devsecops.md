@@ -1,8 +1,9 @@
 ---
 lang: en
 year: 2024
-type: workshop
+type: webinar
 event: heise Academy
+online: true
 startDate: '2024-05-14T09:00:00+02:00'
 endDate: '2024-06-11T13:00:00+02:00'
 title: 'DevSecOps – Agile Security in Software Development'

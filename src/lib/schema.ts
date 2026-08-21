@@ -1,7 +1,10 @@
 import { site } from '../data/site';
+import { getDictionary } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
 
 export function buildPersonSchema(lang: Locale) {
+  const t = getDictionary(lang);
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -9,6 +12,7 @@ export function buildPersonSchema(lang: Locale) {
     alternateName: site.handle,
     url: site.url,
     email: site.email,
+    description: t.about.bio,
     jobTitle: site.role,
     worksFor: {
       '@type': 'Organization',
@@ -34,6 +38,8 @@ interface TalkLike {
   description: string;
   event: string;
   year: number;
+  /** True when the event is delivered online rather than in person. */
+  online?: boolean;
   url?: string;
   /** ISO-8601 date/datetime, extracted from the talk content when known. */
   startDate?: string;
@@ -56,8 +62,9 @@ export function buildSpeakingEventSchema(talk: TalkLike, lang: Locale) {
     name: talk.title,
     description: talk.description,
     eventStatus: 'https://schema.org/EventScheduled',
-    // All talks so far are in-person events (conference venue / classroom course).
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventAttendanceMode: talk.online
+      ? 'https://schema.org/OnlineEventAttendanceMode'
+      : 'https://schema.org/OfflineEventAttendanceMode',
     location: {
       '@type': 'Place',
       name: talk.event,

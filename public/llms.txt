@@ -1,0 +1,25 @@
+# Dominik Pabst
+
+> Executive Consultant für DevOps & Platform Engineering bei CGI Deutschland, Speaker (IT-Tage Frankfurt) und Trainer (heise Academy) zu DevSecOps, Platform Engineering, CI/CD und sicherem KI-Einsatz in der Softwareentwicklung.
+
+Dominik Pabst hilft Entwicklungsteams seit über einem Jahrzehnt dabei, Sicherheit, Automatisierung und Plattformdenken von Anfang an in die Software-Lieferkette zu integrieren. Aktuell bei CGI Deutschland (vormals Novatec Consulting, im Juni 2025 von CGI übernommen), Sitz in Stuttgart, Deutschland.
+
+## Seiten (Deutsch)
+
+- [Über mich](https://dopanik.de/about/): Rolle, Werdegang, thematischer Fokus
+- [Vorträge & Workshops](https://dopanik.de/talks/): Talks, Workshops und Webinare zu DevSecOps und Platform Engineering, u. a. IT-Tage Frankfurt und heise Academy
+- [Schreiben](https://dopanik.de/writing/): Artikel und Beiträge zu DevOps, Infrastructure as Code und KI
+- [Kontakt](https://dopanik.de/contact/): Kontaktformular und Social-Profile
+
+## Pages (English)
+
+- [About](https://dopanik.de/en/about/): Role, background, focus areas
+- [Talks & Workshops](https://dopanik.de/en/talks/): Talks, workshops, and webinars on DevSecOps and Platform Engineering, including IT-Tage Frankfurt and heise Academy
+- [Writing](https://dopanik.de/en/writing/): Articles on DevOps, Infrastructure as Code, and AI
+- [Contact](https://dopanik.de/en/contact/): Contact form and social profiles
+
+## Social
+
+- [LinkedIn](https://www.linkedin.com/in/dominikpabst/)
+- [GitHub](https://github.com/dopanik)
+- [dev.to](https://dev.to/dopanik)

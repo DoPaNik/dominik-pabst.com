@@ -79,6 +79,7 @@ export const en: Dictionary = {
       'Workshops and talks on DevSecOps, Platform Engineering, and secure AI adoption in software development — at IT-Tage Frankfurt and heise Academy.',
     workshopLabel: 'workshop',
     talkLabel: 'talk',
+    webinarLabel: 'webinar',
   },
   writing: {
     seoTitle: 'Articles & Posts – Dominik Pabst | DevSecOps & DevOps',
