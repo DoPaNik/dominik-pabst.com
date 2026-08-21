@@ -20,16 +20,25 @@ All content files are populated with real, SEO-optimized content. Do not overwri
 
 ### Talks (`src/content/talks/`)
 
-| File                               | Event             | Year | Status          |
-| ---------------------------------- | ----------------- | ---- | --------------- |
-| `de/2023-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2023 | ✅ Real content |
-| `en/2023-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2023 | ✅ Real content |
-| `de/2025-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2025 | ✅ Updated      |
-| `en/2025-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2025 | ✅ Updated      |
-| `de/2026-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2026 | ✅ Upcoming     |
-| `en/2026-it-tage-devsecops.md`     | IT-Tage Frankfurt | 2026 | ✅ Upcoming     |
-| `de/heise-academy-devsecops-ki.md` | heise Academy     | 2025 | ✅ Updated      |
-| `en/heise-academy-devsecops-ki.md` | heise Academy     | 2025 | ✅ Updated      |
+Verified 2026-08-21 against the actual event/course pages (see each file's
+`url`). The 2026 IT-Tage entry is the only one still unverified against a
+live source — no dedicated program page existed yet when last checked.
+
+| File                                 | Event             | Year | Status                       |
+| ------------------------------------ | ----------------- | ---- | ---------------------------- |
+| `de/2023-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2023 | ✅ Real content              |
+| `en/2023-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2023 | ✅ Real content              |
+| `de/2024-heise-webinar-devsecops.md` | heise Academy     | 2024 | ✅ Verified (3-part webinar) |
+| `en/2024-heise-webinar-devsecops.md` | heise Academy     | 2024 | ✅ Verified (3-part webinar) |
+| `de/2025-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2025 | ✅ Verified                  |
+| `en/2025-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2025 | ✅ Verified                  |
+| `de/2026-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2026 | ⚠️ Upcoming, unverified      |
+| `en/2026-it-tage-devsecops.md`       | IT-Tage Frankfurt | 2026 | ⚠️ Upcoming, unverified      |
+| `de/heise-academy-devsecops-ki.md`   | heise Academy     | 2025 | ✅ Verified (4 sessions)     |
+| `en/heise-academy-devsecops-ki.md`   | heise Academy     | 2025 | ✅ Verified (4 sessions)     |
+
+All talks list Andreas Falk as `coInstructor`; his LinkedIn URL is not yet
+on file (`coInstructorUrl` field exists in the schema but is unfilled).
 
 ### Writing (`src/content/writing/`)
 
