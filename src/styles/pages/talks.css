@@ -13,7 +13,7 @@
 
 .dpn-talks__event {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--text-xs);
   color: var(--text-dim);
 }
 
@@ -32,9 +32,15 @@
 
 .dpn-talks__co {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--text-sm);
   color: var(--text-dim);
   margin: var(--space-2) 0 0;
+}
+
+.dpn-talks__co a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .dpn-talks__link {

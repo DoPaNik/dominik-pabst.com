@@ -11,6 +11,7 @@ const talks = defineCollection({
     title: z.string(),
     description: z.string(),
     coInstructor: z.string().optional(),
+    coInstructorUrl: z.string().url().optional(),
     url: z.string().url().optional(),
     placeholder: z.boolean().optional().default(false),
     /** ISO-8601 date/datetime, set when the talk content reveals a real date. */

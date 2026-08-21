@@ -23,4 +23,6 @@ const { class: className = '' } = Astro.props;
   <canvas data-matrix-backdrop-canvas></canvas>
 </div>
 
-<script is:inline type="module" src="/scripts/matrix-backdrop.js"></script>
+<script>
+  import '../../scripts/matrix-backdrop';
+</script>

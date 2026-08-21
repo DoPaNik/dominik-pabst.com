@@ -5,6 +5,9 @@
   background: var(--brand);
   vertical-align: -4px;
   margin-left: 2px;
+  /* stylelint-disable-next-line declaration-property-value-disallowed-list --
+     terminal-cursor blink rate is a deliberate, real-world-cursor-like
+     constant, not a UI micro-interaction duration from the --dur-* scale. */
   animation: dpnBlink 1.1s steps(1) infinite;
 }
 

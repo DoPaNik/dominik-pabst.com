@@ -22,7 +22,7 @@
 .dpn-eyebrow {
   font-family: var(--font-mono);
   color: var(--brand-deep);
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--tracking-label);

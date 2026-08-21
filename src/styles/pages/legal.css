@@ -1,0 +1,73 @@
+/* Impressum / Datenschutzerklärung — long-form prose pages. Reuses
+   .dpn-section/.dpn-eyebrow from section.css for the header; everything
+   below is specific to rendering an array of {heading, body[]} sections. */
+
+.dpn-legal__updated {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin: 0 0 24px;
+}
+
+.dpn-legal__notice {
+  border: 1px solid var(--warning);
+  background: var(--warning-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text);
+  max-width: 70ch;
+  margin: 0 0 48px;
+}
+
+/* Neutral variant for informational (non-warning) banners, e.g. a source
+   attribution rather than an unreviewed-draft caveat. */
+.dpn-legal__notice--info {
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.dpn-legal__seal {
+  margin: 48px 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.dpn-legal__seal a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dpn-legal__seal a:hover {
+  color: var(--brand-deep);
+}
+
+.dpn-legal__sections {
+  max-width: 70ch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.dpn-legal__section-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--text-strong);
+  margin: 0 0 12px;
+}
+
+.dpn-legal__section p {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+.dpn-legal__section p:last-child {
+  margin-bottom: 0;
+}

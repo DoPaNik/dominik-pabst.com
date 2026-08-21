@@ -1,87 +1,11 @@
-const DEFAULT_FPS = 27;
-const MAX_DPR = 1.5;
-
-const entries = new Set();
-let running = false;
-
-function clampedDpr() {
-  return Math.min(window.devicePixelRatio || 1, MAX_DPR);
-}
-
-function anyActive() {
-  if (document.hidden) return false;
-  for (const entry of entries) if (entry.visible) return true;
-  return false;
-}
-
-function removeEntry(entry) {
-  entry.io.disconnect();
-  entries.delete(entry);
-}
-
-function loop(now) {
-  if (!running) return;
-  for (const entry of entries) {
-    if (!entry.visible) continue;
-    if (!entry.opts.el.isConnected) {
-      removeEntry(entry);
-      continue;
-    }
-    const interval = 1000 / (entry.opts.fps ?? DEFAULT_FPS);
-    if (entry.last && now - entry.last < interval) continue;
-    const dtMs = entry.last ? Math.min(now - entry.last, 100) : interval;
-    entry.last = now;
-    entry.opts.draw(now, dtMs);
-  }
-  if (!anyActive()) {
-    running = false;
-    return;
-  }
-  requestAnimationFrame(loop);
-}
-
-function wake() {
-  if (running || !anyActive()) return;
-  running = true;
-  requestAnimationFrame(loop);
-}
-
-function addMatrixInstance(opts) {
-  const entry = {
-    opts,
-    visible: false,
-    last: 0,
-    io: new IntersectionObserver(
-      (observations) => {
-        for (const observation of observations) {
-          entry.visible = observation.isIntersecting;
-          if (entry.visible) {
-            entry.last = 0;
-            wake();
-          }
-        }
-      },
-      { threshold: opts.visibleThreshold ?? 0.02 },
-    ),
-  };
-  entry.io.observe(opts.el);
-  entries.add(entry);
-  return () => removeEntry(entry);
-}
-
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) {
-    for (const entry of entries) entry.last = 0;
-    wake();
-  }
-});
+import { addMatrixInstance, clampedDpr } from './matrix-engine';
 
 const GLYPHS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ01<>/{}$#*+=';
 const CELL = 12;
 const DECODE_MS = 1800;
 const REENCODE_MS = 900;
 
-function cssVar(name, fallback) {
+function cssVar(name: string, fallback: string) {
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   return value || fallback;
 }
@@ -107,12 +31,14 @@ function themeColors() {
       };
 }
 
-function setupPortrait(root) {
+type Mode = 'idle' | 'cover' | 'decode' | 'encode' | 'done';
+
+function setupPortrait(root: HTMLElement) {
   if (root.dataset.portraitDone) return;
   root.dataset.portraitDone = 'true';
 
   const img = root.querySelector('img');
-  const canvas = root.querySelector('[data-matrix-portrait-canvas]');
+  const canvas = root.querySelector<HTMLCanvasElement>('[data-matrix-portrait-canvas]');
   if (!img || !canvas) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -128,19 +54,21 @@ function setupPortrait(root) {
   let rows = 0;
   let cssW = 0;
   let cssH = 0;
-  let lum = null;
-  let colProgress = [];
-  let mode = 'idle';
+  let lum: Float32Array | null = null;
+  let colProgress: number[] = [];
+  let mode: Mode = 'idle';
   let modeStart = 0;
   let decodedOnce = false;
-  let unregister = null;
+  let unregister: (() => void) | null = null;
 
   function sampleImage() {
-    const rect = root.querySelector('.dpn-portrait__frame').getBoundingClientRect();
+    const frame = root.querySelector('.dpn-portrait__frame');
+    if (!frame) return;
+    const rect = frame.getBoundingClientRect();
     cssW = rect.width;
     cssH = rect.height;
-    canvas.width = Math.max(1, Math.round(cssW * dpr));
-    canvas.height = Math.max(1, Math.round(cssH * dpr));
+    canvas!.width = Math.max(1, Math.round(cssW * dpr));
+    canvas!.height = Math.max(1, Math.round(cssH * dpr));
     cols = Math.ceil(cssW / CELL);
     rows = Math.ceil(cssH / CELL);
 
@@ -149,10 +77,10 @@ function setupPortrait(root) {
     off.height = rows;
     const octx = off.getContext('2d', { willReadFrequently: true });
     if (!octx) return;
-    const s = Math.max(cols / img.naturalWidth, rows / img.naturalHeight);
-    const dw = img.naturalWidth * s;
-    const dh = img.naturalHeight * s;
-    octx.drawImage(img, (cols - dw) / 2, (rows - dh) / 2, dw, dh);
+    const s = Math.max(cols / img!.naturalWidth, rows / img!.naturalHeight);
+    const dw = img!.naturalWidth * s;
+    const dh = img!.naturalHeight * s;
+    octx.drawImage(img!, (cols - dw) / 2, (rows - dh) / 2, dw, dh);
     const data = octx.getImageData(0, 0, cols, rows).data;
     lum = new Float32Array(cols * rows);
     for (let i = 0; i < cols * rows; i++) {
@@ -164,13 +92,19 @@ function setupPortrait(root) {
     colProgress = Array.from({ length: cols }, () => -Math.random() * 0.35);
   }
 
-  function drawGlyphColumn(x, cover, colors, now, leadRow) {
+  function drawGlyphColumn(
+    x: number,
+    cover: number,
+    colors: ReturnType<typeof themeColors>,
+    now: number,
+    leadRow: number,
+  ) {
     for (let y = 0; y < rows; y++) {
-      const l = lum[y * cols + x];
+      const l = lum![y * cols + x];
       if (l * colors.density < 0.12) continue;
-      ctx.globalAlpha = cover * (0.35 + l * 0.65);
-      ctx.fillStyle = y === leadRow ? colors.lead : colors.glyph;
-      ctx.fillText(
+      ctx!.globalAlpha = cover * (0.35 + l * 0.65);
+      ctx!.fillStyle = y === leadRow ? colors.lead : colors.glyph;
+      ctx!.fillText(
         GLYPHS[(x * 7 + y * 13 + ((now / 90) | 0)) % GLYPHS.length],
         x * CELL,
         y * CELL,
@@ -181,36 +115,36 @@ function setupPortrait(root) {
   function drawStatic() {
     if (!lum) return;
     const colors = themeColors();
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = colors.bg;
-    ctx.fillRect(0, 0, cssW, cssH);
-    ctx.font = `${CELL}px ${monoFont()}`;
-    ctx.textBaseline = 'top';
+    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx!.fillStyle = colors.bg;
+    ctx!.fillRect(0, 0, cssW, cssH);
+    ctx!.font = `${CELL}px ${monoFont()}`;
+    ctx!.textBaseline = 'top';
     const now = performance.now();
     for (let x = 0; x < cols; x++) drawGlyphColumn(x, 1, colors, now, -1);
-    ctx.globalAlpha = 1;
+    ctx!.globalAlpha = 1;
   }
 
   function finish() {
     mode = 'done';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, cssW, cssH);
+    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx!.clearRect(0, 0, cssW, cssH);
     if (unregister) {
       unregister();
       unregister = null;
     }
   }
 
-  function drawFrame(now) {
+  function drawFrame(now: number) {
     if (!lum || mode === 'idle' || mode === 'cover' || mode === 'done') return;
     const duration = mode === 'decode' ? DECODE_MS : REENCODE_MS;
     const t = Math.min(1, (now - modeStart) / duration);
     const colors = themeColors();
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, cssW, cssH);
-    ctx.font = `${CELL}px ${monoFont()}`;
-    ctx.textBaseline = 'top';
+    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx!.clearRect(0, 0, cssW, cssH);
+    ctx!.font = `${CELL}px ${monoFont()}`;
+    ctx!.textBaseline = 'top';
 
     for (let x = 0; x < cols; x++) {
       const progress = colProgress[x];
@@ -219,7 +153,7 @@ function setupPortrait(root) {
       if (cover <= 0) continue;
       drawGlyphColumn(x, cover, colors, now, mode === 'decode' ? x % rows : -1);
     }
-    ctx.globalAlpha = 1;
+    ctx!.globalAlpha = 1;
 
     if (t >= 1) {
       if (mode === 'decode') {
@@ -232,7 +166,7 @@ function setupPortrait(root) {
     }
   }
 
-  function start(modeName) {
+  function start(modeName: Mode) {
     mode = modeName;
     modeStart = performance.now();
   }
@@ -247,7 +181,14 @@ function setupPortrait(root) {
   function requestEncodePulse() {
     if (!decodedOnce || mode === 'encode' || mode === 'decode' || !lum) return;
     start('encode');
-    if (!unregister) unregister = addMatrixInstance({ el: root, draw: drawFrame, fps: 30, visibleThreshold: 0.01 });
+    if (!unregister) {
+      unregister = addMatrixInstance({
+        el: root,
+        draw: drawFrame,
+        fps: 30,
+        visibleThreshold: 0.01,
+      });
+    }
   }
 
   function onPointerEnter() {
@@ -281,9 +222,9 @@ function setupPortrait(root) {
   }
 
   const io = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
+    (observations) => {
+      for (const observation of observations) {
+        if (observation.isIntersecting) {
           activateOnce();
           io.disconnect();
         }
@@ -303,7 +244,9 @@ function setupPortrait(root) {
 }
 
 function initPortraits() {
-  document.querySelectorAll('[data-matrix-portrait]').forEach((root) => setupPortrait(root));
+  document
+    .querySelectorAll<HTMLElement>('[data-matrix-portrait]')
+    .forEach((root) => setupPortrait(root));
 }
 
 initPortraits();
