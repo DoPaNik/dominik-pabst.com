@@ -709,6 +709,10 @@ notwendigen Ausnahme-Kommentare hinaus. `font-size` und Spacing (`px` in
 `padding`/`margin`/`gap`) sind nicht durchgesetzt (siehe oben) —
 Bestandsbereinigung ist eine separate, spätere Aufgabe.
 
+**Nachtrag (2026-08-21):** `font-size` ist erledigt, siehe AP4-11 unten —
+die "62 %"-Schätzung oben war ein grober Scan; genauer sortiert waren es
+nur 5 echte Ausreißer von 28. Spacing bleibt weiterhin offen.
+
 ---
 
 ### AP4-6 · Datenschutzfreundliches Tracking (Plausible) + Feld-Performance-Daten
@@ -967,6 +971,47 @@ Für spätere bewusste Updates (nach einem Redesign): `npm run test:visual --
 
 ---
 
+### AP4-11 · font-size-Bereinigung (Fund aus AP4-5)
+
+**Backlog:** Audit 2026-08-21 · Aufwand 1 / Nutzen 2 / Risiko 1 · Bereich: Wartbarkeit
+**Status:** ✅ Erledigt am 2026-08-21
+
+**Beschreibung:** AP4-5 hatte `font-size` bewusst aus der Stylelint-Regel
+ausgeklammert, weil ein grober Scan 62 % literale Werte zeigte. Genauere
+Analyse (Werte nach Häufigkeit sortiert, nicht nur gezählt) ergab ein
+deutlich klareres Bild: von 28 literalen `font-size`-Deklarationen matchten
+23 (11/12/13/16px) bereits exakt einen vorhandenen Token
+(`--text-2xs`/`-xs`/`-sm`/`-md`) — reines Versehen, kein Gestaltungswille.
+Nur 5 waren echte Ausreißer.
+
+**Umsetzung:**
+
+- 23 exakte Treffer auf den passenden `var(--text-*)`-Token umgestellt —
+  null visuelle Änderung, per Screenshot (Home, Contact) und voller
+  Playwright-Suite verifiziert.
+- 14px (4× konsistent für UI-Textkörper: Card-Body, Input-Text,
+  Button-Label, About-Kolumnenzeile) als neuer Token `--text-14` in
+  `typography.css` aufgenommen — sieht nach einer echten fehlenden
+  Skalen-Sprosse aus, nicht nach Zufall.
+- 19px (Nav-Wortmarke, einmaliges Brand-Element) bleibt literal, mit
+  begründetem `stylelint-disable-next-line`-Kommentar.
+- `stylelint.config.mjs`: `font-size` zur
+  `declaration-property-value-disallowed-list` hinzugefügt — verifiziert
+  per Testverstoß, dass neue rohe Werte jetzt durchfallen.
+
+**Akzeptanzkriterien:**
+
+- [x] Alle exakten Token-Matches umgestellt, keine verbleibenden literalen `font-size`-Werte außer der einen dokumentierten Ausnahme
+- [x] Neuer Token `--text-14` mit Begründungskommentar in `typography.css`
+- [x] `npm run lint:css` erkennt neue rohe `font-size`-Werte (Negativtest verifiziert)
+- [x] Keine visuelle Regression (Screenshots + 52/52 Playwright-Tests grün)
+
+**Abgrenzung:** Spacing (`px` in `padding`/`margin`/`gap`) bleibt weiterhin
+unangetastet und unenforced — deutlich größere, ungeprüfte Fläche als
+`font-size`; eigene, spätere Aufgabe.
+
+---
+
 ## Bewusst nicht enthalten (aus der Roadmap übernommen)
 
 - **CSP-Report-Only-Monitoring** mit Reporting-Endpoint — bräuchte einen
@@ -1024,30 +1069,16 @@ Platzhalterseiten fertig; Adresse und CWV-Beacon-Entscheidung offen) und
 AP4-10 (Test-Infrastruktur fertig; Baseline-Screenshots können erst nach
 einem echten CI-Lauf auf `ubuntu-latest` entstehen).
 
-### Punktliste für morgen
+### Punktliste für morgen (Stand 2026-08-20, historisch)
 
-1. **Deine Adresse fürs Impressum** (AP4-6) — Geschäfts-/Büroadresse oder
-   Privatadresse, sobald entschieden: mir geben, ich trage sie in
-   `src/i18n/de.ts`/`en.ts` ein (Platzhalter ist bereits an der richtigen
-   Stelle, siehe Chat-Verlauf für die Optionen).
-2. **CWV-Custom-Event-Entscheidung** (AP4-6) — willst du für Core-Web-Vitals-
-   Tracking auf den Plausible-"Growth"-Plan wechseln? Falls ja, baue ich die
-   Event-Aufrufe im Code.
-3. **Push nach GitHub** — sobald gepusht, läuft die echte CI auf
-   `ubuntu-latest`. Das schließt AP4-10 ab (Baseline aus dem Artefakt des
-   `visual-regression`-Jobs herunterladen, nach
-   `tests/visual.spec.ts-snapshots/` committen) und ist die erste scharfe
-   Probe für die neuen CI-Schritte (Skript-Drift-Check, `lint:css`,
-   Ressourcen-Budgets, OG-Bild-Generierung, Lighthouse mit 16 Routen).
-4. **`Avatar.astro`-Entscheidung** — unbenutzte Komponente (Fund aus AP4-2),
-   analog zum `Illustration.astro`-Fall aus AP1-4: einbauen oder entfernen.
-5. **font-size-/Spacing-Bereinigung** — Fund aus AP4-5: 62 % der
-   `font-size`-Deklarationen sind literal statt `var(--text-*)`, teils ohne
-   passenden Token. Kein neues Arbeitspaket-Kürzel vergeben, da Umfang und
-   Ansatz (Bestandswerte anpassen vs. Token-Skala erweitern) erst geklärt
-   werden sollten.
+1. ~~Deine Adresse fürs Impressum (AP4-6).~~ ✅ erledigt 2026-08-21.
+2. ~~CWV-Custom-Event-Entscheidung (AP4-6).~~ ✅ erledigt 2026-08-21 — nein.
+3. ~~Push nach GitHub.~~ ✅ erledigt 2026-08-21, siehe unten.
+4. ~~`Avatar.astro`-Entscheidung.~~ ✅ erledigt 2026-08-21 — entfernt.
+5. ~~font-size-/Spacing-Bereinigung.~~ ✅ font-size erledigt 2026-08-21
+   (AP4-11); Spacing bewusst weiterhin offen.
 
-### Aufräumen (erledigt vor der Pause)
+### Aufräumen (erledigt vor der Pause am 2026-08-20)
 
 - Alter `astro dev`-Hintergrundprozess (Uptime ~8,4 h) gestoppt.
 - Build-/Test-Artefakte gelöscht: `dist/`, `.lighthouseci/` (115 MB),
@@ -1055,3 +1086,51 @@ einem echten CI-Lauf auf `ubuntu-latest` entstehen).
   regenerierbar per `npm run build` bzw. den jeweiligen Test-Befehlen.
 - Working Tree ist sauber (`git status` liefert nichts), keine offenen
   Ports, keine Hintergrundprozesse.
+
+---
+
+## Abschlussstatus — 2026-08-21
+
+Alle fünf Punkte von gestern sind bearbeitet:
+
+1. **Adresse** — virtuelle Geschäftsadresse (c/o flexdienst, Kaiserslautern)
+   in `src/i18n/de.ts`/`en.ts` eingetragen (Impressum + Verweis darauf in der
+   Datenschutzerklärung). AP4-6 damit vollständig abgeschlossen.
+2. **CWV-Custom-Event** — Entscheidung: nein, Plausible Free-/Starter-Plan
+   unterstützt keine Custom Properties. Feld-CWV bleibt über Google Search
+   Console.
+3. **Push** — `master` ist bei GitHub schreibgeschützt (Required Status
+   Check), direkter Push wurde daher abgelehnt. Stattdessen: lokalen
+   `master` in `astro-audit-paket-4` umbenannt, gepusht, PR
+   [#22](https://github.com/DoPaNik/dominik-pabst.com/pull/22) gegen
+   `master` erstellt. Erster echter CI-Lauf auf `ubuntu-latest`:
+   - `Lint, typecheck & build` ✅ grün (bestätigt: Skript-Drift-Check,
+     `lint:css`, alle neuen Build-Schritte funktionieren auf Linux)
+   - `Playwright smoke, a11y & core flows` ✅ grün
+   - `Visual regression (non-blocking)` ❌ erwartungsgemäß rot (keine
+     Baseline vorhanden — `continue-on-error` greift, PR bleibt
+     `MERGEABLE`/`MERGEABLE` trotz `UNSTABLE`-State, wie geplant)
+   - `Lighthouse budget` ✅ grün (9 Min. für 48 Runs über 16 Routen —
+     bestätigt: alle Ressourcen-Budgets aus AP4-4 halten auch auf dem
+     echten Linux-Runner)
+   - Netlify Deploy Preview ist grün: <https://deploy-preview-22--dopanik-portfolio.netlify.app>
+4. **Avatar.astro** — bestätigt unbenutzt (`grep` über `src` und
+   `docs/styleguide/`: 0 Treffer), Komponente + `avatar.css` + Import in
+   `global.css` entfernt.
+5. **font-size-Bereinigung** — geklärt (23 von 28 literalen Werten matchten
+   bereits exakt einen Token, nur 5 echte Ausreißer) und gelöst, siehe
+   AP4-11 oben. Neuer Token `--text-14`, ein dokumentierter Literal-Fall
+   (Nav-Wortmarke), `lint:css` deckt `font-size` jetzt mit ab.
+
+**Noch offen:**
+
+- PR #22 muss gemerged werden (nicht automatisch getan — Merge-Entscheidung
+  liegt beim Nutzer).
+- Baseline-Screenshots für AP4-10 aus dem `visual-regression`-Artefakt des
+  ersten CI-Laufs herunterladen und als `tests/visual.spec.ts-snapshots/`
+  committen.
+- Im Plausible-Dashboard nach dem nächsten Production-Deploy verifizieren,
+  dass Seitenaufrufe ankommen.
+- Spacing-Governance (`px` in `padding`/`margin`/`gap`) bleibt ein
+  unbearbeiteter Fund aus AP4-5/AP4-11 — kein Arbeitspaket-Kürzel vergeben,
+  da Umfang (deutlich größer als `font-size`) erst geklärt werden müsste.
