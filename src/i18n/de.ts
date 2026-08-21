@@ -72,7 +72,7 @@ export const de: Dictionary = {
   talks: {
     seoTitle: 'Vorträge & Workshops – Dominik Pabst | DevSecOps Speaker',
     seoDescription:
-      'Workshops und Vorträge zu DevSecOps, Platform Engineering und KI-Sicherheit – IT-Tage Frankfurt 2023, 2025 & 2026, heise Academy.',
+      'Workshops und Vorträge zu DevSecOps, Platform Engineering und KI-Sicherheit – IT-Tage Frankfurt 2023 & 2025, heise Academy.',
     eyebrow: '// talks',
     title: 'Vorträge & Workshops.',
     intro:
