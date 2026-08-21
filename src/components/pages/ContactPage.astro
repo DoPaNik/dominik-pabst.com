@@ -42,6 +42,7 @@ const successHref = getRelativeLocaleUrl(lang, 'contact/success');
           netlify-honeypot="bot-field"
           action={successHref}
           class="dpn-contact__form"
+          data-astro-reload
         >
           <input type="hidden" name="form-name" value="contact" />
           <input type="hidden" name="language" value={lang} />
