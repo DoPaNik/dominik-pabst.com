@@ -119,8 +119,6 @@ export const en: Dictionary = {
     eyebrow: '// imprint',
     title: 'Imprint.',
     updated: 'Updated August 21, 2026',
-    noticeBanner:
-      'This English version is for convenience only — the German version (based on the free Datenschutz-Generator.de by Dr. Thomas Schwenke) is the legally binding one.',
     sections: [
       {
         heading: 'Service provider',
@@ -152,8 +150,6 @@ export const en: Dictionary = {
     eyebrow: '// privacy',
     title: 'Privacy policy.',
     updated: 'Updated August 21, 2026',
-    noticeBanner:
-      'This English version is for convenience only — the German version (based on the free template from e-recht24.de, extended with the hosting and analytics specifics below) is the legally binding one.',
     sections: [
       {
         heading: 'Controller',
