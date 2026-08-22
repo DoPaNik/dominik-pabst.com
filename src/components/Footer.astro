@@ -12,6 +12,9 @@ interface Props {
 const { lang } = Astro.props;
 const t = getDictionary(lang);
 const year = new Date().getFullYear();
+const buildCommit = import.meta.env.PUBLIC_BUILD_COMMIT;
+const buildTime = import.meta.env.PUBLIC_BUILD_TIME as string;
+const buildTimeLabel = buildTime?.slice(0, 16).replace('T', ' ');
 const legalLinks = [
   { label: t.common.footerLegal.imprint, path: 'impressum' },
   { label: t.common.footerLegal.privacy, path: 'datenschutz' },
@@ -26,6 +29,16 @@ const legalLinks = [
       ><span class="dpn-footer__wordmark-strong">Nik</span>
     </span>
     <span class="dpn-footer__meta">© {year} {site.name} · dopanik.de</span>
+
+    <a
+      class="dpn-footer__build"
+      href={`https://github.com/dopanik/dominik-pabst.com/commit/${buildCommit}`}
+      target="_blank"
+      rel="noreferrer"
+      title={`deployed ${buildTimeLabel} UTC`}
+    >
+      build {buildCommit}
+    </a>
 
     <ul class="dpn-footer__socials">
       {

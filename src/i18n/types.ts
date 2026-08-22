@@ -9,7 +9,6 @@ interface LegalPageDictionary {
   eyebrow: string;
   title: string;
   updated: string;
-  noticeBanner: string;
   sections: LegalSection[];
 }
 
