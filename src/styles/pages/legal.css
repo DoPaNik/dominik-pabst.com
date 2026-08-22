@@ -9,25 +9,6 @@
   margin: 0 0 24px;
 }
 
-.dpn-legal__notice {
-  border: 1px solid var(--warning);
-  background: var(--warning-soft);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-  color: var(--text);
-  max-width: 70ch;
-  margin: 0 0 48px;
-}
-
-/* Neutral variant for informational (non-warning) banners, e.g. a source
-   attribution rather than an unreviewed-draft caveat. */
-.dpn-legal__notice--info {
-  border-color: var(--border);
-  background: var(--surface);
-}
-
 .dpn-legal__seal {
   margin: 48px 0 0;
   font-family: var(--font-mono);

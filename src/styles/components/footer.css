@@ -34,6 +34,19 @@
   color: var(--text-dim);
 }
 
+.dpn-footer__build {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.dpn-footer__build:hover {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .dpn-footer__socials {
   display: flex;
   gap: var(--space-3);

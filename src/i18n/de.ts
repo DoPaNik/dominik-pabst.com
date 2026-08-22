@@ -118,8 +118,6 @@ export const de: Dictionary = {
     eyebrow: '// impressum',
     title: 'Impressum.',
     updated: 'Aktualisiert am 21. August 2026',
-    noticeBanner:
-      'Diese Seite basiert auf dem kostenlosen Datenschutz-Generator.de von Dr. Thomas Schwenke, ergänzt um Angaben zu Hosting (Netlify) und Webanalyse (Plausible).',
     sections: [
       {
         heading: 'Diensteanbieter',
@@ -151,8 +149,6 @@ export const de: Dictionary = {
     eyebrow: '// datenschutz',
     title: 'Datenschutzerklärung.',
     updated: 'Aktualisiert am 21. August 2026',
-    noticeBanner:
-      'Diese Seite basiert auf der kostenlosen Vorlage von e-recht24.de, ergänzt um Angaben zu Hosting (Netlify) und Webanalyse (Plausible).',
     sections: [
       {
         heading: 'Verantwortlicher',
