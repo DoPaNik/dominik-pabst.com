@@ -12,6 +12,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Replace the default grey/blue tap flash with our own :active/:focus-visible
+     states so the terminal aesthetic holds on touch devices too. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {

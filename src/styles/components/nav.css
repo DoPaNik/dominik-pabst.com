@@ -90,7 +90,9 @@
   gap: 6px;
 }
 
-.dpn-nav__burger {
+/* Higher specificity than .dpn-iconbtn's unconditional `display: inline-grid`
+   (bundling order isn't guaranteed to put this rule after it). */
+.dpn-nav__actions .dpn-nav__burger {
   display: none;
 }
 
@@ -115,12 +117,23 @@
 }
 
 @media (--below-tablet) {
-  .dpn-nav__cta {
+  /* Higher specificity than .dpn-btn's unconditional `display: inline-flex`
+     (bundling order isn't guaranteed to put this rule after it). */
+  .dpn-nav__actions .dpn-nav__cta {
     display: none;
   }
 
-  .dpn-nav__burger {
+  .dpn-nav__actions .dpn-nav__burger {
     display: inline-grid;
+  }
+
+  /* Theme toggle, lang switch and burger grow to a full 44px touch target on
+     mobile, scoped to the nav so desktop reuse of .dpn-iconbtn/.dpn-lang-switch
+     elsewhere keeps its current 38px size. */
+  .dpn-nav__actions .dpn-iconbtn,
+  .dpn-nav__actions .dpn-lang-switch {
+    width: 44px;
+    height: 44px;
   }
 
   .dpn-nav__links {
@@ -143,4 +156,24 @@
   .dpn-nav__links a {
     padding: 12px;
   }
+
+  /* Dims the page behind the open panel so it reads as an overlay rather
+     than content that got cut off; also gives outside-click-to-close (see
+     nav.ts) something visible to tap. Sits before .dpn-nav__links in the DOM
+     so it paints underneath it despite both having z-index:auto. */
+  .dpn-nav:has(#dpn-nav-links.is-open) .dpn-nav__scrim {
+    display: block;
+    position: fixed;
+    inset: 64px 0 0 0;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+  }
+
+  /* Without this the page keeps scrolling behind the open panel/scrim. */
+  html:has(#dpn-nav-links.is-open) {
+    overflow: hidden;
+  }
+}
+
+.dpn-nav__scrim {
+  display: none;
 }
