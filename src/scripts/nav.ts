@@ -39,7 +39,10 @@ document.addEventListener('focusout', (event) => {
   if (!navLinks?.classList.contains('is-open')) return;
 
   const next = event.relatedTarget;
-  if (next instanceof Element && (next.closest('#dpn-nav-links') || next.closest('#dpn-nav-burger'))) {
+  if (
+    next instanceof Element &&
+    (next.closest('#dpn-nav-links') || next.closest('#dpn-nav-burger'))
+  ) {
     return;
   }
   closeNav();
