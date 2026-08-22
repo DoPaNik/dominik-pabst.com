@@ -34,19 +34,6 @@
   color: var(--text-dim);
 }
 
-.dpn-footer__build {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  color: var(--text-dim);
-  text-decoration: none;
-}
-
-.dpn-footer__build:hover {
-  color: var(--text-muted);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
 .dpn-footer__socials {
   display: flex;
   gap: var(--space-3);
@@ -103,6 +90,26 @@
 
 .dpn-footer__legal a:hover {
   color: var(--brand-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Deliberately the quietest thing in the footer: a debug affordance for
+   catching a stale mobile cache, not a headline element. Scaled down past
+   the type scale's smallest step rather than lightened, since dimming it
+   further would drop the color below the AA contrast minimum. */
+.dpn-footer__build {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--text-dim);
+  text-decoration: none;
+  transform: scale(0.85);
+  transform-origin: left center;
+}
+
+.dpn-footer__build:hover {
+  color: var(--text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
 }

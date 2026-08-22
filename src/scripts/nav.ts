@@ -32,22 +32,6 @@ document.addEventListener('click', (event) => {
   if (!target.closest('#dpn-nav-links')) closeNav();
 });
 
-// Tabbing (or a screen reader swiping) past the last link closes the panel
-// instead of leaving it open with focus somewhere behind it.
-document.addEventListener('focusout', (event) => {
-  const navLinks = document.getElementById('dpn-nav-links');
-  if (!navLinks?.classList.contains('is-open')) return;
-
-  const next = event.relatedTarget;
-  if (
-    next instanceof Element &&
-    (next.closest('#dpn-nav-links') || next.closest('#dpn-nav-burger'))
-  ) {
-    return;
-  }
-  closeNav();
-});
-
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') return;
   const wasOpen = document.getElementById('dpn-nav-links')?.classList.contains('is-open');
