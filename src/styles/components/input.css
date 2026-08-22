@@ -71,3 +71,12 @@
 .dpn-field__hint--error {
   color: var(--danger);
 }
+
+@media (--below-tablet) {
+  /* iOS Safari zooms the whole page in on focus when a field's font-size is
+     under 16px — bump it just for mobile so tapping into the contact form
+     doesn't trigger that. */
+  .dpn-input {
+    font-size: var(--text-md);
+  }
+}

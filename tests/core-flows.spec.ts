@@ -21,6 +21,12 @@ test('contact form wiring is correct on both locales', async ({ page }) => {
   }
 });
 
+test('burger button stays hidden and the CTA stays visible on desktop', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#dpn-nav-burger')).toBeHidden();
+  await expect(page.locator('.dpn-nav__cta')).toBeVisible();
+});
+
 test('theme toggle persists and survives client navigation', async ({ page }) => {
   await page.goto('/');
   const root = page.locator('html');
