@@ -30,16 +30,6 @@ const legalLinks = [
     </span>
     <span class="dpn-footer__meta">© {year} {site.name} · dopanik.de</span>
 
-    <a
-      class="dpn-footer__build"
-      href={`https://github.com/dopanik/dominik-pabst.com/commit/${buildCommit}`}
-      target="_blank"
-      rel="noreferrer"
-      title={`deployed ${buildTimeLabel} UTC`}
-    >
-      build {buildCommit}
-    </a>
-
     <ul class="dpn-footer__socials">
       {
         site.socials.map((social) => (
@@ -64,5 +54,15 @@ const legalLinks = [
         ))
       }
     </ul>
+
+    <a
+      class="dpn-footer__build"
+      href={`https://github.com/dopanik/dominik-pabst.com/commit/${buildCommit}`}
+      target="_blank"
+      rel="noreferrer"
+      title={`build ${buildCommit}, deployed ${buildTimeLabel} UTC`}
+    >
+      {buildCommit}
+    </a>
   </div>
 </footer>
