@@ -67,6 +67,66 @@ test.describe('mobile navigation', () => {
     await toggle.click();
     await expect(root).not.toHaveAttribute('data-theme', 'light');
   });
+
+  test('theme toggle, lang switch and burger meet the 44px touch target minimum', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    for (const selector of ['#dpn-theme-toggle', '.dpn-lang-switch', '#dpn-nav-burger']) {
+      const box = await page.locator(selector).boundingBox();
+      expect(box!.width, selector).toBeGreaterThanOrEqual(44);
+      expect(box!.height, selector).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test('opening the panel locks background scroll and shows a scrim', async ({ page }) => {
+    await page.goto('/');
+    const burger = page.locator('#dpn-nav-burger');
+
+    await expect(page.locator('.dpn-nav__scrim')).toBeHidden();
+    await expect
+      .poll(() => page.evaluate(() => getComputedStyle(document.documentElement).overflow))
+      .toBe('visible');
+
+    await burger.click();
+    await expect(page.locator('.dpn-nav__scrim')).toBeVisible();
+    await expect
+      .poll(() => page.evaluate(() => getComputedStyle(document.documentElement).overflow))
+      .toBe('hidden');
+
+    await burger.click();
+    await expect(page.locator('.dpn-nav__scrim')).toBeHidden();
+  });
+
+  test('tapping the scrim outside the panel closes it', async ({ page }) => {
+    await page.goto('/');
+    const burger = page.locator('#dpn-nav-burger');
+    const navLinks = page.locator('#dpn-nav-links');
+
+    await burger.click();
+    await expect(navLinks).toBeVisible();
+
+    // Click near the bottom of the viewport, below the open panel, where
+    // only the scrim can receive the tap.
+    await page.locator('.dpn-nav__scrim').click({ position: { x: 20, y: 400 } });
+    await expect(navLinks).toBeHidden();
+    await expect(burger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('Escape closes the panel and returns focus to the burger', async ({ page }) => {
+    await page.goto('/');
+    const burger = page.locator('#dpn-nav-burger');
+    const navLinks = page.locator('#dpn-nav-links');
+
+    await burger.click();
+    await expect(navLinks).toBeVisible();
+    await expect(navLinks.locator('a').first()).toBeFocused();
+
+    await page.keyboard.press('Escape');
+    await expect(navLinks).toBeHidden();
+    await expect(burger).toHaveAttribute('aria-expanded', 'false');
+    await expect(burger).toBeFocused();
+  });
 });
 
 for (const path of ['/en/', '/about/', '/talks/', '/contact/']) {

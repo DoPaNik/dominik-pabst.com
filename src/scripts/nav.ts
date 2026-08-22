@@ -8,14 +8,48 @@ onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 document.addEventListener('astro:page-load', onScroll);
 
+const closeNav = () => {
+  const navLinks = document.getElementById('dpn-nav-links');
+  if (!navLinks?.classList.contains('is-open')) return;
+  navLinks.classList.remove('is-open');
+  document.getElementById('dpn-nav-burger')?.setAttribute('aria-expanded', 'false');
+};
+
 document.addEventListener('click', (event) => {
   const target = event.target;
   if (!(target instanceof Element)) return;
 
   const burger = target.closest('#dpn-nav-burger');
-  if (!burger) return;
+  if (burger) {
+    const navLinks = document.getElementById('dpn-nav-links');
+    const isOpen = navLinks?.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', String(Boolean(isOpen)));
+    if (isOpen) (navLinks?.querySelector('a') as HTMLElement | null)?.focus();
+    return;
+  }
 
+  // Tapping the scrim or any other content outside the panel closes it.
+  if (!target.closest('#dpn-nav-links')) closeNav();
+});
+
+// Tabbing (or a screen reader swiping) past the last link closes the panel
+// instead of leaving it open with focus somewhere behind it.
+document.addEventListener('focusout', (event) => {
   const navLinks = document.getElementById('dpn-nav-links');
-  const isOpen = navLinks?.classList.toggle('is-open');
-  burger.setAttribute('aria-expanded', String(Boolean(isOpen)));
+  if (!navLinks?.classList.contains('is-open')) return;
+
+  const next = event.relatedTarget;
+  if (next instanceof Element && (next.closest('#dpn-nav-links') || next.closest('#dpn-nav-burger'))) {
+    return;
+  }
+  closeNav();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  const wasOpen = document.getElementById('dpn-nav-links')?.classList.contains('is-open');
+  if (!wasOpen) return;
+
+  closeNav();
+  document.getElementById('dpn-nav-burger')?.focus();
 });
