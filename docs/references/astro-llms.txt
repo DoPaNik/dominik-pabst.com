@@ -1,0 +1,67 @@
+Astro — condensed reference for dominik-pabst.com
+==================================================
+Full docs: https://docs.astro.build — this file covers only what's
+non-obvious or has bitten this repo specifically. Not a general Astro
+tutorial.
+
+i18n routing (astro.config.mjs)
+--------------------------------
+i18n.routing.prefixDefaultLocale: false means the default locale (de) gets
+unprefixed routes (/, /about/) while every other locale is prefixed
+(/en/, /en/about/). Use astro:i18n's getRelativeLocaleUrl(lang, path) to
+build cross-locale links — never hand-construct /en/ prefixes.
+
+Content collections (src/content.config.ts)
+---------------------------------------------
+Defined with the `glob` loader (astro/loaders), schema via Zod
+(`defineCollection({ loader: glob(...), schema: z.object({...}) })`).
+Access via `getCollection('talks')` etc. — filter/sort in the calling
+page-body component (see src/components/pages/TalksPage.astro), not in the
+schema.
+
+astro:assets
+------------
+Use the `<Image>`/`getImage()` APIs for any raster image that should be
+optimized (resized, converted to WebP) — see the portrait handling in
+about pages. Do not hand-write `<img>` for anything astro:assets can
+process; the build step generates the optimized variants automatically
+(see ARCHITECTURE.md's build-generated-files list).
+
+Script bundling — the CSP gotcha
+----------------------------------
+A component `<script>` tag WITHOUT `is:inline` is always compiled by
+Vite, but the *output* is not guaranteed to be an external
+`/_astro/*.js` file. If the resulting chunk is small and used by only one
+entry point, Vite inlines it directly into the HTML as
+`<script type="module">...</script>` — same content, no `src`. This is
+invisible from the component source and depends on bundling heuristics,
+not anything you write. Consequence: a strict CSP `script-src` without
+inline-script hashes will silently block these. This repo handles it with
+a postbuild hash-injection step — see docs/SECURITY.md. Don't assume a
+component's `<script>` "must" end up external just because it isn't
+`is:inline`.
+
+`is:inline` scripts
+--------------------
+Used only for scripts that must stay classic/synchronous (not deferred
+`type="module"`) — e.g. src/scripts/theme-bootstrap.ts, loaded via
+`<script is:inline src="/scripts/theme-bootstrap.js">` in BaseLayout.astro,
+to avoid a theme-FOUC flash. The .js it references is pre-built by
+scripts/build-critical-scripts.mjs (esbuild, IIFE format) — never hand-edit
+the generated file, edit the .ts source and rerun the build.
+
+View Transitions (`<ClientRouter />`)
+---------------------------------------
+Enables client-side navigation between pages without a full reload.
+Listeners on `document` (not a specific element reference) that need to
+survive navigation must re-query on `astro:page-load` — a re-rendered nav
+after a transition is a *new* DOM subtree, so any listener attached to the
+old element is gone. See src/scripts/nav.ts's top-of-file comment for the
+pattern used throughout this repo.
+
+`astro check` (typecheck)
+--------------------------
+Run via `npm run typecheck`. Content-collection Zod schemas currently emit
+a handful of harmless `'z' is deprecated` warnings (Astro's content-loader
+API migration) — expected noise, not a real error, as long as the error
+count stays 0.
