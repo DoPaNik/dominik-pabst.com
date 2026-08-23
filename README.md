@@ -4,6 +4,11 @@ Personal site of Dominik Pabst — Executive Consultant for DevOps & Platform
 Engineering at CGI Deutschland, speaker, and trainer. Built with
 [Astro](https://astro.build), hosted on [Netlify](https://netlify.com).
 
+For the full system map (directory layout, build pipeline, CI, testing),
+see [`ARCHITECTURE.md`](./ARCHITECTURE.md). For AI-agent-oriented docs
+(design system, quality gates, security model, reliability notes), start at
+[`AGENTS.md`](./AGENTS.md).
+
 ## Stack
 
 - **Astro** (static output, zero JS by default) + a handful of small,
