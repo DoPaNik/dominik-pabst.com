@@ -79,3 +79,10 @@ node scripts/generate-og-image.mjs
 
 No CMS, no auth, no analytics, no embedded social feeds, no comments — see
 the original briefing for rationale.
+
+## License
+
+The code is [MIT-licensed](./LICENSE). This does **not** extend to Dominik
+Pabst's name, likeness, the DoPaNik brand, portrait, or written content
+(bio, talks, articles) — those aren't yours to reuse just because the code
+is open. Security issues: see [`SECURITY.md`](./SECURITY.md).
