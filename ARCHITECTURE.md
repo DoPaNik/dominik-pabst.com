@@ -123,5 +123,7 @@ Four jobs on every PR against `master` and every push to `master`:
 4. **`lighthouse`** — `.lighthouserc.cjs` across all 16 routes; see
    `docs/QUALITY_SCORE.md` for current thresholds.
 
-`master` is protected; PRs need the `quality` and `tests` jobs green (and
-Netlify's deploy-preview check) before merge.
+`master` is protected; PRs need the `quality` and `tests` jobs green before
+merge (GitHub branch-protection `required_status_checks`, strict mode).
+Netlify's deploy-preview check runs alongside and is worth checking, but
+isn't itself a branch-protection requirement.

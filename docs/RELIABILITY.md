@@ -10,13 +10,16 @@ for the CSP mechanism referenced below.
 push to a branch → PR opened against master
   → Netlify deploy preview builds (npm run build, publish dist/)
   → GitHub Actions CI runs (4 jobs, see ARCHITECTURE.md § CI)
-  → required checks: `quality`, `tests`, Netlify deploy-preview
+  → branch-protection required checks: `quality`, `tests`
 merge to master → Netlify production build → live on dopanik.de
 ```
 
-`master` is branch-protected: the required status checks above must be
-green before merge. `visual-regression` and `lighthouse` run but do not
-block (Lighthouse's budgets are currently informational — see
+`master` is branch-protected: `quality` and `tests` must be green before
+merge (`required_status_checks`, strict mode — the branch must also be
+up to date with `master`). Netlify's deploy-preview check runs and is
+worth checking before merging, but is not itself a branch-protection
+requirement. `visual-regression` and `lighthouse` run but do not block
+(Lighthouse's budgets are currently informational — see
 `docs/QUALITY_SCORE.md`).
 
 ## Post-deploy freshness check
