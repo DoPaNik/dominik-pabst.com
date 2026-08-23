@@ -38,9 +38,8 @@ Local Playwright runs (`npm test`) build with `astro build` and serve with
 `docs/SECURITY.md`). Any bug that could plausibly involve CSP, or any change
 to `public/_headers` itself, must be checked against a real deploy preview
 URL (`https://deploy-preview-<PR#>--dopanik-portfolio.netlify.app`), not
-just the local test suite. This is not a hypothetical: the CSP incident in
-`docs/SECURITY.md` passed 65/65 local Playwright tests while being
-completely broken in production.
+just the local test suite — a fully green local suite proves nothing about
+CSP behavior specifically.
 
 ## Known local-dev gotcha: `astro preview`/`astro dev` daemonize
 

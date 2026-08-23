@@ -15,9 +15,9 @@ connect-src 'self' https://plausible.io; object-src 'none'; base-uri
 'self'; form-action 'self'; frame-ancestors 'none'
 ```
 
-No `'unsafe-inline'` anywhere. That's deliberately strict — and it's exactly
-what broke navigation and the theme toggle in production for a full day
-before this was understood (see the incident below).
+No `'unsafe-inline'` anywhere. That's deliberately strict, which means any
+inline script or style not explicitly allow-listed by hash gets silently
+blocked — including ones that look like they should be exempt (see below).
 
 ### Why `scripts/inject-csp-hashes.mjs` exists
 
@@ -50,15 +50,14 @@ every inline (non-`src`) `<script>` block it finds, and appends
 This is fully automatic and covers any future inline script the build
 produces — nothing to remember to update by hand.
 
-### The incident this fixed
+### Standing risk if this mechanism breaks
 
-Production nav and theme toggle silently didn't work — not an iOS-specific
-bug, not a caching issue, though it looked exactly like both at first. Root
-cause: `public/_headers`' `script-src` had no hash/nonce for the inlined
-`nav.ts`/theme-toggle bundles, so **every** browser refused to execute
-them. Local Playwright runs never caught it because `astro preview` does
-not send the Netlify `_headers` CSP at all — see the gotcha below and
-`docs/RELIABILITY.md`.
+Without the hash-injection step, any inline script (JSON-LD, or an Astro-
+inlined component script) is silently blocked by every browser that
+enforces the CSP — with no console warning visible unless you specifically
+check for CSP violations. Local Playwright runs alone won't catch this,
+since `astro preview` never sends the CSP header at all (see the gotcha
+below and `docs/RELIABILITY.md`).
 
 ### Gotcha: CSP is not enforced locally
 

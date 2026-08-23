@@ -53,21 +53,19 @@ Talks and writing entries are Markdown files with frontmatter, one file per
 language under `src/content/{talks,writing}/{de,en}/`. Schema is defined in
 `src/content.config.ts`.
 
-Several entries are placeholders (`placeholder: true` in frontmatter) where
-the briefing didn't have final copy yet — e.g. the Informatik Aktuell
-article "in Vorbereitung". Fill these in as real content becomes available;
-no code changes are needed, just edit the Markdown files.
+Some entries are marked `placeholder: true` in frontmatter (e.g. the
+Informatik Aktuell article, currently "in Vorbereitung") — fill these in as
+real content becomes available; no code changes are needed, just edit the
+Markdown files.
 
 ## Design system
 
-The visual design comes from a Claude Design handoff (`DoPaNik Design
-System`): dark "terminal-hacker × cartoon" brand, JetBrains Mono + Roboto,
-phosphor-green accent. The handoff shipped React component prototypes that
-inject their own CSS at runtime (fine for a demo, not for a static,
-zero-JS-by-default site) — they were ported into static `.astro` components
-in `src/components/astro/` with the same class/prop API, with the CSS
-extracted into `src/styles/components/*.css`. Tokens (`src/styles/tokens/`)
-and brand illustrations (`src/assets/illustrations/`) were copied verbatim.
+**DoPaNik Design System**: dark "terminal-hacker × cartoon" brand,
+JetBrains Mono + Roboto, phosphor-green accent. Static `.astro` components
+in `src/components/astro/`, tokens in `src/styles/tokens/`, component CSS in
+`src/styles/components/*.css`, brand illustrations in
+`src/assets/illustrations/`. See [`docs/styleguide/`](./docs/styleguide/)
+for the full brand guidelines.
 
 To regenerate the OG/Twitter-card image after a brand tweak:
 
@@ -77,8 +75,9 @@ node scripts/generate-og-image.mjs
 
 ## What's intentionally not here
 
-No CMS, no auth, no analytics, no embedded social feeds, no comments — see
-the original briefing for rationale.
+No CMS, no auth, no analytics, no embedded social feeds, no comments —
+deliberate scope cuts for a solo-maintained static site, not gaps to fill
+in later.
 
 ## License
 
