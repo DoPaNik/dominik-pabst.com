@@ -1,0 +1,61 @@
+Playwright + axe-core — condensed reference for dominik-pabst.com
+===================================================================
+Full docs: https://playwright.dev, https://github.com/dequelabs/axe-core-npm
+— this file covers only what's project-specific or has caused real bugs
+here.
+
+Chromium-only project
+------------------------
+`playwright.config.ts` defines exactly one blocking project (`chromium`) —
+this repo does not install or test WebKit/Firefox, locally or in CI
+(`npx playwright install --with-deps chromium` is the only browser CI
+installs). Any spec targeting another engine will fail with "browser not
+installed" in CI, or (locally, on macOS, with the system-Chrome
+`launchOptions.executablePath` override active) a confusing
+Chrome/WebKit-driver mismatch timeout instead of a clean error.
+
+Device-preset trap
+--------------------
+`devices['iPhone 13']` (and other iOS presets from `@playwright/test`)
+carry `defaultBrowserType: 'webkit'`. Spreading a full device object via
+`test.use({ ...devices['iPhone 13'] })` switches the **browser engine**
+for that spec file, not just viewport/touch options — easy to miss since
+most examples only discuss viewport behavior. Since this project only has
+Chromium, use an Android preset instead (`devices['Pixel 5']` —
+`defaultBrowserType: 'chromium'`) for any mobile-viewport test. See
+tests/mobile-nav.spec.ts's top comment for the concrete case this was
+discovered in.
+
+`webServer` + `astro preview` daemon race
+--------------------------------------------
+`playwright.config.ts`'s `webServer.command` runs `npm run build && npm run
+preview -- --port 4322`. `astro preview` daemonizes itself independent of
+the spawning shell — this can race with Playwright's readiness probe and
+produce `Error: Process from config.webServer exited early` even though
+the server comes up fine a moment later. Full gotcha + fix in
+docs/RELIABILITY.md. Quick version: `npx astro preview stop`, then
+`lsof -ti:4322 | xargs -r kill -9`, then retry — or run
+`npx playwright test --project=chromium` directly against an
+already-running daemon (check `npx astro preview status` first).
+
+axe-core integration pattern
+-------------------------------
+`tests/a11y.spec.ts` uses `@axe-core/playwright`'s `AxeBuilder`, scoped to
+WCAG 2.1 AA tags, run once per route per theme (dark default +
+`data-theme="light"`). Only `serious`/`critical` impact violations fail the
+test (`expect(blockingViolations).toHaveLength(0)`); `moderate`/`minor` are
+allowed through — check the spec file if you need the exact filter logic
+rather than assuming axe's full violation list fails the build.
+
+Real device vs. simulated touch
+-----------------------------------
+Playwright's simulated `.click()` on a touch-emulated device does NOT
+reproduce every real-device browser quirk. Notably: iOS Safari's
+`focusout`/`blur` events frequently report `event.relatedTarget: null` for
+touch-driven focus changes, while Playwright's simulated interactions
+(and Chromium generally) populate it reliably. Code that branches on
+`relatedTarget` can pass every local/CI Playwright run and still break on
+a real iPhone — this happened once in this repo (a menu auto-close
+listener ate every tap-to-navigate on Safari). Treat any `relatedTarget`-
+dependent logic as untested until verified on a real device or deploy
+preview, not just green CI.

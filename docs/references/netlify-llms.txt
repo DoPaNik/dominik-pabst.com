@@ -1,0 +1,53 @@
+Netlify — condensed reference for dominik-pabst.com
+====================================================
+Full docs: https://docs.netlify.com — this file covers only what's used or
+non-obvious in this repo.
+
+Build config (netlify.toml)
+-----------------------------
+`command = "npm run build"`, `publish = "dist"`. Node version pinned via
+`build.environment.NODE_VERSION` (kept in sync with .nvmrc by hand — no
+automatic link between the two files). Pushing to the connected branch
+triggers a build automatically; PRs get an isolated deploy preview at
+`https://deploy-preview-<PR#>--dopanik-portfolio.netlify.app`.
+
+`_headers` file mechanics
+--------------------------
+`public/_headers` is copied verbatim into `dist/` during `astro build`
+(Astro copies everything under `public/` into the output as-is). Netlify
+reads `_headers` from the publish directory (`dist/`) and applies rules by
+path glob — `/*` here means every route gets the same header block. This
+repo's postbuild step (scripts/inject-csp-hashes.mjs) rewrites
+`dist/_headers` after the copy, appending inline-script CSP hashes — see
+docs/SECURITY.md. **Editing `dist/_headers` directly does nothing** — it's
+regenerated every build; edit `public/_headers`.
+
+CSP is Netlify-only, not local
+---------------------------------
+Neither `astro dev` nor `astro preview` reads or sends `_headers` — that
+file only exists as a Netlify serving convention. A CSP change (or a bug
+that might be CSP-related) must be verified against a real deploy preview.
+See docs/RELIABILITY.md's testing-policy note — this bit this repo once
+already (65/65 local tests green, production completely broken).
+
+Netlify Forms
+--------------
+No JS SDK, no API keys. A static HTML `<form name="..." data-netlify="true"
+method="POST">` with a hidden `form-name` input matching the `name`
+attribute is enough — Netlify's build-time bot statically parses the HTML
+for `data-netlify` forms and wires up submission handling automatically.
+A honeypot field (visually hidden, real name != what a bot would guess) is
+the spam mitigation in use here — see the `bot-field` input in the contact
+form markup. `action` points at a locale-specific `/contact/success/` page
+for the post-submit redirect.
+
+Deploy-preview verification checklist
+----------------------------------------
+When a fix touches anything security-header-, CSP-, or cache-related:
+1. Open the PR's deploy-preview URL (from `gh pr checks` or the Netlify
+   check's target URL).
+2. `curl -sI <preview-url>/ | grep -i content-security-policy` — confirm
+   the header actually contains what you expect (e.g. the right hashes).
+3. Load the page in a real browser (or Playwright pointed at the preview
+   URL, not the local dev server) and check the console for CSP violation
+   errors before trusting the fix.
