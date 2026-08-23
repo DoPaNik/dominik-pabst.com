@@ -24,7 +24,8 @@
     "lint:css": "stylelint \"src/styles/**/*.css\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
@@ -45,6 +46,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^3.1.0",
     "globals": "^17.11.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
     "postcss-custom-media": "^12.0.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
@@ -60,5 +63,10 @@
     "js-yaml": "4.3.1",
     "nanoid": "3.3.18",
     "postcss": "8.5.26"
+  },
+  "lint-staged": {
+    "*.{ts,astro,mjs,js}": "eslint --fix",
+    "src/styles/**/*.css": "stylelint --fix",
+    "*.{ts,astro,mjs,js,css,md,json,yml,yaml}": "prettier --write"
   }
 }

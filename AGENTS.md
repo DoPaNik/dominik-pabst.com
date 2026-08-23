@@ -17,6 +17,10 @@ astro dev --background
 
 Manage it with `astro dev stop`, `astro dev status`, `astro dev logs`.
 
+A pre-commit hook (husky + lint-staged, `.husky/pre-commit`) runs
+lint/format on staged files and blocks committing PDFs/office docs/
+archives — see `scripts/check-staged-file-types.mjs`.
+
 ### Local dev gotcha: `astro dev`/`astro preview` daemonize
 
 Both commands detach into a background daemon independent of the shell
