@@ -1,9 +1,12 @@
 # Security Policy
 
 This is Dominik Pabst's personal site — a static Astro site with no
-backend, no user accounts, and no stored user data (the contact form is
-handled entirely by Netlify Forms). The realistic attack surface is small,
-but reports are still welcome and taken seriously.
+backend and no user accounts. The contact form is handled entirely by
+Netlify Forms; submissions (name, email, message) are retained there per
+the site's [privacy policy](https://dopanik.de/datenschutz/) until
+deletion is requested. There's no application-managed database or API
+holding user data beyond that. The realistic attack surface is small, but
+reports are still welcome and taken seriously.
 
 ## Reporting a vulnerability
 

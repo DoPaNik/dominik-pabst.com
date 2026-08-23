@@ -10,9 +10,9 @@ Source: `public/_headers`, applied to `/*`:
 
 ```
 Content-Security-Policy: default-src 'self'; script-src 'self'
-https://plausible.io; style-src 'self'; img-src 'self' data:; font-src
-'self'; connect-src 'self' https://plausible.io; object-src 'none';
-base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+https://plausible.io; style-src 'self'; img-src 'self'; font-src 'self';
+connect-src 'self' https://plausible.io; object-src 'none'; base-uri
+'self'; form-action 'self'; frame-ancestors 'none'
 ```
 
 No `'unsafe-inline'` anywhere. That's deliberately strict — and it's exactly
