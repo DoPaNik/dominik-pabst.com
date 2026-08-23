@@ -44,21 +44,19 @@ original file, but all are functionally complete in the live repo.
 | AP3-2 | Inline-Styles/Scripts CSP-fähig machen         | ⚠️ Done via a different approach — see audit note below. |
 | AP3-3 | CSP verschärfen: `unsafe-inline` entfernen     | ⚠️ Premise was already moot — see audit note below.      |
 
-**Audit note (AP3-2/AP3-3):** the original plan assumed (a) JSON-LD
-`<script type="application/ld+json">` blocks are non-executable and
-therefore unaffected by `script-src`, and (b) the fix is to eliminate
-inline scripts one by one (extract the theme-FOUC script to an external
-file, etc.). Both assumptions were disproven while fixing a real
-production incident this session: JSON-LD **is** subject to `script-src`
-like any other `<script>` element, and Astro's build also inlines small
-component scripts (`nav.ts`, the theme-toggle handler) as
-`<script type="module">` with no way to opt out from the component side.
-`public/_headers` already had no `'unsafe-inline'` (AP3-3's stated goal
-was already true) — the actual gap was that the strict CSP had no hashes
-for the inline content it was already blocking. Fixed with
+**Audit note (AP3-2/AP3-3):** the original plan's two assumptions were
+incorrect. (a) JSON-LD `<script type="application/ld+json">` blocks are
+non-executable but are still subject to `script-src` like any other
+`<script>` element — browsers evaluate CSP against the element, not its
+content. (b) Astro's build also inlines small component scripts (`nav.ts`,
+the theme-toggle handler) as `<script type="module">`, with no way to opt
+out from the component side, so "eliminate inline scripts one by one" isn't
+a stable fix. `public/_headers` already had no `'unsafe-inline'` (AP3-3's
+stated goal was already true) — the actual gap was that the strict CSP had
+no hashes for the inline content it was already blocking. Fixed with
 `scripts/inject-csp-hashes.mjs`, a postbuild step that hashes every inline
-script in the built HTML automatically. See `docs/SECURITY.md` for the
-full mechanism and incident writeup.
+script in the built HTML automatically. See `docs/SECURITY.md` for the full
+mechanism.
 
 ## Paket 4 — Astro-Best-Practice-Audit
 

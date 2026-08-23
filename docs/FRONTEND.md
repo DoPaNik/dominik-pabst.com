@@ -33,9 +33,8 @@ Concretely: `src/styles/components/nav.css` is imported directly by
 `Nav.astro`, while `src/styles/components/icon-button.css` is imported
 globally via `global.css`. A bare `.dpn-nav__burger { display: none; }`
 (specificity 0,1,0) and `.dpn-iconbtn { display: inline-grid; }` (also
-0,1,0) tied — and lost, silently, depending on which landed later in the
-built CSS file. The burger button stayed visible at every viewport width in
-production despite the CSS "clearly" saying otherwise.
+0,1,0) tie — and whichever landed later in the built CSS file wins
+silently, regardless of which rule reads as more specific in intent.
 
 **Rule:** when a component-scoped rule needs to override a globally-
 imported base class (or vice versa), scope the selector to win the
@@ -52,7 +51,7 @@ size and how many entry points use it — this is a build-time decision, not
 something the component author controls. Inlined scripts are subject to
 the CSP `script-src` directive exactly like any other inline script. See
 `docs/SECURITY.md` for the mechanism that handles this
-(`scripts/inject-csp-hashes.mjs`) and the incident it fixed.
+(`scripts/inject-csp-hashes.mjs`) and why it's necessary.
 
 ## Testing conventions
 

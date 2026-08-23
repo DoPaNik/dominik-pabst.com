@@ -55,7 +55,5 @@ reproduce every real-device browser quirk. Notably: iOS Safari's
 touch-driven focus changes, while Playwright's simulated interactions
 (and Chromium generally) populate it reliably. Code that branches on
 `relatedTarget` can pass every local/CI Playwright run and still break on
-a real iPhone — this happened once in this repo (a menu auto-close
-listener ate every tap-to-navigate on Safari). Treat any `relatedTarget`-
-dependent logic as untested until verified on a real device or deploy
-preview, not just green CI.
+a real iPhone. Treat any `relatedTarget`-dependent logic as untested until
+verified on a real device or deploy preview, not just green CI.

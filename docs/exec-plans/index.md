@@ -20,6 +20,9 @@ doc.
    `completed/2026-q3-hardening-and-audit.md` for the full story. Update
    the table below in the same PR that closes an item; don't let status
    drift from reality.
+4. **Bugs get filed as GitHub Issues**, closed by whichever PR fixes them
+   — going forward. Historical bugs already closed out via a merged PR
+   don't get backfilled.
 
 ## Active
 
