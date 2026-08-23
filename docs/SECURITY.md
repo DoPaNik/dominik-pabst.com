@@ -10,9 +10,9 @@ Source: `public/_headers`, applied to `/*`:
 
 ```
 Content-Security-Policy: default-src 'self'; script-src 'self'
-https://plausible.io; style-src 'self'; img-src 'self' data:; font-src
-'self'; connect-src 'self' https://plausible.io; object-src 'none';
-base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+https://plausible.io; style-src 'self'; img-src 'self'; font-src 'self';
+connect-src 'self' https://plausible.io; object-src 'none'; base-uri
+'self'; form-action 'self'; frame-ancestors 'none'
 ```
 
 No `'unsafe-inline'` anywhere. That's deliberately strict — and it's exactly
@@ -84,6 +84,20 @@ Playwright run. See `docs/RELIABILITY.md`'s testing-policy note.
 - `.github/dependabot.yml` — weekly scans for both the `npm` and
   `github-actions` ecosystems, PR limit 5, minor/patch npm updates grouped
   to reduce noise.
+- Secret Scanning + Push Protection and CodeQL default setup (JS/TS +
+  Actions) are enabled on the GitHub repo (repo Settings, not something
+  tracked in this codebase).
+
+### Accepted risk: Dependabot alert #18 (`extract-zip`)
+
+Dismissed (`tolerable_risk`) on 2026-08-23. High-severity symlink
+path-traversal, but it's a transitive devDependency
+(`@lhci/cli` → `lighthouse` → `puppeteer-core` → `extract-zip`) used only to
+unzip locally-downloaded Chrome binaries during Lighthouse CI — never
+reachable from the deployed site, and `npm audit --omit=dev` (what CI
+actually runs) already excludes it. No fix exists upstream as of the
+dismissal date (`extract-zip@2.0.1` is the latest release and still
+affected). Revisit when `@lhci/cli` publishes a fix.
 
 ## Secrets posture
 
