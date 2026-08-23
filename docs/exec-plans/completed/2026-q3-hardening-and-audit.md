@@ -2,7 +2,10 @@
 
 Migrated and re-audited from `docs/arbeitspakete.md` (deleted; this is its
 replacement). Original baseline: branch `master` @ `86e8caa`
-(Paket 1–3) then `97ef975` (Paket 4), German work-package IDs (AP*)
+(Paket 1–3) then `97ef975` (Paket 4) — these two commit hashes predate a
+2026-08-23 git-history rewrite (removed an accidentally committed PDF) and
+no longer resolve to a commit; kept here only as the original
+work-package IDs' point of reference. German work-package IDs (AP*)
 preserved for traceability. Re-audited against live repo state on
 2026-08-22 while writing this file — see the "Audit note" callouts where
 reality diverged from the original plan text.
