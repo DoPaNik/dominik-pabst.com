@@ -39,6 +39,12 @@ plan doc, but real enough to not just forget:
   is legally binding" notice — confirm with the user whether it should
   come back as plain text (no box), or whether dropping it entirely was
   fine.
+- `typescript` is pinned to `^6.0.3` while `7.0.2` is available on npm — a
+  major bump, deliberately not part of routine patch/minor dependency
+  maintenance (2026-08 sweep bumped astro, eslint, lucide-static, satori
+  in-range; typescript was left untouched). The version gap will keep
+  growing; needs its own review round (breaking-change scan, `tsconfig`
+  compat, `@astrojs/check` compat) before adopting. Not yet scheduled.
 
 ## Completed
 
