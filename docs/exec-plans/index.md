@@ -26,12 +26,9 @@ doc.
 
 ## Active
 
-Nothing currently in flight as a full initiative. Two small residual items
+Nothing currently in flight as a full initiative. One small residual item
 from the 2026 Q3 audit, not yet resolved:
 
-- **AP1-5 (partial):** the talks page's `seoDescription` (DE + EN) is
-  ~123 characters, under the 140–155 target the rest of the site hits.
-  Low priority, cosmetic SEO gap.
 - **AP1-3 (decision needed):** the original "hero status line driven by
   the talks collection" concept was superseded by a redesign (static
   deploy-pipeline visual). Needs an explicit call: close it as
@@ -61,3 +58,9 @@ button.css` is `.dpn-iconbtn` (no hyphen). Doc is stale.
 - [`2026-q3-hardening-and-audit.md`](completed/2026-q3-hardening-and-audit.md)
   — Pakete 1–4 (quick wins, test/a11y/Lighthouse infrastructure, CSP
   hardening, Astro best-practice audit).
+- **AP1-5:** the talks page's `seoDescription` (DE + EN, `src/i18n/de.ts` /
+  `src/i18n/en.ts`) was ~123/~119 characters, under the 140–155 target the
+  rest of the site hits, and still referenced the removed 2023 IT-Tage
+  entry. Rewritten to 143 characters each, dropping the stale "2023 & 2025"
+  reference in favor of the current, verified "IT-Tage Frankfurt 2025,
+  heise Academy" facts (see `CONTENT.md`).
