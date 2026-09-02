@@ -8,7 +8,7 @@ Source of truth: `src/styles/components/*.css` (`.dpn-*` classes),
 | Class                           | File                | Variants                                                                                                               |
 | ------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `.dpn-btn`                      | button.css          | `--primary` `--secondary` `--ghost` `--link` `--danger`; sizes `--sm` `--lg` `--block`; `.dpn-btn__prompt` for the `$` |
-| `.dpn-icon-btn`                 | icon-button.css     | icon-only square button                                                                                                |
+| `.dpn-iconbtn`                  | icon-button.css     | icon-only square button; sizes `--sm` `--lg`; `--solid` `--ghost`                                                      |
 | `.dpn-input`                    | input.css           | text fields, green focus                                                                                               |
 | `.dpn-badge` / `.dpn-tag`       | badge.css / tag.css | status tints / tech chips                                                                                              |
 | `.dpn-avatar`                   | avatar.css          | round, dot = `--radius-full` exception                                                                                 |
@@ -32,9 +32,9 @@ Terminal window:
 <div class="dpn-term">
   <div class="dpn-term__bar">
     <span class="dpn-term__lights">
-      <span class="dpn-term__light" style="background:var(--danger)"></span>
-      <span class="dpn-term__light" style="background:var(--accent)"></span>
-      <span class="dpn-term__light" style="background:var(--brand)"></span>
+      <span class="dpn-term__light dpn-term__light--danger"></span>
+      <span class="dpn-term__light dpn-term__light--warning"></span>
+      <span class="dpn-term__light dpn-term__light--success"></span>
     </span>
     <span class="dpn-term__title">~/pipeline — deploy.yml</span>
   </div>

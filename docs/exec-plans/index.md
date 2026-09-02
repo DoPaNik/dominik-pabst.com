@@ -26,27 +26,14 @@ doc.
 
 ## Active
 
-Nothing currently in flight as a full initiative. One small residual item
-from the 2026 Q3 audit, not yet resolved:
-
-- **AP1-3 (decision needed):** the original "hero status line driven by
-  the talks collection" concept was superseded by a redesign (static
-  deploy-pipeline visual). Needs an explicit call: close it as
-  intentionally superseded, or revive the underlying idea (surface the
-  next upcoming talk somewhere) against the current design.
+Nothing currently in flight as a full initiative. No residual items open
+from the 2026 Q3 audit.
 
 ## Tech-debt tracker
 
 Small, standalone items noticed in passing — not big enough for a full
 plan doc, but real enough to not just forget:
 
-- `docs/styleguide/06-components.md`'s component table lists
-  `.dpn-icon-btn`; the actual class in `src/styles/components/icon-
-button.css` is `.dpn-iconbtn` (no hyphen). Doc is stale.
-- The same file's `TerminalWindow` code example still shows inline
-  `style="background:var(--danger)"` on the traffic-light dots; the real
-  component no longer renders inline styles this way (confirmed via
-  `grep -rn 'style=' src/components/` returning nothing). Doc is stale.
 - Open content question from the Impressum/Datenschutz cleanup: the
   removed EN "this translation is for convenience only, the German version
   is legally binding" notice — confirm with the user whether it should
@@ -64,3 +51,18 @@ button.css` is `.dpn-iconbtn` (no hyphen). Doc is stale.
   entry. Rewritten to 143 characters each, dropping the stale "2023 & 2025"
   reference in favor of the current, verified "IT-Tage Frankfurt 2025,
   heise Academy" facts (see `CONTENT.md`).
+- **AP1-3 — closed, superseded (2026-08-24).** The original "hero status
+  line driven by the talks collection" concept is obsolete. Verified
+  against the current hero (`src/components/pages/HomePage.astro`): the
+  hero's right column renders a static `TerminalWindow` with hardcoded
+  DevSecOps-pipeline steps (`h.pipeline.*` from `src/i18n/{de,en}.ts`) —
+  no query against the talks content collection, no next-talk badge, no
+  `hero__status` markup anywhere in the component or
+  `src/styles/pages/home.css`. That confirms the redesign (comic
+  illustration → pipeline terminal, see git history: `a1513db feat:
+replace hero comic illustration with a DevSecOps pipeline terminal`)
+  fully replaced the status-line idea rather than leaving it
+  half-implemented. No action needed; reopen as a fresh feature request if
+  a "next talk" surface is wanted again — it would need a new design pass
+  against the current pipeline-terminal layout, not a revival of the old
+  concept.
