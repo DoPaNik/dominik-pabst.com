@@ -73,6 +73,17 @@ Playwright run. See `docs/RELIABILITY.md`'s testing-policy note.
 - `X-Frame-Options: DENY`
 - `Referrer-Policy: strict-origin-when-cross-origin`
 - `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+- `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`
+  — explicit, because Netlify does not guarantee automatic HSTS on custom
+  domains (only on `*.netlify.app`). `includeSubDomains` is safe here: the
+  site has no known subdomains that need to stay on plain HTTP. `preload`
+  is included given the rest of the header set is already strict (no
+  `'unsafe-inline'` in CSP, `frame-ancestors 'none'`, etc.) — but setting
+  the header alone does not add the domain to browsers' preload lists;
+  that requires a separate, manual submission at
+  https://hstspreload.org once the header has been live in production
+  long enough to confirm no HTTP-only paths break. Not done as part of
+  this change.
 - `Cache-Control: public, max-age=31536000, immutable` on `/fonts/*` and
   `/_astro/*` (both are content-hashed, safe to cache forever)
 
@@ -97,6 +108,13 @@ reachable from the deployed site, and `npm audit --omit=dev` (what CI
 actually runs) already excludes it. No fix exists upstream as of the
 dismissal date (`extract-zip@2.0.1` is the latest release and still
 affected). Revisit when `@lhci/cli` publishes a fix.
+
+Re-verified 2026-08-24: ran `npm audit`, applied `npm audit fix` (fixed the
+unrelated `brace-expansion` findings, non-breaking). The remaining 6 high
+findings are all this same `extract-zip` chain — `npm audit fix --force`
+would still downgrade to `@lhci/cli@0.12.0`, a breaking change, and no
+non-breaking upstream fix exists yet. Rationale above still holds unchanged.
+**Next review: 2027-02-24.**
 
 ## Secrets posture
 
