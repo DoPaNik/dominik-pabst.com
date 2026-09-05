@@ -28,6 +28,8 @@ const l = t.legal;
         <p class="dpn-legal__updated">{l.updated}</p>
       </header>
 
+      <p class="dpn-legal__notice">{l.noticeBanner}</p>
+
       <div class="dpn-legal__sections">
         {
           l.sections.map((section) => (
@@ -44,16 +46,15 @@ const l = t.legal;
       {
         lang === 'de' && (
           <p class="dpn-legal__seal">
-            Erstellt mit kostenlosem{' '}
+            Erstellt mit kostenloser Vorlage von{' '}
             <a
-              href="https://datenschutz-generator.de/"
-              title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken."
+              href="https://www.e-recht24.de/"
+              title="Rechtstext von e-recht24.de - für weitere Informationen bitte anklicken."
               target="_blank"
               rel="noopener noreferrer nofollow"
             >
-              Datenschutz-Generator.de
-            </a>{' '}
-            von Dr. Thomas Schwenke
+              e-recht24.de
+            </a>
           </p>
         )
       }

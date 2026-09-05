@@ -28,6 +28,8 @@ const p = t.privacy;
         <p class="dpn-legal__updated">{p.updated}</p>
       </header>
 
+      <p class="dpn-legal__notice">{p.noticeBanner}</p>
+
       <div class="dpn-legal__sections">
         {
           p.sections.map((section) => (
@@ -40,6 +42,23 @@ const p = t.privacy;
           ))
         }
       </div>
+
+      {
+        lang === 'de' && (
+          <p class="dpn-legal__seal">
+            Erstellt mit kostenlosem{' '}
+            <a
+              href="https://datenschutz-generator.de/"
+              title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken."
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              Datenschutz-Generator.de
+            </a>{' '}
+            von Dr. Thomas Schwenke
+          </p>
+        )
+      }
     </div>
   </section>
 </BaseLayout>
