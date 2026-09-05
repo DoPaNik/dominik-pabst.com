@@ -117,14 +117,16 @@ export const de: Dictionary = {
     seoDescription: 'Impressum und Anbieterkennzeichnung gemäß § 5 DDG für dopanik.de.',
     eyebrow: '// impressum',
     title: 'Impressum.',
-    updated: 'Aktualisiert am 21. August 2026',
+    updated: 'Aktualisiert am 5. September 2026',
+    noticeBanner:
+      'Diese Seite basiert auf der kostenlosen Vorlage von e-recht24.de, ergänzt um Angaben zu Hosting (Netlify) und Webanalyse (Plausible).',
     sections: [
       {
         heading: 'Diensteanbieter',
         body: [
           'Dominik Pabst',
           'c/o flexdienst – #21920',
-          'Kurt-Schumacher-Straße 76',
+          'Kurt-Schumacher-Straße 74',
           '67663 Kaiserslautern',
           'Deutschland',
         ],
@@ -148,7 +150,9 @@ export const de: Dictionary = {
     seoDescription: 'Datenschutzerklärung gemäß Art. 13 DSGVO für dopanik.de.',
     eyebrow: '// datenschutz',
     title: 'Datenschutzerklärung.',
-    updated: 'Aktualisiert am 21. August 2026',
+    updated: 'Aktualisiert am 5. September 2026',
+    noticeBanner:
+      'Diese Seite basiert auf dem kostenlosen Datenschutz-Generator.de von Dr. Thomas Schwenke, ergänzt um Angaben zu Hosting (Netlify) und Webanalyse (Plausible).',
     sections: [
       {
         heading: 'Verantwortlicher',

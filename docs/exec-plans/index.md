@@ -34,11 +34,6 @@ from the 2026 Q3 audit.
 Small, standalone items noticed in passing — not big enough for a full
 plan doc, but real enough to not just forget:
 
-- Open content question from the Impressum/Datenschutz cleanup: the
-  removed EN "this translation is for convenience only, the German version
-  is legally binding" notice — confirm with the user whether it should
-  come back as plain text (no box), or whether dropping it entirely was
-  fine.
 - `typescript` is pinned to `^6.0.3` while `7.0.2` is available on npm — a
   major bump, deliberately not part of routine patch/minor dependency
   maintenance (2026-08 sweep bumped astro, eslint, lucide-static, satori
@@ -48,6 +43,18 @@ plan doc, but real enough to not just forget:
 
 ## Completed
 
+- **Impressum/Datenschutz notice restored (2026-09-05).** Re-added the
+  source-attribution / EN convenience-translation notice removed by
+  `5bba615` — as a plain paragraph (`.dpn-legal__notice`, no border/
+  background box), per user decision. While restoring it, also fixed a
+  pre-existing attribution mismatch: the Impressum's "Erstellt mit…" seal
+  cited Datenschutz-Generator.de (that generator's content actually
+  belongs to the Datenschutzerklärung); the Impressum is based on
+  e-recht24.de per the original banner text, confirmed with the user. Seal
+  swapped accordingly, and a matching Datenschutz-Generator.de seal added
+  to the Datenschutz page (it previously had none). Also folded in a
+  flexdienst address change (Kurt-Schumacher-Straße 76 → 74) that arrived
+  mid-task; both pages' `updated` date bumped to 2026-09-05.
 - [`2026-q3-hardening-and-audit.md`](completed/2026-q3-hardening-and-audit.md)
   — Pakete 1–4 (quick wins, test/a11y/Lighthouse infrastructure, CSP
   hardening, Astro best-practice audit).

@@ -118,14 +118,16 @@ export const en: Dictionary = {
       'Imprint and provider identification for dopanik.de under German law (§ 5 DDG).',
     eyebrow: '// imprint',
     title: 'Imprint.',
-    updated: 'Updated August 21, 2026',
+    updated: 'Updated September 5, 2026',
+    noticeBanner:
+      'This English version is for convenience only — the German version (based on the free template from e-recht24.de, extended with the hosting and analytics specifics below) is the legally binding one.',
     sections: [
       {
         heading: 'Service provider',
         body: [
           'Dominik Pabst',
           'c/o flexdienst – #21920',
-          'Kurt-Schumacher-Straße 76',
+          'Kurt-Schumacher-Straße 74',
           '67663 Kaiserslautern',
           'Germany',
         ],
@@ -149,7 +151,9 @@ export const en: Dictionary = {
     seoDescription: 'Privacy policy for dopanik.de under Art. 13 GDPR.',
     eyebrow: '// privacy',
     title: 'Privacy policy.',
-    updated: 'Updated August 21, 2026',
+    updated: 'Updated September 5, 2026',
+    noticeBanner:
+      'This English version is for convenience only — the German version (based on the free Datenschutz-Generator.de by Dr. Thomas Schwenke) is the legally binding one.',
     sections: [
       {
         heading: 'Controller',

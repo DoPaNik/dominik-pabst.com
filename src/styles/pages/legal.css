@@ -9,6 +9,15 @@
   margin: 0 0 24px;
 }
 
+.dpn-legal__notice {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+  max-width: 70ch;
+  margin: 0 0 32px;
+}
+
 .dpn-legal__seal {
   margin: 48px 0 0;
   font-family: var(--font-mono);
