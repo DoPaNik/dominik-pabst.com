@@ -34,12 +34,21 @@ from the 2026 Q3 audit.
 Small, standalone items noticed in passing — not big enough for a full
 plan doc, but real enough to not just forget:
 
-- `typescript` is pinned to `^6.0.3` while `7.0.2` is available on npm — a
-  major bump, deliberately not part of routine patch/minor dependency
-  maintenance (2026-08 sweep bumped astro, eslint, lucide-static, satori
-  in-range; typescript was left untouched). The version gap will keep
-  growing; needs its own review round (breaking-change scan, `tsconfig`
-  compat, `@astrojs/check` compat) before adopting. Not yet scheduled.
+- **TypeScript 7 upgrade — blocked, not just unscheduled (checked
+  2026-09-05).** `typescript` is pinned to `^6.0.3` while `7.0.2` (the
+  Go-native "Corsa" rewrite) is on npm. Verified with a real `npm install`
+  in an isolated scratch dir that this can't be adopted yet without
+  breaking `npm run lint` / `npm run typecheck`:
+  - `@astrojs/check@0.9.10` (latest; `alpha`/`beta` dist-tags are older,
+    not TS7-aware either) declares `peerDependencies.typescript: "^5.0.0
+|| ^6.0.0"` — TS7 is rejected outright (`ERESOLVE`).
+  - `typescript-eslint` (including its `canary` dist-tag, 8.69.1-alpha.0)
+    declares `peerDependencies.typescript: ">=4.8.4 <6.1.0"` — even
+    narrower.
+
+  Re-check once either package ships a release supporting TS7 (watch
+  their changelogs/dist-tags); don't retry the bare `npm install` again
+  until then, the peer-dep ranges above are the actual gate.
 
 ## Completed
 
