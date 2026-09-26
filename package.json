@@ -30,9 +30,9 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.2.10",
-    "lucide-static": "^1.39.0",
-    "zod": "^4.5.4"
+    "astro": "^7.3.4",
+    "lucide-static": "^1.47.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -40,23 +40,23 @@
     "@csstools/postcss-global-data": "^4.0.0",
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
-    "@playwright/test": "^1.62.1",
+    "@playwright/test": "^1.63.0",
     "@resvg/resvg-js": "^2.6.2",
     "esbuild": "^0.28.2",
-    "eslint": "^10.9.1",
+    "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^3.1.0",
+    "eslint-plugin-astro": "^3.2.1",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.5.1",
     "postcss-custom-media": "^12.0.1",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.8",
     "prettier-plugin-astro": "^0.14.1",
-    "satori": "^0.33.4",
+    "satori": "^0.33.5",
     "sharp": "^0.35.3",
-    "stylelint": "^17.14.1",
+    "stylelint": "^17.15.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.69.0"
+    "typescript-eslint": "^8.70.1"
   },
   "overrides": {
     "tmp": "0.2.7",
