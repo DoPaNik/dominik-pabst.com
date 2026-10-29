@@ -30,7 +30,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.2.10",
+    "astro": "^7.3.3",
     "lucide-static": "^1.39.0",
     "zod": "^4.5.4"
   },
